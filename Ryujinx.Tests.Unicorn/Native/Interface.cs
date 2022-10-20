@@ -32,7 +32,7 @@ namespace Ryujinx.Tests.Unicorn.Native
         public static extern uint uc_version(out uint major, out uint minor);
 
         [DllImport("unicorn", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Error uc_open(Arch arch, Mode mode, out IntPtr uc);
+        public static extern Error uc_open(Arch arch, Mode mode, ref IntPtr uc);
 
         [DllImport("unicorn", CallingConvention = CallingConvention.Cdecl)]
         public static extern Error uc_close(IntPtr uc);
