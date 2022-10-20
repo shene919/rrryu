@@ -4,7 +4,7 @@ using System;
 
 namespace Ryujinx.Tests.Unicorn
 {
-    public class UnicornAArch32
+    public class UnicornAArch32 : IDisposable
     {
         internal readonly IntPtr uc;
 
@@ -106,7 +106,7 @@ namespace Ryujinx.Tests.Unicorn
             SetRegister(Arm.REG_FPEXC, 0x40000000);
         }
 
-        ~UnicornAArch32()
+        public void Dispose()
         {
             Interface.Checked(Native.Interface.uc_close(uc));
         }
