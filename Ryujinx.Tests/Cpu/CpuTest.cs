@@ -83,7 +83,6 @@ namespace Ryujinx.Tests.Cpu
             _memory.DecrementReferenceCount();
             _context.Dispose();
             _ram.Dispose();
-            _unicornEmu.Dispose();
 
             _memory     = null;
             _context    = null;

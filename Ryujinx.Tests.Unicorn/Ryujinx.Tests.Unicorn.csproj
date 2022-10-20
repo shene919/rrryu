@@ -10,4 +10,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UnicornManaged\UnicornManaged.fsproj" />
+  </ItemGroup>
+
 </Project>
