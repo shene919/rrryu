@@ -163,6 +163,22 @@ namespace Ryujinx.HLE.HOS.Services.Nifm.StaticService
             return ResultCode.Success;
         }
 
+        [CommandHipc(26)]
+        // TODO: Check if guess is correct
+        // SetExclusiveClient(buffer<nn::nifm::ClientId, 0x19, 4)
+        // 0x19 -> {SfBufferAttr_In | SfBufferAttr_HipcPointer | SfBufferAttr_FixedSize}
+        public ResultCode SetExclusiveClient(ServiceCtx ctx)
+        {
+            ulong position = ctx.Request.PtrBuff[0].Position;
+            ulong size     = ctx.Request.PtrBuff[0].Size;
+
+            int clientId = ctx.Memory.Read<int>(position);
+
+            Logger.Stub?.PrintStub(LogClass.ServiceNifm);
+
+            return ResultCode.Success;
+        }
+
         private (IPInterfaceProperties, UnicastIPAddressInformation) GetLocalInterface()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
