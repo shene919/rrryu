@@ -8,6 +8,8 @@ using Ryujinx.HLE.HOS.Services.Account.Acc;
 using Ryujinx.HLE.HOS.SystemState;
 using Ryujinx.HLE.Ui;
 using System;
+using System.Collections.Immutable;
+using ApplicationId = LibHac.ApplicationId;
 
 namespace Ryujinx.HLE
 {
@@ -39,6 +41,12 @@ namespace Ryujinx.HLE
         /// </summary>
         /// <remarks>This cannot be changed after <see cref="Switch"/> instantiation.</remarks>
         internal readonly ContentManager ContentManager;
+
+        /// <summary>
+        /// The list of title ids found byApplicationLibrary.
+        /// </summary>
+        /// <remarks>This cannot be changed after <see cref="Switch"/> instantiation.</remarks>
+        internal readonly IImmutableList<ApplicationId> Titles;
 
         /// <summary>
         /// The persistent information between run for multi-application capabilities.
@@ -153,34 +161,36 @@ namespace Ryujinx.HLE
         /// </summary>
         public Action RefreshInputConfig { internal get; set; }
 
-        public HLEConfiguration(VirtualFileSystem      virtualFileSystem,
-                                LibHacHorizonManager   libHacHorizonManager,
-                                ContentManager         contentManager,
-                                AccountManager         accountManager,
-                                UserChannelPersistence userChannelPersistence,
-                                IRenderer              gpuRenderer,
-                                IHardwareDeviceDriver  audioDeviceDriver,
-                                MemoryConfiguration    memoryConfiguration,
-                                IHostUiHandler         hostUiHandler,
-                                SystemLanguage         systemLanguage,
-                                RegionCode             region,
-                                bool                   enableVsync,
-                                bool                   enableDockedMode,
-                                bool                   enablePtc,
-                                bool                   enableInternetAccess,
-                                IntegrityCheckLevel    fsIntegrityCheckLevel,
-                                int                    fsGlobalAccessLogMode,
-                                long                   systemTimeOffset,
-                                string                 timeZone,
-                                MemoryManagerMode      memoryManagerMode,
-                                bool                   ignoreMissingServices,
-                                AspectRatio            aspectRatio,
-                                float                  audioVolume)
+        public HLEConfiguration(VirtualFileSystem             virtualFileSystem,
+                                LibHacHorizonManager          libHacHorizonManager,
+                                ContentManager                contentManager,
+                                AccountManager                accountManager,
+                                IImmutableList<ApplicationId> titles,
+                                UserChannelPersistence        userChannelPersistence,
+                                IRenderer                     gpuRenderer,
+                                IHardwareDeviceDriver         audioDeviceDriver,
+                                MemoryConfiguration           memoryConfiguration,
+                                IHostUiHandler                hostUiHandler,
+                                SystemLanguage                systemLanguage,
+                                RegionCode                    region,
+                                bool                          enableVsync,
+                                bool                          enableDockedMode,
+                                bool                          enablePtc,
+                                bool                          enableInternetAccess,
+                                IntegrityCheckLevel           fsIntegrityCheckLevel,
+                                int                           fsGlobalAccessLogMode,
+                                long                          systemTimeOffset,
+                                string                        timeZone,
+                                MemoryManagerMode             memoryManagerMode,
+                                bool                          ignoreMissingServices,
+                                AspectRatio                   aspectRatio,
+                                float                         audioVolume)
         {
             VirtualFileSystem      = virtualFileSystem;
             LibHacHorizonManager   = libHacHorizonManager;
             AccountManager         = accountManager;
             ContentManager         = contentManager;
+            Titles                 = titles;
             UserChannelPersistence = userChannelPersistence;
             GpuRenderer            = gpuRenderer;
             AudioDeviceDriver      = audioDeviceDriver;

@@ -38,11 +38,12 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SPB.Graphics.Vulkan;
 using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
+using ApplicationId = LibHac.ApplicationId;
 using InputManager = Ryujinx.Input.HLE.InputManager;
 using Key = Ryujinx.Input.Key;
 using MouseButton = Ryujinx.Input.MouseButton;
@@ -60,7 +61,7 @@ namespace Ryujinx.Ava
 
         private const float VolumeDelta = 0.05f;
 
-        private static readonly Cursor InvisibleCursor = new Cursor(StandardCursorType.None);        
+        private static readonly Cursor InvisibleCursor = new Cursor(StandardCursorType.None);
 
         private readonly long _ticksPerFrame;
         private readonly Stopwatch _chrono;
@@ -97,6 +98,7 @@ namespace Ryujinx.Ava
         public RendererHost Renderer { get; }
         public VirtualFileSystem VirtualFileSystem { get; }
         public ContentManager ContentManager { get; }
+        public IImmutableList<ApplicationId> Titles { get; }
         public Switch Device { get; set; }
         public NpadManager NpadManager { get; }
         public TouchScreenManager TouchScreenManager { get; }
@@ -378,7 +380,7 @@ namespace Ryujinx.Ava
 
             _gpuCancellationTokenSource.Cancel();
             _gpuCancellationTokenSource.Dispose();
-            
+
             _chrono.Stop();
         }
 
@@ -393,7 +395,7 @@ namespace Ryujinx.Ava
             Renderer?.MakeCurrent();
 
             Device.DisposeGpu();
-            
+
             Renderer?.MakeCurrent(null);
         }
 
@@ -602,7 +604,7 @@ namespace Ryujinx.Ava
             if (Renderer.IsVulkan)
             {
                 string preferredGpu = ConfigurationState.Instance.Graphics.PreferredGpu.Value;
-                
+
                 renderer = new VulkanRenderer(Renderer.CreateVulkanSurface, VulkanHelper.GetRequiredInstanceExtensions, preferredGpu);
             }
             else
@@ -749,6 +751,7 @@ namespace Ryujinx.Ava
                                                                           _parent.LibHacHorizonManager,
                                                                           ContentManager,
                                                                           _accountManager,
+                                                                          _parent.Titles.ToImmutableList(),
                                                                           _userChannelPersistence,
                                                                           renderer,
                                                                           deviceDriver,

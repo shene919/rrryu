@@ -25,6 +25,7 @@ using Ryujinx.Ui.Common;
 using Ryujinx.Ui.Common.Configuration;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
@@ -54,6 +55,7 @@ namespace Ryujinx.Ava.Ui.Windows
         public AccountManager AccountManager { get; private set; }
 
         public LibHacHorizonManager LibHacHorizonManager { get; private set; }
+        public List<LibHac.ApplicationId>  Titles { get; } = new();
 
         internal AppHost AppHost { get; private set; }
         public InputManager InputManager { get; private set; }
@@ -247,7 +249,7 @@ namespace Ryujinx.Ava.Ui.Windows
             {
                 RendererControl.CreateVulkan();
             }
-            
+
             AppHost = new AppHost(RendererControl, InputManager, path, VirtualFileSystem, ContentManager, AccountManager, _userChannelPersistence, this);
 
             if (!AppHost.LoadGuestApplication().Result)

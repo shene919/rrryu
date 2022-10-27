@@ -31,6 +31,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ApplicationId = LibHac.ApplicationId;
 using Path = System.IO.Path;
 using ShaderCacheLoadingState = Ryujinx.Graphics.Gpu.Shader.ShaderCacheState;
 
@@ -761,6 +762,7 @@ namespace Ryujinx.Ava.Ui.ViewModels
 
         private void ApplicationLibrary_ApplicationAdded(object sender, ApplicationAddedEventArgs e)
         {
+            _owner.Titles.Add(new ApplicationId(ulong.Parse(e.AppData.TitleId, NumberStyles.HexNumber)));
             AddApplication(e.AppData);
         }
 
