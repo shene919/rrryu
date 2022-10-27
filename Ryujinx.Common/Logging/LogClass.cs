@@ -46,6 +46,7 @@ namespace Ryujinx.Common.Logging
         ServiceNgct,
         ServiceNifm,
         ServiceNim,
+        ServiceNpns,
         ServiceNs,
         ServiceNsd,
         ServiceNtc,
