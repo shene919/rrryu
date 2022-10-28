@@ -5,7 +5,9 @@ using LibHac.Fs.Fsa;
 using LibHac.FsSystem;
 using LibHac.Ncm;
 using LibHac.Tools.FsSystem.NcaUtils;
+using Ryujinx.Common;
 using Ryujinx.Common.Logging;
+using Ryujinx.HLE.HOS.Services.Settings.Types;
 using Ryujinx.HLE.HOS.SystemState;
 using Ryujinx.HLE.Utilities;
 using System;
@@ -263,6 +265,17 @@ namespace Ryujinx.HLE.HOS.Services.Settings
             ctx.ResponseData.Write(serialNumber.ToArray());
 
             Logger.Stub?.PrintStub(LogClass.ServiceSet);
+
+            return ResultCode.Success;
+        }
+
+        [CommandHipc(72)]
+        // SetSleepSettings(SleepSettings)
+        public ResultCode SetSleepSettings(ServiceCtx ctx)
+        {
+            SleepSettings sleepSettings = ctx.RequestData.ReadStruct<SleepSettings>();
+
+            Logger.Stub?.PrintStub(LogClass.ServiceSet, new {sleepSettings});
 
             return ResultCode.Success;
         }
