@@ -41,5 +41,17 @@ namespace Ryujinx.HLE.HOS.Services.Ptm.Psm
 
             return ResultCode.Success;
         }
+
+        [CommandHipc(13)]
+        // GetRawBatteryChargePercentage() -> double
+        public ResultCode GetRawBatteryChargePercentage(ServiceCtx ctx)
+        {
+            double charge = 100;
+            ctx.ResponseData.Write(charge);
+
+            Logger.Stub?.PrintStub(LogClass.ServicePsm);
+
+            return ResultCode.Success;
+        }
     }
 }
