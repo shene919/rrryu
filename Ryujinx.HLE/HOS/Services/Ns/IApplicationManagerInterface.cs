@@ -1,4 +1,5 @@
-﻿using Ryujinx.Common.Utilities;
+﻿using Ryujinx.Common.Logging;
+using Ryujinx.Common.Utilities;
 using Ryujinx.HLE.HOS.Services.Ns.Types;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,7 @@ namespace Ryujinx.HLE.HOS.Services.Ns
         {
             int entryOffset = ctx.RequestData.ReadInt32();
             ulong position = ctx.Request.ReceiveBuff[0].Position;
+            Logger.Info?.PrintMsg(LogClass.ServiceNs, $"ListApplicationRecord: type-0x6 pos: {position}");
             List<ApplicationRecord> records = new();
 
             foreach (ApplicationId appId in ctx.Device.Configuration.Titles)
@@ -85,6 +87,43 @@ namespace Ryujinx.HLE.HOS.Services.Ns
             byte[] nacpData = context.Device.Application.ControlData.ByteSpan.ToArray();
 
             context.Memory.Write(position, nacpData);
+
+            return ResultCode.Success;
+        }
+
+        [CommandHipc(1701)] // [3.0.0+]
+        // GetApplicationView(buffer<ApplicationId[], 5>) -> (buffer<ApplicationView[], 6>
+        public ResultCode GetApplicationView(ServiceCtx ctx)
+        {
+            ulong appIdsPos = ctx.Request.SendBuff[0].Position;
+            ulong appIdsSize = ctx.Request.SendBuff[0].Size;
+            byte[] appIdBytes = new byte[appIdsSize];
+
+            ctx.Memory.Read(appIdsPos, appIdBytes);
+
+            ulong[] appIds = new ulong[appIdsSize / sizeof(ulong)];
+
+            for (int i = 0; i < appIds.Length; i++)
+            {
+                appIds[i] = BitConverter.ToUInt64(appIdBytes, i * sizeof(ulong));
+            }
+
+            ulong viewsPos = ctx.Request.ReceiveBuff[0].Position;
+
+            // TODO: Figure struct out, esp. the flags
+            foreach (var appId in appIds)
+            {
+                ctx.Memory.Write(viewsPos, StructToBytes(
+                    new ApplicationView()
+                    {
+                        ApplicationId = appId,
+                        Flags = 0,
+                        Unknown1 = 0,
+                        Unknown2 = new byte[0x40]
+                    }
+                ));
+                viewsPos += (ulong)Marshal.SizeOf<ApplicationView>();
+            }
 
             return ResultCode.Success;
         }
