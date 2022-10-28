@@ -9,6 +9,7 @@ using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.SystemState;
 using Ryujinx.HLE.Utilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -239,6 +240,27 @@ namespace Ryujinx.HLE.HOS.Services.Settings
         public ResultCode GetDebugModeFlag(ServiceCtx context)
         {
             context.ResponseData.Write(false);
+
+            Logger.Stub?.PrintStub(LogClass.ServiceSet);
+
+            return ResultCode.Success;
+        }
+
+        [CommandHipc(68)]
+        // GetSerialNumber() -> string
+        public ResultCode GetSerialNumber(ServiceCtx ctx)
+        {
+            // SerialNumber length: 0x18
+            List<byte> serialNumber = new (0x18);
+            byte[] ryuSerial = Encoding.ASCII.GetBytes("XYZ0Ryujinx0".ToUpper());
+            byte[] randomBytes = new byte[0x18 - ryuSerial.Length];
+
+            serialNumber.AddRange(ryuSerial);
+
+            new Random().NextBytes(randomBytes);
+            serialNumber.AddRange(randomBytes);
+
+            ctx.ResponseData.Write(serialNumber.ToArray());
 
             Logger.Stub?.PrintStub(LogClass.ServiceSet);
 
