@@ -6,6 +6,7 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Button = Avalonia.Controls.Button;
 
@@ -65,6 +66,13 @@ namespace Ryujinx.Ava.Ui.Controls
             IsVisible = true;
 			ShowCore();
 			SetupDialog();
+
+            // TODO: It's very likely that the current crash gets produced somewhere here.
+            //       Please help me fix it.
+            var field = typeof(ContentDialog).GetField("_host",
+                BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
+
+            field.SetValue(this, _dialogHost);
 
             return await tcs.Task;
 		}
