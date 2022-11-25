@@ -8,6 +8,7 @@
                         xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                         x:Class="Ryujinx.Ava.Ui.Windows.ContentDialogOverlayWindow"
                         xmlns:window="clr-namespace:Ryujinx.Ava.Ui.Windows"
+                        xmlns:controls="clr-namespace:Ryujinx.Ava.Ui.Controls"
                         Title="ContentDialogOverlayWindow">
     <window:StyleableWindow.Styles>
         <Style Selector="ui|ContentDialog /template/ Panel#LayoutRoot">
@@ -19,7 +20,7 @@
         Focusable="False"
         IsVisible="False"
         KeyboardNavigation.IsTabStop="False">
-        <ui:ContentDialog Name="ContentDialog"
+        <controls:ContentDialogOverlay Name="ContentDialog"
                           IsPrimaryButtonEnabled="True"
                           IsSecondaryButtonEnabled="True"
                           IsVisible="False" />

@@ -38,7 +38,7 @@ namespace Ryujinx.Ava.Ui.Controls
             bool useOverlay = false;
             Window mainWindow = null;
 
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime al)
+            if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime al)
             {
                 foreach (var item in al.Windows)
                 {
@@ -51,7 +51,7 @@ namespace Ryujinx.Ava.Ui.Controls
                 }
             }
 
-            ContentDialog contentDialog = null;
+            ContentDialogOverlay contentDialog = null;
             ContentDialogOverlayWindow overlay = null;
 
             if (useOverlay)
@@ -94,7 +94,7 @@ namespace Ryujinx.Ava.Ui.Controls
             }
             else
             {
-                contentDialog = new ContentDialog();
+                contentDialog = new ContentDialogOverlay();
 
                 await ShowDialog();
             }
@@ -127,7 +127,14 @@ namespace Ryujinx.Ava.Ui.Controls
                     contentDialog.PrimaryButtonClick += deferCloseAction;
                 }
 
-                await contentDialog.ShowAsync(ContentDialogPlacement.Popup);
+                if (useOverlay)
+                {
+                    await contentDialog.ShowAsync(overlay, ContentDialogPlacement.Popup);
+                }
+                else
+                {
+                    await contentDialog.ShowAsync(ContentDialogPlacement.Popup);
+                }
 
                 overlay?.Close();
             }
