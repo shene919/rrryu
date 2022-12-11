@@ -1,12 +1,13 @@
 using ARMeilleure.Translation.PTC;
 using Avalonia;
 using Avalonia.Threading;
+using PInvoke;
 using Ryujinx.Ava.Ui.Windows;
 using Ryujinx.Common;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.GraphicsDriver;
 using Ryujinx.Common.Logging;
-using Ryujinx.Common.System;
+using Ryujinx.Common.SystemInterop;
 using Ryujinx.Common.SystemInfo;
 using Ryujinx.Modules;
 using Ryujinx.SDL2.Common;
@@ -15,12 +16,11 @@ using Ryujinx.Ui.Common.Configuration;
 using Ryujinx.Ui.Common.Helper;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Ryujinx.Ava
 {
-    internal class Program
+    internal partial class Program
     {
         public static double WindowScaleFactor  { get; set; }
         public static double DesktopScaleFactor { get; set; } = 1.0;
@@ -28,18 +28,13 @@ namespace Ryujinx.Ava
         public static string ConfigurationPath  { get; private set; }
         public static bool   PreviewerDetached {  get; private set; }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern int MessageBoxA(IntPtr hWnd, string text, string caption, uint type);
-
-        private const uint MB_ICONWARNING = 0x30;
-
         public static void Main(string[] args)
         {
             Version = ReleaseInformations.GetVersion();
 
             if (OperatingSystem.IsWindows() && !OperatingSystem.IsWindowsVersionAtLeast(10, 0, 17134))
             {
-                _ = MessageBoxA(IntPtr.Zero, "You are running an outdated version of Windows.\n\nStarting on June 1st 2022, Ryujinx will only support Windows 10 1803 and newer.\n", $"Ryujinx {Version}", MB_ICONWARNING);
+                _ = User32.MessageBox(IntPtr.Zero, "You are running an outdated version of Windows.\n\nStarting on June 1st 2022, Ryujinx will only support Windows 10 1803 and newer.\n", $"Ryujinx {Version}", User32.MessageBoxOptions.MB_ICONWARNING);
             }
 
             PreviewerDetached = true;

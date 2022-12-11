@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Ryujinx.Modules
 {
-    public static class Updater
+    public static partial class Updater
     {
         internal static bool Running;
 
@@ -387,8 +387,8 @@ namespace Ryujinx.Modules
             worker.Start();
         }
 
-        [DllImport("libc", SetLastError = true)]
-        private static extern int chmod(string path, uint mode);
+        [LibraryImport("libc", SetLastError = true)]
+        private static partial int chmod([MarshalAs(UnmanagedType.LPStr)] string path, uint mode);
 
         private static void SetUnixPermissions()
         {

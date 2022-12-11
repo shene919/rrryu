@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace Ryujinx.Modules
 {
-    internal static class Updater
+    internal static partial class Updater
     {
         private const string GitHubApiURL = "https://api.github.com";
         internal static bool Running;
@@ -456,8 +456,8 @@ namespace Ryujinx.Modules
             worker.Start();
         }
 
-        [DllImport("libc", SetLastError = true)]
-        private static extern int chmod(string path, uint mode);
+        [LibraryImport("libc", SetLastError = true)]
+        private static partial int chmod([MarshalAs(UnmanagedType.LPStr)] string path, uint mode);
 
         private static void SetUnixPermissions()
         {

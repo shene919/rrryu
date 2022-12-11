@@ -2,21 +2,22 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform;
+using PInvoke;
 using Ryujinx.Ava.Ui.Helper;
 using SPB.Graphics;
 using SPB.Platform;
 using SPB.Platform.GLX;
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
-using static Ryujinx.Ava.Ui.Controls.Win32NativeInterop;
 
 namespace Ryujinx.Ava.Ui.Controls
 {
     public class EmbeddedWindow : NativeControlHost
     {
-        private WindowProc _wndProcDelegate;
+        private User32.WndProc _wndProcDelegate;
         private string _className;
 
         protected GLXWindow X11Window { get; set; }
@@ -117,27 +118,27 @@ namespace Ryujinx.Ava.Ui.Controls
         }
 
         [SupportedOSPlatform("windows")]
-        IPlatformHandle CreateWin32(IPlatformHandle parent)
+        unsafe IPlatformHandle CreateWin32(IPlatformHandle parent)
         {
             _className = "NativeWindow-" + Guid.NewGuid();
             _wndProcDelegate = WndProc;
-            var wndClassEx = new WNDCLASSEX
+            var wndClassEx = new User32.WNDCLASSEX
             {
-                cbSize = Marshal.SizeOf<WNDCLASSEX>(),
-                hInstance = GetModuleHandle(null),
+                cbSize = Marshal.SizeOf<User32.WNDCLASSEX>(),
+                hInstance = Kernel32.GetModuleHandle(null),
                 lpfnWndProc = _wndProcDelegate,
-                style = ClassStyles.CS_OWNDC,
-                lpszClassName = _className,
-                hCursor = LoadCursor(IntPtr.Zero, (IntPtr)Cursors.IDC_ARROW)
+                style = User32.ClassStyles.CS_OWNDC,
+                lpszClassName = (char *)Unsafe.AsPointer(ref _className),
+                hCursor = User32.LoadCursor(IntPtr.Zero, (IntPtr)User32.Cursors.IDC_ARROW).DangerousGetHandle()
             };
 
-            var atom = RegisterClassEx(ref wndClassEx);
+            var atom = User32.RegisterClassEx(ref wndClassEx);
 
-            var handle = CreateWindowEx(
-                0,
+            var handle = User32.CreateWindowEx(
+                User32.WindowStylesEx.WS_EX_LEFT,
                 _className,
                 "NativeWindow",
-                WindowStyles.WS_CHILD,
+                User32.WindowStyles.WS_CHILD,
                 0,
                 0,
                 640,
@@ -153,16 +154,16 @@ namespace Ryujinx.Ava.Ui.Controls
         }
 
         [SupportedOSPlatform("windows")]
-        IntPtr WndProc(IntPtr hWnd, WindowsMessages msg, IntPtr wParam, IntPtr lParam)
+        unsafe IntPtr WndProc(IntPtr hWnd, User32.WindowMessage windowMessage, void* wParam1, void* lParam1)
         {
-            var point = new Point((long)lParam & 0xFFFF, ((long)lParam >> 16) & 0xFFFF);
+            var point = new Point((long)lParam1 & 0xFFFF, ((long)lParam1 >> 16) & 0xFFFF);
             var root = VisualRoot as Window;
             bool isLeft = false;
-            switch (msg)
+            switch (windowMessage)
             {
-                case WindowsMessages.LBUTTONDOWN:
-                case WindowsMessages.RBUTTONDOWN:
-                    isLeft = msg == WindowsMessages.LBUTTONDOWN;
+                case User32.WindowMessage.WM_LBUTTONDOWN:
+                case User32.WindowMessage.WM_RBUTTONDOWN:
+                    isLeft = windowMessage == User32.WindowMessage.WM_LBUTTONDOWN;
                     this.RaiseEvent(new PointerPressedEventArgs(
                         this,
                         new Pointer(0, PointerType.Mouse, true),
@@ -172,9 +173,9 @@ namespace Ryujinx.Ava.Ui.Controls
                         new PointerPointProperties(isLeft ? RawInputModifiers.LeftMouseButton : RawInputModifiers.RightMouseButton, isLeft ? PointerUpdateKind.LeftButtonPressed : PointerUpdateKind.RightButtonPressed),
                         KeyModifiers.None));
                     break;
-                case WindowsMessages.LBUTTONUP:
-                case WindowsMessages.RBUTTONUP:
-                    isLeft = msg == WindowsMessages.LBUTTONUP;
+                case User32.WindowMessage.WM_LBUTTONUP:
+                case User32.WindowMessage.WM_RBUTTONUP:
+                    isLeft = windowMessage == User32.WindowMessage.WM_LBUTTONUP;
                     this.RaiseEvent(new PointerReleasedEventArgs(
                         this,
                         new Pointer(0, PointerType.Mouse, true),
@@ -185,7 +186,7 @@ namespace Ryujinx.Ava.Ui.Controls
                         KeyModifiers.None,
                         isLeft ? MouseButton.Left : MouseButton.Right));
                     break;
-                case WindowsMessages.MOUSEMOVE:
+                case User32.WindowMessage.WM_MOUSEMOVE:
                     this.RaiseEvent(new PointerEventArgs(
                         PointerMovedEvent,
                         this,
@@ -197,7 +198,7 @@ namespace Ryujinx.Ava.Ui.Controls
                         KeyModifiers.None));
                     break;
             }
-            return DefWindowProc(hWnd, msg, (IntPtr)wParam, (IntPtr)lParam);
+            return User32.DefWindowProc(hWnd, windowMessage, (IntPtr)wParam1, (IntPtr)lParam1);
         }
 
         [SupportedOSPlatform("macos")]
@@ -218,8 +219,8 @@ namespace Ryujinx.Ava.Ui.Controls
         [SupportedOSPlatform("windows")]
         void DestroyWin32(IPlatformHandle handle)
         {
-            DestroyWindow(handle.Handle);
-            UnregisterClass(_className, GetModuleHandle(null));
+            User32.DestroyWindow(handle.Handle);
+            User32.UnregisterClass(_className, Kernel32.GetModuleHandle(null));
         }
 
         [SupportedOSPlatform("macos")]
