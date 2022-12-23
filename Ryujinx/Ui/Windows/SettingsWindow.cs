@@ -37,6 +37,8 @@ namespace Ryujinx.Ui.Windows
         private bool _directoryChanged = false;
 
 #pragma warning disable CS0649, IDE0044
+        [GUI] Entry           _logDirBox;
+        [GUI] ToggleButton    _addLogDir;
         [GUI] CheckButton     _traceLogToggle;
         [GUI] CheckButton     _errorLogToggle;
         [GUI] CheckButton     _warningLogToggle;
@@ -349,6 +351,7 @@ namespace Ryujinx.Ui.Windows
             _graphicsShadersDumpPath.Buffer.Text = ConfigurationState.Instance.Graphics.ShadersDumpPath;
             _fsLogSpinAdjustment.Value           = ConfigurationState.Instance.System.FsGlobalAccessLogMode;
             _systemTimeOffset                    = ConfigurationState.Instance.System.SystemTimeOffset;
+            _logDirBox.Text                      = ConfigurationState.Instance.Logger.LogDirectory.Value;
 
             _gameDirsBox.AppendColumn("", new CellRendererText(), "text", 0);
             _gameDirsBoxStore  = new ListStore(typeof(string));
@@ -563,6 +566,7 @@ namespace Ryujinx.Ui.Windows
                 DriverUtilities.ToggleOGLThreading(backendThreading == BackendThreading.Off);
             }
 
+            ConfigurationState.Instance.Logger.LogDirectory.Value                 = _logDirBox.Text;
             ConfigurationState.Instance.Logger.EnableError.Value                  = _errorLogToggle.Active;
             ConfigurationState.Instance.Logger.EnableTrace.Value                  = _traceLogToggle.Active;
             ConfigurationState.Instance.Logger.EnableWarn.Value                   = _warningLogToggle.Active;
@@ -750,6 +754,18 @@ namespace Ryujinx.Ui.Windows
             }
 
             _browseThemePath.SetStateFlags(StateFlags.Normal, true);
+        }
+
+        private void ChooseLogDir_Pressed(object sender, EventArgs args)
+        {
+            using FileChooserNative fileChooser = new FileChooserNative("Choose the log directory you want to use", this, FileChooserAction.SelectFolder, "Choose", "Cancel");
+
+            if (fileChooser.Run() == (int)ResponseType.Accept)
+            {
+                _logDirBox.Text = fileChooser.Filename;
+            }
+
+            ((ToggleButton)sender).SetStateFlags(StateFlags.Normal, true);
         }
 
         private void ConfigureController_Pressed(object sender, PlayerIndex playerIndex)
