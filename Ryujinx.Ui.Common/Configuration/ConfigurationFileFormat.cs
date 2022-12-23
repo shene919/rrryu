@@ -14,7 +14,7 @@ namespace Ryujinx.Ui.Common.Configuration
         /// <summary>
         /// The current version of the file format
         /// </summary>
-        public const int CurrentVersion = 42;
+        public const int CurrentVersion = 43;
 
         /// <summary>
         /// Version of the configuration file format
@@ -55,6 +55,11 @@ namespace Ryujinx.Ui.Common.Configuration
         /// Dumps shaders in this local directory
         /// </summary>
         public string GraphicsShadersDumpPath { get; set; }
+
+        /// <summary>
+        /// Sets the log directory
+        /// </summary>
+        public string LoggingLogDirectory { get; set; }
 
         /// <summary>
         /// Enables printing debug log messages

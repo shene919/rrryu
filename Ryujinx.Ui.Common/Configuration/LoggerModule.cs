@@ -1,6 +1,7 @@
 ﻿using Ryujinx.Common;
 using Ryujinx.Common.Logging;
 using System;
+using System.IO;
 
 namespace Ryujinx.Ui.Common.Configuration
 {
@@ -8,6 +9,7 @@ namespace Ryujinx.Ui.Common.Configuration
     {
         public static void Initialize()
         {
+            ConfigurationState.Instance.Logger.LogDirectory.Event      += ReloadLogDirectory;
             ConfigurationState.Instance.Logger.EnableDebug.Event       += ReloadEnableDebug;
             ConfigurationState.Instance.Logger.EnableStub.Event        += ReloadEnableStub;
             ConfigurationState.Instance.Logger.EnableInfo.Event        += ReloadEnableInfo;
@@ -80,7 +82,7 @@ namespace Ryujinx.Ui.Common.Configuration
             if (e.NewValue)
             {
                 Logger.AddTarget(new AsyncLogTargetWrapper(
-                    new FileLogTarget(ReleaseInformations.GetBaseApplicationDirectory(), "file"),
+                    new FileLogTarget(ConfigurationState.Instance.Logger.LogDirectory.Value, "file"),
                     1000,
                     AsyncLogTargetOverflowAction.Block
                 ));
@@ -88,6 +90,32 @@ namespace Ryujinx.Ui.Common.Configuration
             else
             {
                 Logger.RemoveTarget("file");
+            }
+        }
+
+        private static void ReloadLogDirectory(object sender, ReactiveEventArgs<string> e)
+        {
+            if (!string.IsNullOrEmpty(e.NewValue))
+            {
+                if (!Directory.Exists(e.NewValue))
+                {
+                    Directory.CreateDirectory(e.NewValue);
+                }
+
+                if (e.OldValue != null)
+                {
+                    Logger.RemoveTarget("file");
+
+                    Logger.AddTarget(new AsyncLogTargetWrapper(
+                        new FileLogTarget(e.NewValue, "file"),
+                        1000,
+                        AsyncLogTargetOverflowAction.Block
+                    ));
+                }
+            }
+            else
+            {
+                ConfigurationState.Instance.Logger.LogDirectory.Value = Path.Combine(ReleaseInformations.GetBaseApplicationDirectory(), "Logs");
             }
         }
     }

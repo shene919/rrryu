@@ -9,6 +9,7 @@ using Ryujinx.Ui.Common.Configuration.Ui;
 using Ryujinx.Ui.Common.Helper;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Ryujinx.Ui.Common.Configuration
 {
@@ -155,6 +156,11 @@ namespace Ryujinx.Ui.Common.Configuration
         public class LoggerSection
         {
             /// <summary>
+            /// Sets the log directory
+            /// </summary>
+            public ReactiveObject<string> LogDirectory { get; private set; }
+
+            /// <summary>
             /// Enables printing debug log messages
             /// </summary>
             public ReactiveObject<bool> EnableDebug { get; private set; }
@@ -211,6 +217,7 @@ namespace Ryujinx.Ui.Common.Configuration
 
             public LoggerSection()
             {
+                LogDirectory        = new ReactiveObject<string>();
                 EnableDebug         = new ReactiveObject<bool>();
                 EnableStub          = new ReactiveObject<bool>();
                 EnableInfo          = new ReactiveObject<bool>();
@@ -534,6 +541,7 @@ namespace Ryujinx.Ui.Common.Configuration
                 MaxAnisotropy              = Graphics.MaxAnisotropy,
                 AspectRatio                = Graphics.AspectRatio,
                 GraphicsShadersDumpPath    = Graphics.ShadersDumpPath,
+                LoggingLogDirectory        = Logger.LogDirectory,
                 LoggingEnableDebug         = Logger.EnableDebug,
                 LoggingEnableStub          = Logger.EnableStub,
                 LoggingEnableInfo          = Logger.EnableInfo,
@@ -1192,7 +1200,15 @@ namespace Ryujinx.Ui.Common.Configuration
                 configurationFileFormat.EnableMacroHLE = true;
             }
 
+            if (configurationFileFormat.Version < 43)
+            {
+                Ryujinx.Common.Logging.Logger.Warning?.Print(LogClass.Application, $"Outdated configuration version {configurationFileFormat.Version}, migrating to version 43.");
+
+                configurationFileFormat.LoggingLogDirectory = Path.Combine(ReleaseInformations.GetBaseApplicationDirectory(), "Logs");
+            }
+
             Logger.EnableFileLog.Value                = configurationFileFormat.EnableFileLog;
+            Logger.LogDirectory.Value                 = configurationFileFormat.LoggingLogDirectory;
             Graphics.ResScale.Value                   = configurationFileFormat.ResScale;
             Graphics.ResScaleCustom.Value             = configurationFileFormat.ResScaleCustom;
             Graphics.MaxAnisotropy.Value              = configurationFileFormat.MaxAnisotropy;
