@@ -142,14 +142,14 @@ namespace Ryujinx.Common.Memory.PartialUnmaps
 
                     if (handle == IntPtr.Zero)
                     {
-                        Console.Error.WriteLine($"PartialUnmapState OpenThread failed: {Marshal.GetLastPInvokeErrorMessage()}");
+                        Console.Error.WriteLine($"PartialUnmapState OpenThread failed for id '{id}': {Marshal.GetLastPInvokeError()} - {Marshal.GetLastPInvokeErrorMessage()}");
                         Interlocked.CompareExchange(ref ids[i], 0, id);
                     }
                     else
                     {
                         if (!GetExitCodeThread(handle, out uint exitCode))
                         {
-                            Console.Error.WriteLine($"PartialUnmapState GetExitCodeThread failed: {Marshal.GetLastPInvokeErrorMessage()}");
+                            Console.Error.WriteLine($"PartialUnmapState GetExitCodeThread failed for handle '{handle}': {Marshal.GetLastPInvokeError()} - {Marshal.GetLastPInvokeErrorMessage()}");
                         }
 
                         if (exitCode != ExitCodeStillActive)
@@ -159,7 +159,7 @@ namespace Ryujinx.Common.Memory.PartialUnmaps
 
                         if (!CloseHandle(handle))
                         {
-                            Console.Error.WriteLine($"PartialUnmapState CloseHandle failed: {Marshal.GetLastPInvokeErrorMessage()}");
+                            Console.Error.WriteLine($"PartialUnmapState CloseHandle failed for handle '{handle}': {Marshal.GetLastPInvokeError()} - {Marshal.GetLastPInvokeErrorMessage()}");
                         }
                     }
                 }
