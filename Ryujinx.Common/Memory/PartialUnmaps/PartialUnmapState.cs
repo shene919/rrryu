@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.Versioning;
 using System.Threading;
 
@@ -143,18 +142,25 @@ namespace Ryujinx.Common.Memory.PartialUnmaps
 
                     if (handle == IntPtr.Zero)
                     {
+                        Console.Error.WriteLine($"PartialUnmapState OpenThread failed: {Marshal.GetLastPInvokeErrorMessage()}");
                         Interlocked.CompareExchange(ref ids[i], 0, id);
                     }
                     else
                     {
-                        GetExitCodeThread(handle, out uint exitCode);
+                        if (!GetExitCodeThread(handle, out uint exitCode))
+                        {
+                            Console.Error.WriteLine($"PartialUnmapState GetExitCodeThread failed: {Marshal.GetLastPInvokeErrorMessage()}");
+                        }
 
                         if (exitCode != ExitCodeStillActive)
                         {
                             Interlocked.CompareExchange(ref ids[i], 0, id);
                         }
 
-                        CloseHandle(handle);
+                        if (!CloseHandle(handle))
+                        {
+                            Console.Error.WriteLine($"PartialUnmapState CloseHandle failed: {Marshal.GetLastPInvokeErrorMessage()}");
+                        }
                     }
                 }
             }
