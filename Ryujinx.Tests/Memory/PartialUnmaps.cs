@@ -73,6 +73,9 @@ namespace Ryujinx.Tests.Memory
 
             EnsureTranslator();
 
+            // Globally reset the struct for handling partial unmap races.
+            PartialUnmapState.Reset();
+
             ref var state = ref PartialUnmapState.GetRef();
 
             Thread testThread = null;
@@ -80,8 +83,6 @@ namespace Ryujinx.Tests.Memory
 
             try
             {
-                // Globally reset the struct for handling partial unmap races.
-                PartialUnmapState.Reset();
                 bool error = false;
 
                 // Create a large mapping.
@@ -94,7 +95,7 @@ namespace Ryujinx.Tests.Memory
 
                 if (readOnly)
                 {
-                    // Write a value to the physical memory, then try to read it repeately from virtual.
+                    // Write a value to the physical memory, then try to read it repeatedly from virtual.
                     // It should not change.
                     testThread = new Thread(() =>
                     {
