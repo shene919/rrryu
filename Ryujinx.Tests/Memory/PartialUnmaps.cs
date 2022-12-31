@@ -155,8 +155,21 @@ namespace Ryujinx.Tests.Memory
                 // On Windows, this should put unmap counts on the thread local map.
                 if (OperatingSystem.IsWindows())
                 {
+                    int tryCount = 0;
+                    int threadCount = CountThreads(ref state);
+
+                    while (tryCount < 3 && threadCount == 0)
+                    {
+                        Console.Error.WriteLine($"CountThreads sleeping... [Try {tryCount + 1}/3]");
+                        Thread.Sleep(2000);
+
+                        threadCount = CountThreads(ref state);
+
+                        tryCount++;
+                    }
+
                     // One thread should be present on the thread local map. Trimming should remove it.
-                    Assert.AreEqual(1, CountThreads(ref state));
+                    Assert.AreEqual(1, threadCount);
                 }
 
                 shouldAccess = false;
