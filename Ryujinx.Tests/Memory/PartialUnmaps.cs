@@ -158,6 +158,8 @@ namespace Ryujinx.Tests.Memory
                     int tryCount = 0;
                     int threadCount = CountThreads(ref state);
 
+                    Console.Error.WriteLine($"CountThreads current state: partial unmap counts: {state.PartialUnmapsCount} - {testThread.ThreadState}");
+
                     while (tryCount < 5 && threadCount == 0)
                     {
                         if (!testThread.IsAlive)
