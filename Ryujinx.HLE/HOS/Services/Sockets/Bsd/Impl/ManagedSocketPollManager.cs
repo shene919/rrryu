@@ -1,6 +1,9 @@
 ﻿using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Services.Sockets.Bsd.Types;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Sockets;
 
 namespace Ryujinx.HLE.HOS.Services.Sockets.Bsd.Impl
@@ -8,6 +11,8 @@ namespace Ryujinx.HLE.HOS.Services.Sockets.Bsd.Impl
     class ManagedSocketPollManager : IPollManager
     {
         private static ManagedSocketPollManager _instance;
+
+        private readonly Stopwatch _timer;
 
         public static ManagedSocketPollManager Instance
         {
@@ -20,6 +25,30 @@ namespace Ryujinx.HLE.HOS.Services.Sockets.Bsd.Impl
 
                 return _instance;
             }
+        }
+
+        private ManagedSocketPollManager()
+        {
+            if (OperatingSystem.IsMacOS())
+            {
+                _timer = new Stopwatch();
+            }
+        }
+
+        private bool PollFilterWorkaround(Socket socket, SelectMode mode, ref int timeout)
+        {
+            if (timeout <= 0)
+            {
+                return false;
+            }
+
+            _timer.Restart();
+            var result = socket.Poll(timeout, mode);
+            _timer.Stop();
+
+            timeout -= _timer.Elapsed.Microseconds;
+
+            return result;
         }
 
         public bool IsCompatible(PollEvent evnt)
@@ -75,7 +104,28 @@ namespace Ryujinx.HLE.HOS.Services.Sockets.Bsd.Impl
             {
                 int actualTimeoutMicroseconds = timeoutMilliseconds == -1 ? -1 : timeoutMilliseconds * 1000;
 
-                Socket.Select(readEvents, writeEvents, errorEvents, actualTimeoutMicroseconds);
+                // FIXME: Workaround for https://github.com/dotnet/runtime/issues/920
+                if (OperatingSystem.IsMacOS())
+                {
+                    if (actualTimeoutMicroseconds >= 0)
+                    {
+                        readEvents = readEvents.Where(sock => PollFilterWorkaround(sock, SelectMode.SelectRead, ref actualTimeoutMicroseconds)).ToList();
+                        writeEvents = writeEvents.Where(sock => PollFilterWorkaround(sock, SelectMode.SelectWrite, ref actualTimeoutMicroseconds)).ToList();
+                        errorEvents = errorEvents.Where(sock => PollFilterWorkaround(sock, SelectMode.SelectError, ref actualTimeoutMicroseconds)).ToList();
+
+                        _timer.Reset();
+                    }
+                    else
+                    {
+                        readEvents = readEvents.Where(sock => sock.Poll(actualTimeoutMicroseconds, SelectMode.SelectRead)).ToList();
+                        writeEvents = writeEvents.Where(sock => sock.Poll(actualTimeoutMicroseconds, SelectMode.SelectWrite)).ToList();
+                        errorEvents = errorEvents.Where(sock => sock.Poll(actualTimeoutMicroseconds, SelectMode.SelectError)).ToList();
+                    }
+                }
+                else
+                {
+                    Socket.Select(readEvents, writeEvents, errorEvents, actualTimeoutMicroseconds);
+                }
             }
             catch (SocketException exception)
             {
@@ -147,7 +197,28 @@ namespace Ryujinx.HLE.HOS.Services.Sockets.Bsd.Impl
                 }
             }
 
-            Socket.Select(readEvents, writeEvents, errorEvents, timeout);
+            // FIXME: Workaround for https://github.com/dotnet/runtime/issues/920
+            if (OperatingSystem.IsMacOS())
+            {
+                if (timeout >= 0)
+                {
+                    readEvents = readEvents.Where(sock => PollFilterWorkaround(sock, SelectMode.SelectRead, ref timeout)).ToList();
+                    writeEvents = writeEvents.Where(sock => PollFilterWorkaround(sock, SelectMode.SelectWrite, ref timeout)).ToList();
+                    errorEvents = errorEvents.Where(sock => PollFilterWorkaround(sock, SelectMode.SelectError, ref timeout)).ToList();
+
+                    _timer.Reset();
+                }
+                else
+                {
+                    readEvents = readEvents.Where(sock => sock.Poll(timeout, SelectMode.SelectRead)).ToList();
+                    writeEvents = writeEvents.Where(sock => sock.Poll(timeout, SelectMode.SelectWrite)).ToList();
+                    errorEvents = errorEvents.Where(sock => sock.Poll(timeout, SelectMode.SelectError)).ToList();
+                }
+            }
+            else
+            {
+                Socket.Select(readEvents, writeEvents, errorEvents, timeout);
+            }
 
             updatedCount = readEvents.Count + writeEvents.Count + errorEvents.Count;
 
