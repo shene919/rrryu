@@ -28,10 +28,12 @@ jobs:
       - name: Run dotnet format
         run: |
           dotnet tool install -g dotnet-format
-          dotnet format --exclude-diagnostics ENDOFLINE,WHITESPACE --severity info --verify-no-changes --report ./dotnet-format-report.json
+          dotnet format style --severity info --verify-no-changes --report ./style-report.json
+          dotnet format analyzers --severity info --verify-no-changes --report ./analyzers-report.json
 
       - name: Upload report
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          path: ./dotnet-format-report.json
+          name: dotnet-format
+          path: ./*-report.json
