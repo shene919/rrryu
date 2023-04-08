@@ -319,5 +319,15 @@ namespace Ryujinx.Memory.Range
 
             return hash.ToHashCode();
         }
+
+        public static bool operator ==(MultiRange left, MultiRange right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(MultiRange left, MultiRange right)
+        {
+            return !(left == right);
+        }
     }
 }

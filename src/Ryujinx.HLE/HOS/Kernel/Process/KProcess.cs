@@ -527,7 +527,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             return result;
         }
 
-        private void GenerateRandomEntropy()
+        private static void GenerateRandomEntropy()
         {
             // TODO.
         }
@@ -1020,12 +1020,12 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             }
         }
 
-        private void SignalExitToDebugTerminated()
+        private static void SignalExitToDebugTerminated()
         {
             // TODO: Debug events.
         }
 
-        private void SignalExitToDebugExited()
+        private static void SignalExitToDebugExited()
         {
             // TODO: Debug events.
         }
@@ -1183,7 +1183,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             }
         }
 
-        public bool IsExceptionUserThread(KThread thread)
+        public static bool IsExceptionUserThread(KThread thread)
         {
             // TODO
             return false;

@@ -677,12 +677,12 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public bool ShowConsoleVisible
+        public static bool ShowConsoleVisible
         {
             get => ConsoleHelper.SetConsoleWindowStateSupported;
         }
 
-        public bool ManageFileTypesVisible
+        public static bool ManageFileTypesVisible
         {
             get => FileAssociationHelper.IsTypeAssociationSupported;
         }
@@ -741,7 +741,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public int ListItemSelectorSize
+        public static int ListItemSelectorSize
         {
             get
             {
@@ -884,10 +884,10 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool IsSortedByType => SortMode == ApplicationSort.FileType;
         public bool IsSortedBySize => SortMode == ApplicationSort.FileSize;
         public bool IsSortedByPath => SortMode == ApplicationSort.Path;
-        public bool IsGridSmall => ConfigurationState.Instance.Ui.GridSize == 1;
-        public bool IsGridMedium => ConfigurationState.Instance.Ui.GridSize == 2;
-        public bool IsGridLarge => ConfigurationState.Instance.Ui.GridSize == 3;
-        public bool IsGridHuge => ConfigurationState.Instance.Ui.GridSize == 4;
+        public static bool IsGridSmall => ConfigurationState.Instance.Ui.GridSize == 1;
+        public static bool IsGridMedium => ConfigurationState.Instance.Ui.GridSize == 2;
+        public static bool IsGridLarge => ConfigurationState.Instance.Ui.GridSize == 3;
+        public static bool IsGridHuge => ConfigurationState.Instance.Ui.GridSize == 4;
 
 #endregion
 
@@ -1325,7 +1325,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             }
         }
 
-        public void ChangeLanguage(object languageCode)
+        public static void ChangeLanguage(object languageCode)
         {
             LocaleManager.Instance.LoadLanguage((string)languageCode);
 
@@ -1535,7 +1535,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             if (SelectedApplication != null)
             {
                 string modsBasePath  = VirtualFileSystem.ModLoader.GetModsBasePath();
-                string titleModsPath = VirtualFileSystem.ModLoader.GetTitleDir(modsBasePath, SelectedApplication.TitleId);
+                string titleModsPath = ModLoader.GetTitleDir(modsBasePath, SelectedApplication.TitleId);
 
                 OpenHelper.OpenFolder(titleModsPath);
             }
@@ -1546,7 +1546,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             if (SelectedApplication != null)
             {
                 string sdModsBasePath = VirtualFileSystem.ModLoader.GetSdModsBasePath();
-                string titleModsPath  = VirtualFileSystem.ModLoader.GetTitleDir(sdModsBasePath, SelectedApplication.TitleId);
+                string titleModsPath  = ModLoader.GetTitleDir(sdModsBasePath, SelectedApplication.TitleId);
 
                 OpenHelper.OpenFolder(titleModsPath);
             }

@@ -625,7 +625,7 @@ namespace Ryujinx.Ui.Windows
             }
 
             ConfigurationState.Instance.ToFileFormat().SaveConfig(Program.ConfigurationPath);
-            _parent.UpdateGraphicsConfig();
+            MainWindow.UpdateGraphicsConfig();
             ThemeHelper.ApplyTheme();
         }
 

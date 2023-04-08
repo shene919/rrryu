@@ -140,7 +140,7 @@ namespace Ryujinx.HLE.HOS
         public string GetModsBasePath()   => EnsureBaseDirStructure(AppDataManager.GetModsPath());
         public string GetSdModsBasePath() => EnsureBaseDirStructure(AppDataManager.GetSdModsPath());
 
-        private string EnsureBaseDirStructure(string modsBasePath)
+        private static string EnsureBaseDirStructure(string modsBasePath)
         {
             var modsDir = new DirectoryInfo(modsBasePath);
 
@@ -155,7 +155,7 @@ namespace Ryujinx.HLE.HOS
         private static DirectoryInfo FindTitleDir(DirectoryInfo contentsDir, string titleId)
             => contentsDir.EnumerateDirectories($"{titleId}*", _dirEnumOptions).FirstOrDefault();
 
-        public string GetTitleDir(string modsBasePath, string titleId)
+        public static string GetTitleDir(string modsBasePath, string titleId)
         {
             var contentsDir = new DirectoryInfo(Path.Combine(modsBasePath, AmsContentsDir));
             var titleModsPath = FindTitleDir(contentsDir, titleId);

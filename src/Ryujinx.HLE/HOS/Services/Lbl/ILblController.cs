@@ -12,14 +12,14 @@
 
         [CommandHipc(17)]
         // SetBrightnessReflectionDelayLevel(float, float)
-        public ResultCode SetBrightnessReflectionDelayLevel(ServiceCtx context)
+        public static ResultCode SetBrightnessReflectionDelayLevel(ServiceCtx context)
         {
             return ResultCode.Success;
         }
 
         [CommandHipc(18)]
         // GetBrightnessReflectionDelayLevel(float) -> float
-        public ResultCode GetBrightnessReflectionDelayLevel(ServiceCtx context)
+        public static ResultCode GetBrightnessReflectionDelayLevel(ServiceCtx context)
         {
             context.ResponseData.Write(0.0f);
 
@@ -28,14 +28,14 @@
 
         [CommandHipc(21)]
         // SetCurrentAmbientLightSensorMapping(unknown<0xC>)
-        public ResultCode SetCurrentAmbientLightSensorMapping(ServiceCtx context)
+        public static ResultCode SetCurrentAmbientLightSensorMapping(ServiceCtx context)
         {
             return ResultCode.Success;
         }
 
         [CommandHipc(22)]
         // GetCurrentAmbientLightSensorMapping() -> unknown<0xC>
-        public ResultCode GetCurrentAmbientLightSensorMapping(ServiceCtx context)
+        public static ResultCode GetCurrentAmbientLightSensorMapping(ServiceCtx context)
         {
             return ResultCode.Success;
         }

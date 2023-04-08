@@ -663,7 +663,7 @@ namespace Ryujinx.Ava
 
             DiscordIntegrationModule.SwitchToPlayingState(Device.Processes.ActiveApplication.ProgramIdText, Device.Processes.ActiveApplication.Name);
 
-            _viewModel.ApplicationLibrary.LoadAndSaveMetaData(Device.Processes.ActiveApplication.ProgramIdText, appMetadata =>
+            Ui.App.Common.ApplicationLibrary.LoadAndSaveMetaData(Device.Processes.ActiveApplication.ProgramIdText, appMetadata =>
             {
                 appMetadata.LastPlayed = DateTime.UtcNow.ToString();
             });

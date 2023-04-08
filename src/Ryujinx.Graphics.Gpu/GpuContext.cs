@@ -204,7 +204,7 @@ namespace Ryujinx.Graphics.Gpu
         /// Gets the value of the GPU timer.
         /// </summary>
         /// <returns>The current GPU timestamp</returns>
-        public ulong GetTimestamp()
+        public static ulong GetTimestamp()
         {
             ulong ticks = ConvertNanosecondsToTicks((ulong)PerformanceCounter.ElapsedNanoseconds);
 

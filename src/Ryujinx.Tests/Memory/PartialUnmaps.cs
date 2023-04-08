@@ -21,7 +21,7 @@ namespace Ryujinx.Tests.Memory
     {
         private static Translator _translator;
 
-        private (MemoryBlock virt, MemoryBlock mirror, MemoryEhMeilleure exceptionHandler) GetVirtual(ulong asSize)
+        private static (MemoryBlock virt, MemoryBlock mirror, MemoryEhMeilleure exceptionHandler) GetVirtual(ulong asSize)
         {
             MemoryAllocationFlags asFlags = MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible;
 
@@ -34,7 +34,7 @@ namespace Ryujinx.Tests.Memory
             return (addressSpace, addressSpaceMirror, exceptionHandler);
         }
 
-        private int CountThreads(ref PartialUnmapState state)
+        private static int CountThreads(ref PartialUnmapState state)
         {
             int count = 0;
 
@@ -51,7 +51,7 @@ namespace Ryujinx.Tests.Memory
             return count;
         }
 
-        private void EnsureTranslator()
+        private static void EnsureTranslator()
         {
             // Create a translator, as one is needed to register the signal handler or emit methods.
             _translator ??= new Translator(new JitMemoryAllocator(), new MockMemoryManager(), true);

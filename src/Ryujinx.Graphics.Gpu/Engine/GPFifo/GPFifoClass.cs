@@ -93,7 +93,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.GPFifo
             if (_state.State.SemaphoredReleaseSize == SemaphoredReleaseSize.SixteenBytes)
             {
                 _parent.MemoryManager.Write(address + 4, 0);
-                _parent.MemoryManager.Write(address + 8, _context.GetTimestamp());
+                _parent.MemoryManager.Write(address + 8, GpuContext.GetTimestamp());
             }
 
             // TODO: Acquire operations (Wait), interrupts for invalid combinations.

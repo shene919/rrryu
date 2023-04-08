@@ -150,7 +150,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         {
             ulong gpuVa = _state.State.SemaphoreAddress.Pack();
 
-            ulong ticks = _context.GetTimestamp();
+            ulong ticks = GpuContext.GetTimestamp();
 
             ICounterEvent counter = null;
 

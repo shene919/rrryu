@@ -38,7 +38,7 @@ namespace Ryujinx.Memory.Tests
                 (IMultiRegionHandle)_tracking.BeginGranularTracking(address, size, null, granularity, 0);
         }
 
-        private void RandomOrder(Random random, List<int> indices, Action<int> action)
+        private static void RandomOrder(Random random, List<int> indices, Action<int> action)
         {
             List<int> choices = indices.ToList();
 
@@ -50,7 +50,7 @@ namespace Ryujinx.Memory.Tests
             }
         }
 
-        private int ExpectQueryInOrder(IMultiRegionHandle handle, ulong startAddress, ulong size, Func<ulong, bool> addressPredicate)
+        private static int ExpectQueryInOrder(IMultiRegionHandle handle, ulong startAddress, ulong size, Func<ulong, bool> addressPredicate)
         {
             int regionCount = 0;
             ulong lastAddress = startAddress;
@@ -66,7 +66,7 @@ namespace Ryujinx.Memory.Tests
             return regionCount;
         }
 
-        private int ExpectQueryInOrder(IMultiRegionHandle handle, ulong startAddress, ulong size, Func<ulong, bool> addressPredicate, int sequenceNumber)
+        private static int ExpectQueryInOrder(IMultiRegionHandle handle, ulong startAddress, ulong size, Func<ulong, bool> addressPredicate, int sequenceNumber)
         {
             int regionCount = 0;
             ulong lastAddress = startAddress;

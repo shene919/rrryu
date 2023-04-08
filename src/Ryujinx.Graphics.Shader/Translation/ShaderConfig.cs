@@ -186,7 +186,7 @@ namespace Ryujinx.Graphics.Shader.Translation
             return format;
         }
 
-        private bool FormatSupportsAtomic(TextureFormat format)
+        private static bool FormatSupportsAtomic(TextureFormat format)
         {
             return format == TextureFormat.R32Sint || format == TextureFormat.R32Uint;
         }

@@ -29,7 +29,7 @@ namespace Ryujinx.Ui.Windows
             _baseTitleInfoLabel.Text = $"Cheats Available for {titleName} [{titleId:X16}]";
 
             string modsBasePath  = virtualFileSystem.ModLoader.GetModsBasePath();
-            string titleModsPath = virtualFileSystem.ModLoader.GetTitleDir(modsBasePath, titleId.ToString("X16"));
+            string titleModsPath = ModLoader.GetTitleDir(modsBasePath, titleId.ToString("X16"));
 
             _enabledCheatsPath = System.IO.Path.Combine(titleModsPath, "cheats", "enabled.txt");
 
@@ -59,7 +59,7 @@ namespace Ryujinx.Ui.Windows
             var buildIdColumn = _cheatTreeView.AppendColumn("Build Id", new CellRendererText(), "text", 3);
             buildIdColumn.Visible = false;
 
-            string[] enabled = { };
+            string[] enabled = Array.Empty<string>();
 
             if (File.Exists(_enabledCheatsPath))
             {

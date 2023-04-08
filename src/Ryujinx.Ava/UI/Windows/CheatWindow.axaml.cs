@@ -36,12 +36,12 @@ namespace Ryujinx.Ava.UI.Windows
             InitializeComponent();
 
             string modsBasePath = virtualFileSystem.ModLoader.GetModsBasePath();
-            string titleModsPath = virtualFileSystem.ModLoader.GetTitleDir(modsBasePath, titleId);
+            string titleModsPath = ModLoader.GetTitleDir(modsBasePath, titleId);
             ulong titleIdValue = ulong.Parse(titleId, System.Globalization.NumberStyles.HexNumber);
 
             _enabledCheatsPath = Path.Combine(titleModsPath, "cheats", "enabled.txt");
 
-            string[] enabled = { };
+            string[] enabled = System.Array.Empty<string>();
 
             if (File.Exists(_enabledCheatsPath))
             {

@@ -55,7 +55,7 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
             return ResultCode.Success;
         }
 
-        private ulong WriteDeliveryCacheProgressImpl(ServiceCtx context, IpcRecvListBuffDesc ipcDesc, DeliveryCacheProgressImpl deliveryCacheProgress)
+        private static ulong WriteDeliveryCacheProgressImpl(ServiceCtx context, IpcRecvListBuffDesc ipcDesc, DeliveryCacheProgressImpl deliveryCacheProgress)
         {
             return MemoryHelper.Write(context.Memory, ipcDesc.Position, deliveryCacheProgress);
         }

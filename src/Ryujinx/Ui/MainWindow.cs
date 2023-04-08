@@ -857,7 +857,7 @@ namespace Ryujinx.Ui
                 DiscordIntegrationModule.SwitchToPlayingState(_emulationContext.Processes.ActiveApplication.ProgramIdText,
                                                               _emulationContext.Processes.ActiveApplication.ApplicationControlProperties.Title[(int)_emulationContext.System.State.DesiredTitleLanguage].NameString.ToString());
 
-                _applicationLibrary.LoadAndSaveMetaData(_emulationContext.Processes.ActiveApplication.ProgramIdText, appMetadata =>
+                ApplicationLibrary.LoadAndSaveMetaData(_emulationContext.Processes.ActiveApplication.ProgramIdText, appMetadata =>
                 {
                     appMetadata.LastPlayed = DateTime.UtcNow.ToString();
                 });
@@ -1000,7 +1000,7 @@ namespace Ryujinx.Ui
         {
             if (_gameLoaded)
             {
-                _applicationLibrary.LoadAndSaveMetaData(titleId, appMetadata =>
+                ApplicationLibrary.LoadAndSaveMetaData(titleId, appMetadata =>
                 {
                     DateTime lastPlayedDateTime = DateTime.Parse(appMetadata.LastPlayed);
                     double   sessionTimePlayed  = DateTime.UtcNow.Subtract(lastPlayedDateTime).TotalSeconds;
@@ -1010,7 +1010,7 @@ namespace Ryujinx.Ui
             }
         }
 
-        public void UpdateGraphicsConfig()
+        public static void UpdateGraphicsConfig()
         {
             int   resScale       = ConfigurationState.Instance.Graphics.ResScale;
             float resScaleCustom = ConfigurationState.Instance.Graphics.ResScaleCustom;
@@ -1023,7 +1023,7 @@ namespace Ryujinx.Ui
             Graphics.Gpu.GraphicsConfig.EnableMacroHLE             = ConfigurationState.Instance.Graphics.EnableMacroHLE;
         }
 
-        public void SaveConfig()
+        public static void SaveConfig()
         {
             ConfigurationState.Instance.ToFileFormat().SaveConfig(Program.ConfigurationPath);
         }
@@ -1136,7 +1136,7 @@ namespace Ryujinx.Ui
 
             _tableStore.SetValue(treeIter, 0, newToggleValue);
 
-            _applicationLibrary.LoadAndSaveMetaData(titleId, appMetadata =>
+            ApplicationLibrary.LoadAndSaveMetaData(titleId, appMetadata =>
             {
                 appMetadata.Favorite = newToggleValue;
             });
@@ -1173,7 +1173,7 @@ namespace Ryujinx.Ui
             ConfigurationState.Instance.System.EnableDockedMode.Value = !ConfigurationState.Instance.System.EnableDockedMode.Value;
         }
 
-        private string GetVolumeLabelText(float volume)
+        private static string GetVolumeLabelText(float volume)
         {
             string icon = volume == 0 ? "🔇" : "🔊";
 
