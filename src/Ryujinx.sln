@@ -35,6 +35,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
 		..\.editorconfig = ..\.editorconfig
+		..\distribution\legal\THIRDPARTY.md = ..\distribution\legal\THIRDPARTY.md
+		..\crowdin.yml = ..\crowdin.yml
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\README.md = ..\README.md
+		Ryujinx.sln.DotSettings = Ryujinx.sln.DotSettings
+		global.json = global.json
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ryujinx.Memory", "Ryujinx.Memory\Ryujinx.Memory.csproj", "{A5E6C691-9E22-4263-8F40-42F002CE66BE}"
@@ -86,6 +93,62 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ryujinx.Horizon", "Ryujinx.Horizon\Ryujinx.Horizon.csproj", "{AF34127A-3A92-43E5-8496-14960A50B1F1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ryujinx.Horizon.Kernel.Generators", "Ryujinx.Horizon.Kernel.Generators\Ryujinx.Horizon.Kernel.Generators.csproj", "{7F55A45D-4E1D-4A36-ADD3-87F29A285AA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "distribution", "distribution", "{F25E1D3C-AAE5-4E69-9E02-8ED7C55AE5EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "linux", "linux", "{88EE9D32-C6EB-409C-BD41-39DC4CE76ACB}"
+	ProjectSection(SolutionItems) = preProject
+		..\distribution\linux\Ryujinx.desktop = ..\distribution\linux\Ryujinx.desktop
+		..\distribution\linux\mime\Ryujinx.xml = ..\distribution\linux\mime\Ryujinx.xml
+		..\distribution\linux\Ryujinx.sh = ..\distribution\linux\Ryujinx.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "macOS", "macOS", "{88CD1F28-74F5-4971-AF98-60142644CDF8}"
+	ProjectSection(SolutionItems) = preProject
+		..\distribution\macos\updater.sh = ..\distribution\macos\updater.sh
+		..\distribution\macos\create_macos_release.sh = ..\distribution\macos\create_macos_release.sh
+		..\distribution\macos\construct_universal_dylib.py = ..\distribution\macos\construct_universal_dylib.py
+		..\distribution\macos\entitlements.xml = ..\distribution\macos\entitlements.xml
+		..\distribution\macos\Info.plist = ..\distribution\macos\Info.plist
+		..\distribution\macos\create_app_bundle.sh = ..\distribution\macos\create_app_bundle.sh
+		..\distribution\macos\bundle_fix_up.py = ..\distribution\macos\bundle_fix_up.py
+		..\distribution\macos\Ryujinx.icns = ..\distribution\macos\Ryujinx.icns
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows", "windows", "{48B99668-8952-4F97-A73B-12A4B107406C}"
+	ProjectSection(SolutionItems) = preProject
+		..\distribution\windows\alsoft.ini = ..\distribution\windows\alsoft.ini
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{61FC9B18-2396-436B-849D-96BF2B2D478A}"
+	ProjectSection(SolutionItems) = preProject
+		..\distribution\misc\add_tar_exec.py = ..\distribution\misc\add_tar_exec.py
+		..\distribution\misc\Logo.svg = ..\distribution\misc\Logo.svg
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{F973CDCD-CD60-4BE2-8266-893BB5F835F3}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\dependabot.yml = ..\.github\dependabot.yml
+		..\.github\FUNDING.yml = ..\.github\FUNDING.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D28ED311-1FA6-417C-8AB2-42AE443D6BAB}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\checks.yml = ..\.github\workflows\checks.yml
+		..\.github\workflows\flatpak.yml = ..\.github\workflows\flatpak.yml
+		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\nightly_pr_comment.yml = ..\.github\workflows\nightly_pr_comment.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{ACAAAB4B-A599-4497-8406-73B7D447016E}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\ISSUE_TEMPLATE\missing_service_call.yml = ..\.github\ISSUE_TEMPLATE\missing_service_call.yml
+		..\.github\ISSUE_TEMPLATE\missing_cpu_instruction.yml = ..\.github\ISSUE_TEMPLATE\missing_cpu_instruction.yml
+		..\.github\ISSUE_TEMPLATE\bug_report.yml = ..\.github\ISSUE_TEMPLATE\bug_report.yml
+		..\.github\ISSUE_TEMPLATE\config.yml = ..\.github\ISSUE_TEMPLATE\config.yml
+		..\.github\ISSUE_TEMPLATE\feature_request.yml = ..\.github\ISSUE_TEMPLATE\feature_request.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -255,5 +318,15 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {110169B3-3328-4730-8AB0-BA05BEF75C1A}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F25E1D3C-AAE5-4E69-9E02-8ED7C55AE5EC} = {36F870C1-3E5F-485F-B426-F0645AF78751}
+		{88EE9D32-C6EB-409C-BD41-39DC4CE76ACB} = {F25E1D3C-AAE5-4E69-9E02-8ED7C55AE5EC}
+		{88CD1F28-74F5-4971-AF98-60142644CDF8} = {F25E1D3C-AAE5-4E69-9E02-8ED7C55AE5EC}
+		{48B99668-8952-4F97-A73B-12A4B107406C} = {F25E1D3C-AAE5-4E69-9E02-8ED7C55AE5EC}
+		{61FC9B18-2396-436B-849D-96BF2B2D478A} = {F25E1D3C-AAE5-4E69-9E02-8ED7C55AE5EC}
+		{F973CDCD-CD60-4BE2-8266-893BB5F835F3} = {36F870C1-3E5F-485F-B426-F0645AF78751}
+		{D28ED311-1FA6-417C-8AB2-42AE443D6BAB} = {F973CDCD-CD60-4BE2-8266-893BB5F835F3}
+		{ACAAAB4B-A599-4497-8406-73B7D447016E} = {F973CDCD-CD60-4BE2-8266-893BB5F835F3}
 	EndGlobalSection
 EndGlobal
