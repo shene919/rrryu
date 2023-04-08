@@ -12,7 +12,7 @@ namespace Ryujinx.Memory
     [SupportedOSPlatform("macos")]
     static class MemoryManagementUnix
     {
-        private static readonly ConcurrentDictionary<IntPtr, ulong> _allocations = new ConcurrentDictionary<IntPtr, ulong>();
+        private static readonly ConcurrentDictionary<IntPtr, ulong> _allocations = new();
 
         public static IntPtr Allocate(ulong size, bool forJit)
         {
