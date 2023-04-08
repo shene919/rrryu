@@ -1429,17 +1429,13 @@ namespace ARMeilleure.Instructions
             }
             else if (MathF.Abs(value) < MathF.Pow(2f, -128))
             {
-                bool overflowToInf;
-
-                switch (fpcr.GetRoundingMode())
+                var overflowToInf = fpcr.GetRoundingMode() switch
                 {
-                    default:
-                    case FPRoundingMode.ToNearest:            overflowToInf = true;  break;
-                    case FPRoundingMode.TowardsPlusInfinity:  overflowToInf = !sign; break;
-                    case FPRoundingMode.TowardsMinusInfinity: overflowToInf = sign;  break;
-                    case FPRoundingMode.TowardsZero:          overflowToInf = false; break;
-                }
-
+                    FPRoundingMode.TowardsPlusInfinity => !sign,
+                    FPRoundingMode.TowardsMinusInfinity => sign,
+                    FPRoundingMode.TowardsZero => false,
+                    _ => true,
+                };
                 result = overflowToInf ? FPInfinity(sign) : FPMaxNormal(sign);
 
                 SoftFloat.FPProcessException(FPException.Overflow, context, fpcr);
@@ -2841,17 +2837,13 @@ namespace ARMeilleure.Instructions
             }
             else if (Math.Abs(value) < Math.Pow(2d, -1024))
             {
-                bool overflowToInf;
-
-                switch (fpcr.GetRoundingMode())
+                var overflowToInf = fpcr.GetRoundingMode() switch
                 {
-                    default:
-                    case FPRoundingMode.ToNearest:            overflowToInf = true;  break;
-                    case FPRoundingMode.TowardsPlusInfinity:  overflowToInf = !sign; break;
-                    case FPRoundingMode.TowardsMinusInfinity: overflowToInf = sign;  break;
-                    case FPRoundingMode.TowardsZero:          overflowToInf = false; break;
-                }
-
+                    FPRoundingMode.TowardsPlusInfinity => !sign,
+                    FPRoundingMode.TowardsMinusInfinity => sign,
+                    FPRoundingMode.TowardsZero => false,
+                    _ => true,
+                };
                 result = overflowToInf ? FPInfinity(sign) : FPMaxNormal(sign);
 
                 SoftFloat.FPProcessException(FPException.Overflow, context, fpcr);
