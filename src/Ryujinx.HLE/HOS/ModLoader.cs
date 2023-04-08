@@ -174,8 +174,10 @@ namespace Ryujinx.HLE.HOS
         {
             if (cache.Initialized || !patchDir.Exists) return;
 
+#pragma warning disable IDE0059
             var patches = cache.KipPatches;
             string type = null;
+#pragma warning restore IDE0059
 
             if (StrEquals(AmsNsoPatchDir, patchDir.Name)) { patches = cache.NsoPatches; type = "NSO"; }
             else if (StrEquals(AmsNroPatchDir, patchDir.Name)) { patches = cache.NroPatches; type = "NRO"; }

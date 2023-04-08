@@ -2683,6 +2683,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Memory
                 return endAddr <= AliasRegionStart || address >= AliasRegionEnd;
             }
 
+#pragma warning disable IDE0066
             switch (state)
             {
                 case MemoryState.Io:
@@ -2712,12 +2713,14 @@ namespace Ryujinx.HLE.HOS.Kernel.Memory
                 case MemoryState.KernelStack:
                     return InsideRegion();
             }
+#pragma warning restore IDE0066
 
             throw new ArgumentException($"Invalid state value \"{state}\".");
         }
 
         private ulong GetBaseAddress(MemoryState state)
         {
+#pragma warning disable IDE0066
             switch (state)
             {
                 case MemoryState.Io:
@@ -2751,12 +2754,14 @@ namespace Ryujinx.HLE.HOS.Kernel.Memory
                 case MemoryState.KernelStack:
                     return AddrSpaceStart;
             }
+#pragma warning restore IDE0066
 
             throw new ArgumentException($"Invalid state value \"{state}\".");
         }
 
         private ulong GetSize(MemoryState state)
         {
+#pragma warning disable IDE0066
             switch (state)
             {
                 case MemoryState.Io:
@@ -2790,6 +2795,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Memory
                 case MemoryState.KernelStack:
                     return AddrSpaceEnd - AddrSpaceStart;
             }
+#pragma warning restore IDE0066
 
             throw new ArgumentException($"Invalid state value \"{state}\".");
         }

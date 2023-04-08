@@ -104,7 +104,9 @@ namespace Ryujinx.HLE.HOS.Services
                 }
             }
 
+#pragma warning disable IDE0059
             long sfciMagic = context.RequestData.ReadInt64();
+#pragma warning restore IDE0059
             int commandId = (int)context.RequestData.ReadInt64();
 
             bool serviceExists = service.HipcCommands.TryGetValue(commandId, out MethodInfo processRequest);

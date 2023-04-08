@@ -9,10 +9,12 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
     {
         private SharedRef<LibHac.Bcat.Impl.Ipc.IDeliveryCacheStorageService> _base;
 
+#pragma warning disable IDE0060
         public IDeliveryCacheStorageService(ServiceCtx context, ref SharedRef<LibHac.Bcat.Impl.Ipc.IDeliveryCacheStorageService> baseService)
         {
             _base = SharedRef<LibHac.Bcat.Impl.Ipc.IDeliveryCacheStorageService>.CreateMove(ref baseService);
         }
+#pragma warning restore IDE0060
 
         [CommandHipc(0)]
         // CreateFileService() -> object<nn::bcat::detail::ipc::IDeliveryCacheFileService>

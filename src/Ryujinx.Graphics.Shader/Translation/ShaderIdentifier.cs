@@ -116,6 +116,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
         private static bool IsResourceWrite(Instruction inst)
         {
+#pragma warning disable IDE0066
             switch (inst)
             {
                 case Instruction.AtomicAdd:
@@ -138,6 +139,7 @@ namespace Ryujinx.Graphics.Shader.Translation
                 case Instruction.StoreStorage8:
                     return true;
             }
+#pragma warning restore IDE0066
 
             return false;
         }

@@ -87,13 +87,12 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
                     {
                         Instruction memRegion = inst & Instruction.MrMask;
 
-                        switch (memRegion)
+                        args += memRegion switch
                         {
-                            case Instruction.MrShared: args += LoadShared(context, operation); break;
-                            case Instruction.MrStorage: args += LoadStorage(context, operation); break;
-
-                            default: throw new InvalidOperationException($"Invalid memory region \"{memRegion}\".");
-                        }
+                            Instruction.MrShared => LoadShared(context, operation),
+                            Instruction.MrStorage => LoadStorage(context, operation),
+                            _ => throw new InvalidOperationException($"Invalid memory region \"{memRegion}\"."),
+                        };
                     }
                     else
                     {

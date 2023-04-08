@@ -260,7 +260,9 @@ namespace Ryujinx.HLE.HOS.Services
             else if (request.Type == IpcMessageType.HipcControl ||
                         request.Type == IpcMessageType.HipcControlWithContext)
             {
+#pragma warning disable IDE0059
                 uint magic = (uint)_requestDataReader.ReadUInt64();
+#pragma warning restore IDE0059
                 uint cmdId = (uint)_requestDataReader.ReadUInt64();
 
                 switch (cmdId)
@@ -276,7 +278,9 @@ namespace Ryujinx.HLE.HOS.Services
                     // TODO: Whats the difference between IpcDuplicateSession/Ex?
                     case 2:
                     case 4:
+#pragma warning disable IDE0059
                         int unknown = _requestDataReader.ReadInt32();
+#pragma warning restore IDE0059
 
                         _context.Syscall.CreateSession(out int dupServerSessionHandle, out int dupClientSessionHandle, false, 0);
 

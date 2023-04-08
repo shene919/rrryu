@@ -577,6 +577,7 @@ namespace Ryujinx.Cpu.Jit
             }
         }
 
+#pragma warning disable IDE0051
         private ulong GetPhysicalAddress(ulong va)
         {
             // We return -1L if the virtual address is invalid or unmapped.
@@ -587,6 +588,7 @@ namespace Ryujinx.Cpu.Jit
 
             return GetPhysicalAddressInternal(va);
         }
+#pragma warning restore IDE0051
 
         private ulong GetPhysicalAddressInternal(ulong va)
         {
@@ -699,6 +701,8 @@ namespace Ryujinx.Cpu.Jit
         /// </summary>
         protected override void Destroy() => _pageTable.Dispose();
 
+#pragma warning disable IDE0051
         private static void ThrowInvalidMemoryRegionException(string message) => throw new InvalidMemoryRegionException(message);
+#pragma warning restore IDE0051
     }
 }

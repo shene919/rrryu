@@ -1091,6 +1091,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             }));
         }
 
+#pragma warning disable IDE0051
         private async void ExtractLogo()
         {
             if (SelectedApplication != null)
@@ -1114,6 +1115,7 @@ namespace Ryujinx.Ava.UI.ViewModels
                 await ApplicationHelper.ExtractSection(NcaSectionType.Code, SelectedApplication.Path, SelectedApplication.TitleName);
             }
         }
+#pragma warning restore IDE0051
 
         private void PrepareLoadScreen()
         {

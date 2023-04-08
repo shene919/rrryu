@@ -33,15 +33,11 @@ namespace ARMeilleure.Instructions
                         throw new NotImplementedException($"Unknown MRC CRm 0x{op.CRm:X} at 0x{op.Address:X} (0x{op.RawOpCode:X}).");
                     }
 
-                    switch (op.Opc2)
+                    info = op.Opc2 switch
                     {
-                        case 2:
-                            info = typeof(NativeInterface).GetMethod(nameof(NativeInterface.SetTpidrEl032)); break;
-
-                        default:
-                            throw new NotImplementedException($"Unknown MRC Opc2 0x{op.Opc2:X} at 0x{op.Address:X} (0x{op.RawOpCode:X}).");
-                    }
-
+                        2 => typeof(NativeInterface).GetMethod(nameof(NativeInterface.SetTpidrEl032)),
+                        _ => throw new NotImplementedException($"Unknown MRC Opc2 0x{op.Opc2:X} at 0x{op.Address:X} (0x{op.RawOpCode:X})."),
+                    };
                     break;
 
                 case 7:
@@ -89,18 +85,12 @@ namespace ARMeilleure.Instructions
                         throw new NotImplementedException($"Unknown MRC CRm 0x{op.CRm:X} at 0x{op.Address:X} (0x{op.RawOpCode:X}).");
                     }
 
-                    switch (op.Opc2)
+                    info = op.Opc2 switch
                     {
-                        case 2:
-                            info = typeof(NativeInterface).GetMethod(nameof(NativeInterface.GetTpidrEl032)); break;
-
-                        case 3:
-                            info = typeof(NativeInterface).GetMethod(nameof(NativeInterface.GetTpidr32)); break;
-
-                        default:
-                            throw new NotImplementedException($"Unknown MRC Opc2 0x{op.Opc2:X} at 0x{op.Address:X} (0x{op.RawOpCode:X}).");
-                    }
-
+                        2 => typeof(NativeInterface).GetMethod(nameof(NativeInterface.GetTpidrEl032)),
+                        3 => typeof(NativeInterface).GetMethod(nameof(NativeInterface.GetTpidr32)),
+                        _ => throw new NotImplementedException($"Unknown MRC Opc2 0x{op.Opc2:X} at 0x{op.Address:X} (0x{op.RawOpCode:X})."),
+                    };
                     break;
 
                 default:
@@ -132,27 +122,16 @@ namespace ARMeilleure.Instructions
             }
 
             int opc = op.MrrcOp;
-
-            MethodInfo info;
-
-            switch (op.CRm)
+            MethodInfo info = op.CRm switch
             {
-                case 14: // Timer.
-                    switch (opc)
-                    {
-                        case 0:
-                            info = typeof(NativeInterface).GetMethod(nameof(NativeInterface.GetCntpctEl0)); break;
-
-                        default:
-                            throw new NotImplementedException($"Unknown MRRC Opc1 0x{opc:X} at 0x{op.Address:X} (0x{op.RawOpCode:X}).");
-                    }
-
-                    break;
-
-                default:
-                    throw new NotImplementedException($"Unknown MRRC 0x{op.RawOpCode:X} at 0x{op.Address:X}.");
-            }
-
+                // Timer.
+                14 => opc switch
+                {
+                    0 => typeof(NativeInterface).GetMethod(nameof(NativeInterface.GetCntpctEl0)),
+                    _ => throw new NotImplementedException($"Unknown MRRC Opc1 0x{opc:X} at 0x{op.Address:X} (0x{op.RawOpCode:X})."),
+                },
+                _ => throw new NotImplementedException($"Unknown MRRC 0x{op.RawOpCode:X} at 0x{op.Address:X}."),
+            };
             Operand result = context.Call(info);
 
             SetIntA32(context, op.Rt, context.ConvertI64ToI32(result));

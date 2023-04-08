@@ -6,7 +6,7 @@ namespace Ryujinx.Graphics.Texture.Astc
 {
     public struct BitStream128
     {
-        private Buffer16 _data;
+        private readonly Buffer16 _data;
         public int BitsLeft { get; set; }
 
         public BitStream128(Buffer16 data)

@@ -464,7 +464,9 @@ namespace ARMeilleure.CodeGen.X86
                 Operand zex = Local(OperandType.I64);
 
                 node = nodes.AddAfter(node, Operation(Instruction.ZeroExtend32, zex,  source));
+#pragma warning disable IDE0059
                 node = nodes.AddAfter(node, Operation(Instruction.ConvertToFP,  dest, zex));
+#pragma warning restore IDE0059
             }
             else /* if (source.Type == OperandType.I64) */
             {
@@ -638,6 +640,7 @@ namespace ARMeilleure.CodeGen.X86
 
         private static bool IsSameOperandDestSrc1(Operation operation)
         {
+#pragma warning disable IDE0066
             switch (operation.Instruction)
             {
                 case Instruction.Add:
@@ -669,6 +672,7 @@ namespace ARMeilleure.CodeGen.X86
                 case Instruction.Extended:
                     return IsIntrinsicSameOperandDestSrc1(operation);
             }
+#pragma warning restore IDE0066
 
             return IsVexSameOperandDestSrc1(operation);
         }
@@ -700,20 +704,16 @@ namespace ARMeilleure.CodeGen.X86
 
         private static bool HasConstSrc1(Instruction inst)
         {
-            switch (inst)
+            return inst switch
             {
-                case Instruction.Copy:
-                case Instruction.LoadArgument:
-                case Instruction.Spill:
-                case Instruction.SpillArg:
-                    return true;
-            }
-
-            return false;
+                Instruction.Copy or Instruction.LoadArgument or Instruction.Spill or Instruction.SpillArg => true,
+                _ => false,
+            };
         }
 
         private static bool HasConstSrc2(Instruction inst)
         {
+#pragma warning disable IDE0066
             switch (inst)
             {
                 case Instruction.Add:
@@ -736,6 +736,7 @@ namespace ARMeilleure.CodeGen.X86
                 case Instruction.VectorExtract8:
                     return true;
             }
+#pragma warning restore IDE0066
 
             return false;
         }

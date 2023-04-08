@@ -628,7 +628,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (isIndexed)
             {
+#pragma warning disable IDE0059
                 index = Src(AggregateType.S32);
+#pragma warning restore IDE0059
             }
 
             int coordsCount = texOp.Type.GetDimensions();
@@ -658,7 +660,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             (var imageType, var imageVariable) = context.Images[new TextureMeta(texOp.CbufSlot, texOp.Handle, texOp.Format)];
 
+#pragma warning disable IDE0059
             var image = context.Load(imageType, imageVariable);
+#pragma warning restore IDE0059
 
             SpvInstruction resultType = context.GetType(componentType);
             SpvInstruction imagePointerType = context.TypePointer(StorageClass.Image, resultType);
@@ -717,7 +721,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (isIndexed)
             {
+#pragma warning disable IDE0059
                 index = Src(AggregateType.S32);
+#pragma warning restore IDE0059
             }
 
             int coordsCount = texOp.Type.GetDimensions();
@@ -783,7 +789,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (isIndexed)
             {
+#pragma warning disable IDE0059
                 index = Src(AggregateType.S32);
+#pragma warning restore IDE0059
             }
 
             int coordsCount = texOp.Type.GetDimensions();
@@ -1007,7 +1015,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (isIndexed)
             {
+#pragma warning disable IDE0059
                 index = Src(AggregateType.S32);
+#pragma warning restore IDE0059
             }
 
             int pCount = texOp.Type.GetDimensions();
@@ -1090,7 +1100,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 loopBlock = loopBlock.Parent;
             }
 
+#pragma warning disable IDE0059
             (var loopTarget, var continueTarget) = context.LoopTargets[loopBlock];
+#pragma warning restore IDE0059
 
             context.Branch(continueTarget);
 
@@ -1508,7 +1520,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (isIndexed)
             {
+#pragma warning disable IDE0059
                 index = Src(AggregateType.S32);
+#pragma warning restore IDE0059
             }
 
             int coordsCount = texOp.Type.GetDimensions();
@@ -1785,7 +1799,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (isIndexed)
             {
+#pragma warning disable IDE0059
                 index = context.GetS32(texOp.GetSource(0));
+#pragma warning restore IDE0059
             }
 
             var meta = new TextureMeta(texOp.CbufSlot, texOp.Handle, texOp.Format);

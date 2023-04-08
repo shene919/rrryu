@@ -16,10 +16,10 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.Sys
         private readonly Lbl.LblControllerServer _lblControllerServer;
 
         private bool _vrModeEnabled;
-#pragma warning disable CS0414
+#pragma warning disable CS0414, IDE0052
         private bool _lcdBacklighOffEnabled;
         private bool _requestExitToLibraryAppletAtExecuteNextProgramEnabled;
-#pragma warning restore CS0414
+#pragma warning restore CS0414, IDE0052
         private int  _messageEventHandle;
         private int  _displayResolutionChangedEventHandle;
 
@@ -153,21 +153,25 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.Sys
 
         [CommandHipc(53)] // 7.0.0+
         // BeginVrModeEx()
+#pragma warning disable IDE0060
         public ResultCode BeginVrModeEx(ServiceCtx context)
         {
             UpdateVrMode(true);
 
             return ResultCode.Success;
         }
+#pragma warning restore IDE0060
 
         [CommandHipc(54)] // 7.0.0+
         // EndVrModeEx()
+#pragma warning disable IDE0060
         public ResultCode EndVrModeEx(ServiceCtx context)
         {
             UpdateVrMode(false);
 
             return ResultCode.Success;
         }
+#pragma warning restore IDE0060
 
         private void UpdateVrMode(bool vrModeEnabled)
         {
@@ -274,6 +278,7 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.Sys
 
         [CommandHipc(900)] // 11.0.0+
         // SetRequestExitToLibraryAppletAtExecuteNextProgramEnabled()
+#pragma warning disable IDE0060
         public ResultCode SetRequestExitToLibraryAppletAtExecuteNextProgramEnabled(ServiceCtx context)
         {
             // TODO : Find where the field is used.
@@ -281,5 +286,6 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.Sys
 
             return ResultCode.Success;
         }
+#pragma warning restore IDE0060
     }
 }

@@ -845,7 +845,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         S16h0 = 3,
     }
 
-    struct InstConditional
+    readonly struct InstConditional
     {
         private readonly ulong _opcode;
         public InstConditional(ulong opcode) => _opcode = opcode;
@@ -854,7 +854,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstAl2p
+    readonly struct InstAl2p
     {
         private readonly ulong _opcode;
         public InstAl2p(ulong opcode) => _opcode = opcode;
@@ -868,7 +868,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 44) & 0x7);
     }
 
-    struct InstAld
+    readonly struct InstAld
     {
         private readonly ulong _opcode;
         public InstAld(ulong opcode) => _opcode = opcode;
@@ -884,7 +884,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Phys => !P && Imm11 == 0 && SrcA != RegisterConsts.RegisterZeroIndex;
     }
 
-    struct InstAst
+    readonly struct InstAst
     {
         private readonly ulong _opcode;
         public InstAst(ulong opcode) => _opcode = opcode;
@@ -899,7 +899,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Phys => !P && Imm11 == 0 && SrcA != RegisterConsts.RegisterZeroIndex;
     }
 
-    struct InstAtom
+    readonly struct InstAtom
     {
         private readonly ulong _opcode;
         public InstAtom(ulong opcode) => _opcode = opcode;
@@ -914,7 +914,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool E => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstAtomCas
+    readonly struct InstAtomCas
     {
         private readonly ulong _opcode;
         public InstAtomCas(ulong opcode) => _opcode = opcode;
@@ -927,7 +927,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool E => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstAtoms
+    readonly struct InstAtoms
     {
         private readonly ulong _opcode;
         public InstAtoms(ulong opcode) => _opcode = opcode;
@@ -941,7 +941,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public AtomOp AtomOp => (AtomOp)((_opcode >> 52) & 0xF);
     }
 
-    struct InstAtomsCas
+    readonly struct InstAtomsCas
     {
         private readonly ulong _opcode;
         public InstAtomsCas(ulong opcode) => _opcode = opcode;
@@ -953,7 +953,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int AtomsBcRz => (int)((_opcode >> 28) & 0x3);
     }
 
-    struct InstB2r
+    readonly struct InstB2r
     {
         private readonly ulong _opcode;
         public InstB2r(ulong opcode) => _opcode = opcode;
@@ -965,7 +965,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public BarMode Mode => (BarMode)((_opcode >> 32) & 0x3);
     }
 
-    struct InstBar
+    readonly struct InstBar
     {
         private readonly ulong _opcode;
         public InstBar(ulong opcode) => _opcode = opcode;
@@ -981,7 +981,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BFixBar => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstBfeR
+    readonly struct InstBfeR
     {
         private readonly ulong _opcode;
         public InstBfeR(ulong opcode) => _opcode = opcode;
@@ -995,7 +995,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Brev => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstBfeI
+    readonly struct InstBfeI
     {
         private readonly ulong _opcode;
         public InstBfeI(ulong opcode) => _opcode = opcode;
@@ -1009,7 +1009,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Brev => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstBfeC
+    readonly struct InstBfeC
     {
         private readonly ulong _opcode;
         public InstBfeC(ulong opcode) => _opcode = opcode;
@@ -1024,7 +1024,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Brev => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstBfiR
+    readonly struct InstBfiR
     {
         private readonly ulong _opcode;
         public InstBfiR(ulong opcode) => _opcode = opcode;
@@ -1037,7 +1037,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool WriteCC => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstBfiI
+    readonly struct InstBfiI
     {
         private readonly ulong _opcode;
         public InstBfiI(ulong opcode) => _opcode = opcode;
@@ -1050,7 +1050,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool WriteCC => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstBfiC
+    readonly struct InstBfiC
     {
         private readonly ulong _opcode;
         public InstBfiC(ulong opcode) => _opcode = opcode;
@@ -1064,7 +1064,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool WriteCC => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstBfiRc
+    readonly struct InstBfiRc
     {
         private readonly ulong _opcode;
         public InstBfiRc(ulong opcode) => _opcode = opcode;
@@ -1078,7 +1078,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool WriteCC => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstBpt
+    readonly struct InstBpt
     {
         private readonly ulong _opcode;
         public InstBpt(ulong opcode) => _opcode = opcode;
@@ -1086,7 +1086,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Bpt Bpt => (Bpt)((_opcode >> 6) & 0x7);
     }
 
-    struct InstBra
+    readonly struct InstBra
     {
         private readonly ulong _opcode;
         public InstBra(ulong opcode) => _opcode = opcode;
@@ -1099,7 +1099,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool U => (_opcode & 0x80) != 0;
     }
 
-    struct InstBrk
+    readonly struct InstBrk
     {
         private readonly ulong _opcode;
         public InstBrk(ulong opcode) => _opcode = opcode;
@@ -1108,7 +1108,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstBrx
+    readonly struct InstBrx
     {
         private readonly ulong _opcode;
         public InstBrx(ulong opcode) => _opcode = opcode;
@@ -1121,7 +1121,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Lmt => (_opcode & 0x40) != 0;
     }
 
-    struct InstCal
+    readonly struct InstCal
     {
         private readonly ulong _opcode;
         public InstCal(ulong opcode) => _opcode = opcode;
@@ -1130,7 +1130,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Inc => (_opcode & 0x40) != 0;
     }
 
-    struct InstCctl
+    readonly struct InstCctl
     {
         private readonly ulong _opcode;
         public InstCctl(ulong opcode) => _opcode = opcode;
@@ -1143,7 +1143,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public CctlOp CctlOp => (CctlOp)((_opcode >> 0) & 0xF);
     }
 
-    struct InstCctll
+    readonly struct InstCctll
     {
         private readonly ulong _opcode;
         public InstCctll(ulong opcode) => _opcode = opcode;
@@ -1155,7 +1155,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public CctlOp CctlOp => (CctlOp)((_opcode >> 0) & 0xF);
     }
 
-    struct InstCctlt
+    readonly struct InstCctlt
     {
         private readonly ulong _opcode;
         public InstCctlt(ulong opcode) => _opcode = opcode;
@@ -1165,7 +1165,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public CctltOp CctltOp => (CctltOp)((_opcode >> 0) & 0x3);
     }
 
-    struct InstCctltR
+    readonly struct InstCctltR
     {
         private readonly ulong _opcode;
         public InstCctltR(ulong opcode) => _opcode = opcode;
@@ -1173,7 +1173,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public CctltOp CctltOp => (CctltOp)((_opcode >> 0) & 0x3);
     }
 
-    struct InstCont
+    readonly struct InstCont
     {
         private readonly ulong _opcode;
         public InstCont(ulong opcode) => _opcode = opcode;
@@ -1182,7 +1182,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstCset
+    readonly struct InstCset
     {
         private readonly ulong _opcode;
         public InstCset(ulong opcode) => _opcode = opcode;
@@ -1197,7 +1197,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public BoolOp Bop => (BoolOp)((_opcode >> 45) & 0x3);
     }
 
-    struct InstCsetp
+    readonly struct InstCsetp
     {
         private readonly ulong _opcode;
         public InstCsetp(ulong opcode) => _opcode = opcode;
@@ -1212,7 +1212,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public BoolOp Bop => (BoolOp)((_opcode >> 45) & 0x3);
     }
 
-    struct InstCs2r
+    readonly struct InstCs2r
     {
         private readonly ulong _opcode;
         public InstCs2r(ulong opcode) => _opcode = opcode;
@@ -1222,7 +1222,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SReg SReg => (SReg)((_opcode >> 20) & 0xFF);
     }
 
-    struct InstDaddR
+    readonly struct InstDaddR
     {
         private readonly ulong _opcode;
         public InstDaddR(ulong opcode) => _opcode = opcode;
@@ -1239,7 +1239,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode RoundMode => (RoundMode)((_opcode >> 39) & 0x3);
     }
 
-    struct InstDaddI
+    readonly struct InstDaddI
     {
         private readonly ulong _opcode;
         public InstDaddI(ulong opcode) => _opcode = opcode;
@@ -1256,7 +1256,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode RoundMode => (RoundMode)((_opcode >> 39) & 0x3);
     }
 
-    struct InstDaddC
+    readonly struct InstDaddC
     {
         private readonly ulong _opcode;
         public InstDaddC(ulong opcode) => _opcode = opcode;
@@ -1274,7 +1274,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode RoundMode => (RoundMode)((_opcode >> 39) & 0x3);
     }
 
-    struct InstDepbar
+    readonly struct InstDepbar
     {
         private readonly ulong _opcode;
         public InstDepbar(ulong opcode) => _opcode = opcode;
@@ -1286,7 +1286,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm6 => (int)((_opcode >> 0) & 0x3F);
     }
 
-    struct InstDfmaR
+    readonly struct InstDfmaR
     {
         private readonly ulong _opcode;
         public InstDfmaR(ulong opcode) => _opcode = opcode;
@@ -1302,7 +1302,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDfmaI
+    readonly struct InstDfmaI
     {
         private readonly ulong _opcode;
         public InstDfmaI(ulong opcode) => _opcode = opcode;
@@ -1318,7 +1318,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDfmaC
+    readonly struct InstDfmaC
     {
         private readonly ulong _opcode;
         public InstDfmaC(ulong opcode) => _opcode = opcode;
@@ -1335,7 +1335,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDfmaRc
+    readonly struct InstDfmaRc
     {
         private readonly ulong _opcode;
         public InstDfmaRc(ulong opcode) => _opcode = opcode;
@@ -1352,7 +1352,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDmnmxR
+    readonly struct InstDmnmxR
     {
         private readonly ulong _opcode;
         public InstDmnmxR(ulong opcode) => _opcode = opcode;
@@ -1370,7 +1370,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstDmnmxI
+    readonly struct InstDmnmxI
     {
         private readonly ulong _opcode;
         public InstDmnmxI(ulong opcode) => _opcode = opcode;
@@ -1388,7 +1388,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstDmnmxC
+    readonly struct InstDmnmxC
     {
         private readonly ulong _opcode;
         public InstDmnmxC(ulong opcode) => _opcode = opcode;
@@ -1407,7 +1407,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstDmulR
+    readonly struct InstDmulR
     {
         private readonly ulong _opcode;
         public InstDmulR(ulong opcode) => _opcode = opcode;
@@ -1421,7 +1421,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDmulI
+    readonly struct InstDmulI
     {
         private readonly ulong _opcode;
         public InstDmulI(ulong opcode) => _opcode = opcode;
@@ -1435,7 +1435,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDmulC
+    readonly struct InstDmulC
     {
         private readonly ulong _opcode;
         public InstDmulC(ulong opcode) => _opcode = opcode;
@@ -1450,7 +1450,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegA => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstDsetR
+    readonly struct InstDsetR
     {
         private readonly ulong _opcode;
         public InstDsetR(ulong opcode) => _opcode = opcode;
@@ -1471,7 +1471,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstDsetI
+    readonly struct InstDsetI
     {
         private readonly ulong _opcode;
         public InstDsetI(ulong opcode) => _opcode = opcode;
@@ -1492,7 +1492,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstDsetC
+    readonly struct InstDsetC
     {
         private readonly ulong _opcode;
         public InstDsetC(ulong opcode) => _opcode = opcode;
@@ -1514,7 +1514,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstDsetpR
+    readonly struct InstDsetpR
     {
         private readonly ulong _opcode;
         public InstDsetpR(ulong opcode) => _opcode = opcode;
@@ -1534,7 +1534,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPredInv => (int)((_opcode >> 0) & 0x7);
     }
 
-    struct InstDsetpI
+    readonly struct InstDsetpI
     {
         private readonly ulong _opcode;
         public InstDsetpI(ulong opcode) => _opcode = opcode;
@@ -1554,7 +1554,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPredInv => (int)((_opcode >> 0) & 0x7);
     }
 
-    struct InstDsetpC
+    readonly struct InstDsetpC
     {
         private readonly ulong _opcode;
         public InstDsetpC(ulong opcode) => _opcode = opcode;
@@ -1575,7 +1575,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPredInv => (int)((_opcode >> 0) & 0x7);
     }
 
-    struct InstExit
+    readonly struct InstExit
     {
         private readonly ulong _opcode;
         public InstExit(ulong opcode) => _opcode = opcode;
@@ -1585,7 +1585,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool KeepRefCnt => (_opcode & 0x20) != 0;
     }
 
-    struct InstF2fR
+    readonly struct InstF2fR
     {
         private readonly ulong _opcode;
         public InstF2fR(ulong opcode) => _opcode = opcode;
@@ -1604,7 +1604,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstF2fI
+    readonly struct InstF2fI
     {
         private readonly ulong _opcode;
         public InstF2fI(ulong opcode) => _opcode = opcode;
@@ -1623,7 +1623,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstF2fC
+    readonly struct InstF2fC
     {
         private readonly ulong _opcode;
         public InstF2fC(ulong opcode) => _opcode = opcode;
@@ -1643,7 +1643,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstF2iR
+    readonly struct InstF2iR
     {
         private readonly ulong _opcode;
         public InstF2iR(ulong opcode) => _opcode = opcode;
@@ -1661,7 +1661,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode2 RoundMode => (RoundMode2)((_opcode >> 39) & 0x3);
     }
 
-    struct InstF2iI
+    readonly struct InstF2iI
     {
         private readonly ulong _opcode;
         public InstF2iI(ulong opcode) => _opcode = opcode;
@@ -1679,7 +1679,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode2 RoundMode => (RoundMode2)((_opcode >> 39) & 0x3);
     }
 
-    struct InstF2iC
+    readonly struct InstF2iC
     {
         private readonly ulong _opcode;
         public InstF2iC(ulong opcode) => _opcode = opcode;
@@ -1698,7 +1698,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode2 RoundMode => (RoundMode2)((_opcode >> 39) & 0x3);
     }
 
-    struct InstFaddR
+    readonly struct InstFaddR
     {
         private readonly ulong _opcode;
         public InstFaddR(ulong opcode) => _opcode = opcode;
@@ -1717,7 +1717,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode RoundMode => (RoundMode)((_opcode >> 39) & 0x3);
     }
 
-    struct InstFaddI
+    readonly struct InstFaddI
     {
         private readonly ulong _opcode;
         public InstFaddI(ulong opcode) => _opcode = opcode;
@@ -1736,7 +1736,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode RoundMode => (RoundMode)((_opcode >> 39) & 0x3);
     }
 
-    struct InstFaddC
+    readonly struct InstFaddC
     {
         private readonly ulong _opcode;
         public InstFaddC(ulong opcode) => _opcode = opcode;
@@ -1756,7 +1756,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public RoundMode RoundMode => (RoundMode)((_opcode >> 39) & 0x3);
     }
 
-    struct InstFadd32i
+    readonly struct InstFadd32i
     {
         private readonly ulong _opcode;
         public InstFadd32i(ulong opcode) => _opcode = opcode;
@@ -1773,7 +1773,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x20000000000000) != 0;
     }
 
-    struct InstFchkR
+    readonly struct InstFchkR
     {
         private readonly ulong _opcode;
         public InstFchkR(ulong opcode) => _opcode = opcode;
@@ -1789,7 +1789,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ChkModeF ChkModeF => (ChkModeF)((_opcode >> 39) & 0x3F);
     }
 
-    struct InstFchkI
+    readonly struct InstFchkI
     {
         private readonly ulong _opcode;
         public InstFchkI(ulong opcode) => _opcode = opcode;
@@ -1805,7 +1805,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ChkModeF ChkModeF => (ChkModeF)((_opcode >> 39) & 0x3F);
     }
 
-    struct InstFchkC
+    readonly struct InstFchkC
     {
         private readonly ulong _opcode;
         public InstFchkC(ulong opcode) => _opcode = opcode;
@@ -1822,7 +1822,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ChkModeF ChkModeF => (ChkModeF)((_opcode >> 39) & 0x3F);
     }
 
-    struct InstFcmpR
+    readonly struct InstFcmpR
     {
         private readonly ulong _opcode;
         public InstFcmpR(ulong opcode) => _opcode = opcode;
@@ -1836,7 +1836,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFcmpI
+    readonly struct InstFcmpI
     {
         private readonly ulong _opcode;
         public InstFcmpI(ulong opcode) => _opcode = opcode;
@@ -1850,7 +1850,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFcmpC
+    readonly struct InstFcmpC
     {
         private readonly ulong _opcode;
         public InstFcmpC(ulong opcode) => _opcode = opcode;
@@ -1865,7 +1865,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFcmpRc
+    readonly struct InstFcmpRc
     {
         private readonly ulong _opcode;
         public InstFcmpRc(ulong opcode) => _opcode = opcode;
@@ -1880,7 +1880,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFfmaR
+    readonly struct InstFfmaR
     {
         private readonly ulong _opcode;
         public InstFfmaR(ulong opcode) => _opcode = opcode;
@@ -1898,7 +1898,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 53) & 0x3);
     }
 
-    struct InstFfmaI
+    readonly struct InstFfmaI
     {
         private readonly ulong _opcode;
         public InstFfmaI(ulong opcode) => _opcode = opcode;
@@ -1916,7 +1916,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 53) & 0x3);
     }
 
-    struct InstFfmaC
+    readonly struct InstFfmaC
     {
         private readonly ulong _opcode;
         public InstFfmaC(ulong opcode) => _opcode = opcode;
@@ -1935,7 +1935,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 53) & 0x3);
     }
 
-    struct InstFfmaRc
+    readonly struct InstFfmaRc
     {
         private readonly ulong _opcode;
         public InstFfmaRc(ulong opcode) => _opcode = opcode;
@@ -1954,7 +1954,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 53) & 0x3);
     }
 
-    struct InstFfma32i
+    readonly struct InstFfma32i
     {
         private readonly ulong _opcode;
         public InstFfma32i(ulong opcode) => _opcode = opcode;
@@ -1970,7 +1970,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 53) & 0x3);
     }
 
-    struct InstFloR
+    readonly struct InstFloR
     {
         private readonly ulong _opcode;
         public InstFloR(ulong opcode) => _opcode = opcode;
@@ -1984,7 +1984,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstFloI
+    readonly struct InstFloI
     {
         private readonly ulong _opcode;
         public InstFloI(ulong opcode) => _opcode = opcode;
@@ -1998,7 +1998,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstFloC
+    readonly struct InstFloC
     {
         private readonly ulong _opcode;
         public InstFloC(ulong opcode) => _opcode = opcode;
@@ -2013,7 +2013,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstFmnmxR
+    readonly struct InstFmnmxR
     {
         private readonly ulong _opcode;
         public InstFmnmxR(ulong opcode) => _opcode = opcode;
@@ -2032,7 +2032,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstFmnmxI
+    readonly struct InstFmnmxI
     {
         private readonly ulong _opcode;
         public InstFmnmxI(ulong opcode) => _opcode = opcode;
@@ -2051,7 +2051,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstFmnmxC
+    readonly struct InstFmnmxC
     {
         private readonly ulong _opcode;
         public InstFmnmxC(ulong opcode) => _opcode = opcode;
@@ -2071,7 +2071,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstFmulR
+    readonly struct InstFmulR
     {
         private readonly ulong _opcode;
         public InstFmulR(ulong opcode) => _opcode = opcode;
@@ -2088,7 +2088,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstFmulI
+    readonly struct InstFmulI
     {
         private readonly ulong _opcode;
         public InstFmulI(ulong opcode) => _opcode = opcode;
@@ -2105,7 +2105,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstFmulC
+    readonly struct InstFmulC
     {
         private readonly ulong _opcode;
         public InstFmulC(ulong opcode) => _opcode = opcode;
@@ -2123,7 +2123,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstFmul32i
+    readonly struct InstFmul32i
     {
         private readonly ulong _opcode;
         public InstFmul32i(ulong opcode) => _opcode = opcode;
@@ -2137,7 +2137,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool WriteCC => (_opcode & 0x10000000000000) != 0;
     }
 
-    struct InstFsetR
+    readonly struct InstFsetR
     {
         private readonly ulong _opcode;
         public InstFsetR(ulong opcode) => _opcode = opcode;
@@ -2159,7 +2159,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVal => (_opcode & 0x10000000000000) != 0;
     }
 
-    struct InstFsetC
+    readonly struct InstFsetC
     {
         private readonly ulong _opcode;
         public InstFsetC(ulong opcode) => _opcode = opcode;
@@ -2182,7 +2182,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVal => (_opcode & 0x10000000000000) != 0;
     }
 
-    struct InstFsetI
+    readonly struct InstFsetI
     {
         private readonly ulong _opcode;
         public InstFsetI(ulong opcode) => _opcode = opcode;
@@ -2204,7 +2204,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVal => (_opcode & 0x10000000000000) != 0;
     }
 
-    struct InstFsetpR
+    readonly struct InstFsetpR
     {
         private readonly ulong _opcode;
         public InstFsetpR(ulong opcode) => _opcode = opcode;
@@ -2226,7 +2226,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFsetpI
+    readonly struct InstFsetpI
     {
         private readonly ulong _opcode;
         public InstFsetpI(ulong opcode) => _opcode = opcode;
@@ -2248,7 +2248,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFsetpC
+    readonly struct InstFsetpC
     {
         private readonly ulong _opcode;
         public InstFsetpC(ulong opcode) => _opcode = opcode;
@@ -2271,7 +2271,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstFswzadd
+    readonly struct InstFswzadd
     {
         private readonly ulong _opcode;
         public InstFswzadd(ulong opcode) => _opcode = opcode;
@@ -2287,21 +2287,21 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int PnWord => (int)((_opcode >> 28) & 0xFF);
     }
 
-    struct InstGetcrsptr
+    readonly struct InstGetcrsptr
     {
         private readonly ulong _opcode;
         public InstGetcrsptr(ulong opcode) => _opcode = opcode;
         public int Dest => (int)((_opcode >> 0) & 0xFF);
     }
 
-    struct InstGetlmembase
+    readonly struct InstGetlmembase
     {
         private readonly ulong _opcode;
         public InstGetlmembase(ulong opcode) => _opcode = opcode;
         public int Dest => (int)((_opcode >> 0) & 0xFF);
     }
 
-    struct InstHadd2R
+    readonly struct InstHadd2R
     {
         private readonly ulong _opcode;
         public InstHadd2R(ulong opcode) => _opcode = opcode;
@@ -2321,7 +2321,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstHadd2I
+    readonly struct InstHadd2I
     {
         private readonly ulong _opcode;
         public InstHadd2I(ulong opcode) => _opcode = opcode;
@@ -2339,7 +2339,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstHadd2C
+    readonly struct InstHadd2C
     {
         private readonly ulong _opcode;
         public InstHadd2C(ulong opcode) => _opcode = opcode;
@@ -2359,7 +2359,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstHadd232i
+    readonly struct InstHadd232i
     {
         private readonly ulong _opcode;
         public InstHadd232i(ulong opcode) => _opcode = opcode;
@@ -2374,7 +2374,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x80000000000000) != 0;
     }
 
-    struct InstHfma2R
+    readonly struct InstHfma2R
     {
         private readonly ulong _opcode;
         public InstHfma2R(ulong opcode) => _opcode = opcode;
@@ -2394,7 +2394,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 37) & 0x3);
     }
 
-    struct InstHfma2I
+    readonly struct InstHfma2I
     {
         private readonly ulong _opcode;
         public InstHfma2I(ulong opcode) => _opcode = opcode;
@@ -2413,7 +2413,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 57) & 0x3);
     }
 
-    struct InstHfma2C
+    readonly struct InstHfma2C
     {
         private readonly ulong _opcode;
         public InstHfma2C(ulong opcode) => _opcode = opcode;
@@ -2433,7 +2433,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 57) & 0x3);
     }
 
-    struct InstHfma2Rc
+    readonly struct InstHfma2Rc
     {
         private readonly ulong _opcode;
         public InstHfma2Rc(ulong opcode) => _opcode = opcode;
@@ -2453,7 +2453,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 57) & 0x3);
     }
 
-    struct InstHfma232i
+    readonly struct InstHfma232i
     {
         private readonly ulong _opcode;
         public InstHfma232i(ulong opcode) => _opcode = opcode;
@@ -2467,7 +2467,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 57) & 0x3);
     }
 
-    struct InstHmul2R
+    readonly struct InstHmul2R
     {
         private readonly ulong _opcode;
         public InstHmul2R(ulong opcode) => _opcode = opcode;
@@ -2486,7 +2486,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 39) & 0x3);
     }
 
-    struct InstHmul2I
+    readonly struct InstHmul2I
     {
         private readonly ulong _opcode;
         public InstHmul2I(ulong opcode) => _opcode = opcode;
@@ -2504,7 +2504,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 39) & 0x3);
     }
 
-    struct InstHmul2C
+    readonly struct InstHmul2C
     {
         private readonly ulong _opcode;
         public InstHmul2C(ulong opcode) => _opcode = opcode;
@@ -2523,7 +2523,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 39) & 0x3);
     }
 
-    struct InstHmul232i
+    readonly struct InstHmul232i
     {
         private readonly ulong _opcode;
         public InstHmul232i(ulong opcode) => _opcode = opcode;
@@ -2537,7 +2537,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Fmz Fmz => (Fmz)((_opcode >> 55) & 0x3);
     }
 
-    struct InstHset2R
+    readonly struct InstHset2R
     {
         private readonly ulong _opcode;
         public InstHset2R(ulong opcode) => _opcode = opcode;
@@ -2560,7 +2560,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstHset2I
+    readonly struct InstHset2I
     {
         private readonly ulong _opcode;
         public InstHset2I(ulong opcode) => _opcode = opcode;
@@ -2581,7 +2581,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x40000000000000) != 0;
     }
 
-    struct InstHset2C
+    readonly struct InstHset2C
     {
         private readonly ulong _opcode;
         public InstHset2C(ulong opcode) => _opcode = opcode;
@@ -2603,7 +2603,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ftz => (_opcode & 0x40000000000000) != 0;
     }
 
-    struct InstHsetp2R
+    readonly struct InstHsetp2R
     {
         private readonly ulong _opcode;
         public InstHsetp2R(ulong opcode) => _opcode = opcode;
@@ -2627,7 +2627,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public HalfSwizzle BSwizzle => (HalfSwizzle)((_opcode >> 28) & 0x3);
     }
 
-    struct InstHsetp2I
+    readonly struct InstHsetp2I
     {
         private readonly ulong _opcode;
         public InstHsetp2I(ulong opcode) => _opcode = opcode;
@@ -2649,7 +2649,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public HalfSwizzle ASwizzle => (HalfSwizzle)((_opcode >> 47) & 0x3);
     }
 
-    struct InstHsetp2C
+    readonly struct InstHsetp2C
     {
         private readonly ulong _opcode;
         public InstHsetp2C(ulong opcode) => _opcode = opcode;
@@ -2673,7 +2673,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public HalfSwizzle ASwizzle => (HalfSwizzle)((_opcode >> 47) & 0x3);
     }
 
-    struct InstI2fR
+    readonly struct InstI2fR
     {
         private readonly ulong _opcode;
         public InstI2fR(ulong opcode) => _opcode = opcode;
@@ -2690,7 +2690,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public DstFmt DstFmt => (DstFmt)((_opcode >> 8) & 0x3);
     }
 
-    struct InstI2fI
+    readonly struct InstI2fI
     {
         private readonly ulong _opcode;
         public InstI2fI(ulong opcode) => _opcode = opcode;
@@ -2707,7 +2707,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public DstFmt DstFmt => (DstFmt)((_opcode >> 8) & 0x3);
     }
 
-    struct InstI2fC
+    readonly struct InstI2fC
     {
         private readonly ulong _opcode;
         public InstI2fC(ulong opcode) => _opcode = opcode;
@@ -2725,7 +2725,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public DstFmt DstFmt => (DstFmt)((_opcode >> 8) & 0x3);
     }
 
-    struct InstI2iR
+    readonly struct InstI2iR
     {
         private readonly ulong _opcode;
         public InstI2iR(ulong opcode) => _opcode = opcode;
@@ -2742,7 +2742,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ISrcDstFmt ISrcFmt => (ISrcDstFmt)((int)((_opcode >> 11) & 0x4) | (int)((_opcode >> 10) & 0x3));
     }
 
-    struct InstI2iI
+    readonly struct InstI2iI
     {
         private readonly ulong _opcode;
         public InstI2iI(ulong opcode) => _opcode = opcode;
@@ -2759,7 +2759,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ISrcDstFmt ISrcFmt => (ISrcDstFmt)((int)((_opcode >> 11) & 0x4) | (int)((_opcode >> 10) & 0x3));
     }
 
-    struct InstI2iC
+    readonly struct InstI2iC
     {
         private readonly ulong _opcode;
         public InstI2iC(ulong opcode) => _opcode = opcode;
@@ -2777,7 +2777,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ISrcDstFmt ISrcFmt => (ISrcDstFmt)((int)((_opcode >> 11) & 0x4) | (int)((_opcode >> 10) & 0x3));
     }
 
-    struct InstIaddR
+    readonly struct InstIaddR
     {
         private readonly ulong _opcode;
         public InstIaddR(ulong opcode) => _opcode = opcode;
@@ -2792,7 +2792,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstIaddI
+    readonly struct InstIaddI
     {
         private readonly ulong _opcode;
         public InstIaddI(ulong opcode) => _opcode = opcode;
@@ -2807,7 +2807,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstIaddC
+    readonly struct InstIaddC
     {
         private readonly ulong _opcode;
         public InstIaddC(ulong opcode) => _opcode = opcode;
@@ -2823,7 +2823,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstIadd32i
+    readonly struct InstIadd32i
     {
         private readonly ulong _opcode;
         public InstIadd32i(ulong opcode) => _opcode = opcode;
@@ -2838,7 +2838,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x20000000000000) != 0;
     }
 
-    struct InstIadd3R
+    readonly struct InstIadd3R
     {
         private readonly ulong _opcode;
         public InstIadd3R(ulong opcode) => _opcode = opcode;
@@ -2859,7 +2859,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public HalfSelect Cpart => (HalfSelect)((_opcode >> 31) & 0x3);
     }
 
-    struct InstIadd3I
+    readonly struct InstIadd3I
     {
         private readonly ulong _opcode;
         public InstIadd3I(ulong opcode) => _opcode = opcode;
@@ -2876,7 +2876,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstIadd3C
+    readonly struct InstIadd3C
     {
         private readonly ulong _opcode;
         public InstIadd3C(ulong opcode) => _opcode = opcode;
@@ -2894,7 +2894,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstIcmpR
+    readonly struct InstIcmpR
     {
         private readonly ulong _opcode;
         public InstIcmpR(ulong opcode) => _opcode = opcode;
@@ -2908,7 +2908,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Signed => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstIcmpI
+    readonly struct InstIcmpI
     {
         private readonly ulong _opcode;
         public InstIcmpI(ulong opcode) => _opcode = opcode;
@@ -2922,7 +2922,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Signed => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstIcmpC
+    readonly struct InstIcmpC
     {
         private readonly ulong _opcode;
         public InstIcmpC(ulong opcode) => _opcode = opcode;
@@ -2937,7 +2937,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Signed => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstIcmpRc
+    readonly struct InstIcmpRc
     {
         private readonly ulong _opcode;
         public InstIcmpRc(ulong opcode) => _opcode = opcode;
@@ -2952,7 +2952,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Signed => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstIde
+    readonly struct InstIde
     {
         private readonly ulong _opcode;
         public InstIde(ulong opcode) => _opcode = opcode;
@@ -2960,7 +2960,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Di => (_opcode & 0x20) != 0;
     }
 
-    struct InstIdpR
+    readonly struct InstIdpR
     {
         private readonly ulong _opcode;
         public InstIdpR(ulong opcode) => _opcode = opcode;
@@ -2976,7 +2976,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcBSign => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstIdpC
+    readonly struct InstIdpC
     {
         private readonly ulong _opcode;
         public InstIdpC(ulong opcode) => _opcode = opcode;
@@ -2993,7 +2993,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcBSign => (_opcode & 0x800000000000) != 0;
     }
 
-    struct InstImadR
+    readonly struct InstImadR
     {
         private readonly ulong _opcode;
         public InstImadR(ulong opcode) => _opcode = opcode;
@@ -3012,7 +3012,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool ASigned => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstImadI
+    readonly struct InstImadI
     {
         private readonly ulong _opcode;
         public InstImadI(ulong opcode) => _opcode = opcode;
@@ -3031,7 +3031,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool ASigned => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstImadC
+    readonly struct InstImadC
     {
         private readonly ulong _opcode;
         public InstImadC(ulong opcode) => _opcode = opcode;
@@ -3051,7 +3051,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool ASigned => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstImadRc
+    readonly struct InstImadRc
     {
         private readonly ulong _opcode;
         public InstImadRc(ulong opcode) => _opcode = opcode;
@@ -3071,7 +3071,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool ASigned => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstImad32i
+    readonly struct InstImad32i
     {
         private readonly ulong _opcode;
         public InstImad32i(ulong opcode) => _opcode = opcode;
@@ -3087,7 +3087,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Hilo => (_opcode & 0x20000000000000) != 0;
     }
 
-    struct InstImadspR
+    readonly struct InstImadspR
     {
         private readonly ulong _opcode;
         public InstImadspR(ulong opcode) => _opcode = opcode;
@@ -3102,7 +3102,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ImadspASelect CSelect => (ImadspASelect)((int)((_opcode >> 50) & 0x6) | (int)((_opcode >> 48) & 0x1));
     }
 
-    struct InstImadspI
+    readonly struct InstImadspI
     {
         private readonly ulong _opcode;
         public InstImadspI(ulong opcode) => _opcode = opcode;
@@ -3117,7 +3117,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ImadspASelect CSelect => (ImadspASelect)((int)((_opcode >> 50) & 0x6) | (int)((_opcode >> 48) & 0x1));
     }
 
-    struct InstImadspC
+    readonly struct InstImadspC
     {
         private readonly ulong _opcode;
         public InstImadspC(ulong opcode) => _opcode = opcode;
@@ -3133,7 +3133,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ImadspASelect CSelect => (ImadspASelect)((int)((_opcode >> 50) & 0x6) | (int)((_opcode >> 48) & 0x1));
     }
 
-    struct InstImadspRc
+    readonly struct InstImadspRc
     {
         private readonly ulong _opcode;
         public InstImadspRc(ulong opcode) => _opcode = opcode;
@@ -3149,7 +3149,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public ImadspASelect CSelect => (ImadspASelect)((int)((_opcode >> 50) & 0x6) | (int)((_opcode >> 48) & 0x1));
     }
 
-    struct InstImnmxR
+    readonly struct InstImnmxR
     {
         private readonly ulong _opcode;
         public InstImnmxR(ulong opcode) => _opcode = opcode;
@@ -3165,7 +3165,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstImnmxI
+    readonly struct InstImnmxI
     {
         private readonly ulong _opcode;
         public InstImnmxI(ulong opcode) => _opcode = opcode;
@@ -3181,7 +3181,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstImnmxC
+    readonly struct InstImnmxC
     {
         private readonly ulong _opcode;
         public InstImnmxC(ulong opcode) => _opcode = opcode;
@@ -3198,7 +3198,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstImulR
+    readonly struct InstImulR
     {
         private readonly ulong _opcode;
         public InstImulR(ulong opcode) => _opcode = opcode;
@@ -3213,7 +3213,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Hilo => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstImulI
+    readonly struct InstImulI
     {
         private readonly ulong _opcode;
         public InstImulI(ulong opcode) => _opcode = opcode;
@@ -3228,7 +3228,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Hilo => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstImulC
+    readonly struct InstImulC
     {
         private readonly ulong _opcode;
         public InstImulC(ulong opcode) => _opcode = opcode;
@@ -3244,7 +3244,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Hilo => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstImul32i
+    readonly struct InstImul32i
     {
         private readonly ulong _opcode;
         public InstImul32i(ulong opcode) => _opcode = opcode;
@@ -3259,7 +3259,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool WriteCC => (_opcode & 0x10000000000000) != 0;
     }
 
-    struct InstIpa
+    readonly struct InstIpa
     {
         private readonly ulong _opcode;
         public InstIpa(ulong opcode) => _opcode = opcode;
@@ -3278,7 +3278,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstIsberd
+    readonly struct InstIsberd
     {
         private readonly ulong _opcode;
         public InstIsberd(ulong opcode) => _opcode = opcode;
@@ -3292,7 +3292,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool P => (_opcode & 0x80000000) != 0;
     }
 
-    struct InstIscaddR
+    readonly struct InstIscaddR
     {
         private readonly ulong _opcode;
         public InstIscaddR(ulong opcode) => _opcode = opcode;
@@ -3306,7 +3306,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public AvgMode AvgMode => (AvgMode)((_opcode >> 48) & 0x3);
     }
 
-    struct InstIscaddI
+    readonly struct InstIscaddI
     {
         private readonly ulong _opcode;
         public InstIscaddI(ulong opcode) => _opcode = opcode;
@@ -3320,7 +3320,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public AvgMode AvgMode => (AvgMode)((_opcode >> 48) & 0x3);
     }
 
-    struct InstIscaddC
+    readonly struct InstIscaddC
     {
         private readonly ulong _opcode;
         public InstIscaddC(ulong opcode) => _opcode = opcode;
@@ -3335,7 +3335,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public AvgMode AvgMode => (AvgMode)((_opcode >> 48) & 0x3);
     }
 
-    struct InstIscadd32i
+    readonly struct InstIscadd32i
     {
         private readonly ulong _opcode;
         public InstIscadd32i(ulong opcode) => _opcode = opcode;
@@ -3348,7 +3348,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm5 => (int)((_opcode >> 53) & 0x1F);
     }
 
-    struct InstIsetR
+    readonly struct InstIsetR
     {
         private readonly ulong _opcode;
         public InstIsetR(ulong opcode) => _opcode = opcode;
@@ -3367,7 +3367,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstIsetI
+    readonly struct InstIsetI
     {
         private readonly ulong _opcode;
         public InstIsetI(ulong opcode) => _opcode = opcode;
@@ -3386,7 +3386,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstIsetC
+    readonly struct InstIsetC
     {
         private readonly ulong _opcode;
         public InstIsetC(ulong opcode) => _opcode = opcode;
@@ -3406,7 +3406,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool X => (_opcode & 0x80000000000) != 0;
     }
 
-    struct InstIsetpR
+    readonly struct InstIsetpR
     {
         private readonly ulong _opcode;
         public InstIsetpR(ulong opcode) => _opcode = opcode;
@@ -3424,7 +3424,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPredInv => (int)((_opcode >> 0) & 0x7);
     }
 
-    struct InstIsetpI
+    readonly struct InstIsetpI
     {
         private readonly ulong _opcode;
         public InstIsetpI(ulong opcode) => _opcode = opcode;
@@ -3442,7 +3442,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPredInv => (int)((_opcode >> 0) & 0x7);
     }
 
-    struct InstIsetpC
+    readonly struct InstIsetpC
     {
         private readonly ulong _opcode;
         public InstIsetpC(ulong opcode) => _opcode = opcode;
@@ -3461,7 +3461,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPredInv => (int)((_opcode >> 0) & 0x7);
     }
 
-    struct InstJcal
+    readonly struct InstJcal
     {
         private readonly ulong _opcode;
         public InstJcal(ulong opcode) => _opcode = opcode;
@@ -3470,7 +3470,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Inc => (_opcode & 0x40) != 0;
     }
 
-    struct InstJmp
+    readonly struct InstJmp
     {
         private readonly ulong _opcode;
         public InstJmp(ulong opcode) => _opcode = opcode;
@@ -3484,7 +3484,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool U => (_opcode & 0x80) != 0;
     }
 
-    struct InstJmx
+    readonly struct InstJmx
     {
         private readonly ulong _opcode;
         public InstJmx(ulong opcode) => _opcode = opcode;
@@ -3497,7 +3497,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Lmt => (_opcode & 0x40) != 0;
     }
 
-    struct InstKil
+    readonly struct InstKil
     {
         private readonly ulong _opcode;
         public InstKil(ulong opcode) => _opcode = opcode;
@@ -3506,7 +3506,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstLd
+    readonly struct InstLd
     {
         private readonly ulong _opcode;
         public InstLd(ulong opcode) => _opcode = opcode;
@@ -3521,7 +3521,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm32 => (int)(_opcode >> 20);
     }
 
-    struct InstLdc
+    readonly struct InstLdc
     {
         private readonly ulong _opcode;
         public InstLdc(ulong opcode) => _opcode = opcode;
@@ -3535,7 +3535,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int CbufOffset => (int)((_opcode >> 20) & 0xFFFF);
     }
 
-    struct InstLdg
+    readonly struct InstLdg
     {
         private readonly ulong _opcode;
         public InstLdg(ulong opcode) => _opcode = opcode;
@@ -3549,7 +3549,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstLdl
+    readonly struct InstLdl
     {
         private readonly ulong _opcode;
         public InstLdl(ulong opcode) => _opcode = opcode;
@@ -3562,7 +3562,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstLds
+    readonly struct InstLds
     {
         private readonly ulong _opcode;
         public InstLds(ulong opcode) => _opcode = opcode;
@@ -3575,7 +3575,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstLeaR
+    readonly struct InstLeaR
     {
         private readonly ulong _opcode;
         public InstLeaR(ulong opcode) => _opcode = opcode;
@@ -3591,7 +3591,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 48) & 0x7);
     }
 
-    struct InstLeaI
+    readonly struct InstLeaI
     {
         private readonly ulong _opcode;
         public InstLeaI(ulong opcode) => _opcode = opcode;
@@ -3607,7 +3607,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 48) & 0x7);
     }
 
-    struct InstLeaC
+    readonly struct InstLeaC
     {
         private readonly ulong _opcode;
         public InstLeaC(ulong opcode) => _opcode = opcode;
@@ -3624,7 +3624,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 48) & 0x7);
     }
 
-    struct InstLeaHiR
+    readonly struct InstLeaHiR
     {
         private readonly ulong _opcode;
         public InstLeaHiR(ulong opcode) => _opcode = opcode;
@@ -3641,7 +3641,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 48) & 0x7);
     }
 
-    struct InstLeaHiC
+    readonly struct InstLeaHiC
     {
         private readonly ulong _opcode;
         public InstLeaHiC(ulong opcode) => _opcode = opcode;
@@ -3659,20 +3659,20 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 48) & 0x7);
     }
 
-    struct InstLepc
+    readonly struct InstLepc
     {
         private readonly ulong _opcode;
         public InstLepc(ulong opcode) => _opcode = opcode;
     }
 
-    struct InstLongjmp
+    readonly struct InstLongjmp
     {
         private readonly ulong _opcode;
         public InstLongjmp(ulong opcode) => _opcode = opcode;
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstLopR
+    readonly struct InstLopR
     {
         private readonly ulong _opcode;
         public InstLopR(ulong opcode) => _opcode = opcode;
@@ -3690,7 +3690,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstLopI
+    readonly struct InstLopI
     {
         private readonly ulong _opcode;
         public InstLopI(ulong opcode) => _opcode = opcode;
@@ -3708,7 +3708,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstLopC
+    readonly struct InstLopC
     {
         private readonly ulong _opcode;
         public InstLopC(ulong opcode) => _opcode = opcode;
@@ -3727,7 +3727,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstLop3R
+    readonly struct InstLop3R
     {
         private readonly ulong _opcode;
         public InstLop3R(ulong opcode) => _opcode = opcode;
@@ -3744,7 +3744,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm => (int)((_opcode >> 28) & 0xFF);
     }
 
-    struct InstLop3I
+    readonly struct InstLop3I
     {
         private readonly ulong _opcode;
         public InstLop3I(ulong opcode) => _opcode = opcode;
@@ -3759,7 +3759,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm => (int)((_opcode >> 48) & 0xFF);
     }
 
-    struct InstLop3C
+    readonly struct InstLop3C
     {
         private readonly ulong _opcode;
         public InstLop3C(ulong opcode) => _opcode = opcode;
@@ -3775,7 +3775,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm => (int)((_opcode >> 48) & 0xFF);
     }
 
-    struct InstLop32i
+    readonly struct InstLop32i
     {
         private readonly ulong _opcode;
         public InstLop32i(ulong opcode) => _opcode = opcode;
@@ -3791,7 +3791,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x100000000000000) != 0;
     }
 
-    struct InstMembar
+    readonly struct InstMembar
     {
         private readonly ulong _opcode;
         public InstMembar(ulong opcode) => _opcode = opcode;
@@ -3801,7 +3801,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ivall Ivall => (Ivall)((_opcode >> 0) & 0x3);
     }
 
-    struct InstMovR
+    readonly struct InstMovR
     {
         private readonly ulong _opcode;
         public InstMovR(ulong opcode) => _opcode = opcode;
@@ -3812,7 +3812,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int QuadMask => (int)((_opcode >> 39) & 0xF);
     }
 
-    struct InstMovI
+    readonly struct InstMovI
     {
         private readonly ulong _opcode;
         public InstMovI(ulong opcode) => _opcode = opcode;
@@ -3823,7 +3823,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int QuadMask => (int)((_opcode >> 39) & 0xF);
     }
 
-    struct InstMovC
+    readonly struct InstMovC
     {
         private readonly ulong _opcode;
         public InstMovC(ulong opcode) => _opcode = opcode;
@@ -3835,7 +3835,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int QuadMask => (int)((_opcode >> 39) & 0xF);
     }
 
-    struct InstMov32i
+    readonly struct InstMov32i
     {
         private readonly ulong _opcode;
         public InstMov32i(ulong opcode) => _opcode = opcode;
@@ -3846,7 +3846,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int QuadMask => (int)((_opcode >> 12) & 0xF);
     }
 
-    struct InstMufu
+    readonly struct InstMufu
     {
         private readonly ulong _opcode;
         public InstMufu(ulong opcode) => _opcode = opcode;
@@ -3860,7 +3860,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Sat => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstNop
+    readonly struct InstNop
     {
         private readonly ulong _opcode;
         public InstNop(ulong opcode) => _opcode = opcode;
@@ -3871,7 +3871,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 8) & 0x1F);
     }
 
-    struct InstOutR
+    readonly struct InstOutR
     {
         private readonly ulong _opcode;
         public InstOutR(ulong opcode) => _opcode = opcode;
@@ -3883,7 +3883,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public OutType OutType => (OutType)((_opcode >> 39) & 0x3);
     }
 
-    struct InstOutI
+    readonly struct InstOutI
     {
         private readonly ulong _opcode;
         public InstOutI(ulong opcode) => _opcode = opcode;
@@ -3895,7 +3895,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public OutType OutType => (OutType)((_opcode >> 39) & 0x3);
     }
 
-    struct InstOutC
+    readonly struct InstOutC
     {
         private readonly ulong _opcode;
         public InstOutC(ulong opcode) => _opcode = opcode;
@@ -3908,7 +3908,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public OutType OutType => (OutType)((_opcode >> 39) & 0x3);
     }
 
-    struct InstP2rR
+    readonly struct InstP2rR
     {
         private readonly ulong _opcode;
         public InstP2rR(ulong opcode) => _opcode = opcode;
@@ -3921,7 +3921,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ccpr => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstP2rI
+    readonly struct InstP2rI
     {
         private readonly ulong _opcode;
         public InstP2rI(ulong opcode) => _opcode = opcode;
@@ -3934,7 +3934,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ccpr => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstP2rC
+    readonly struct InstP2rC
     {
         private readonly ulong _opcode;
         public InstP2rC(ulong opcode) => _opcode = opcode;
@@ -3948,7 +3948,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ccpr => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstPbk
+    readonly struct InstPbk
     {
         private readonly ulong _opcode;
         public InstPbk(ulong opcode) => _opcode = opcode;
@@ -3956,7 +3956,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ca => (_opcode & 0x20) != 0;
     }
 
-    struct InstPcnt
+    readonly struct InstPcnt
     {
         private readonly ulong _opcode;
         public InstPcnt(ulong opcode) => _opcode = opcode;
@@ -3964,14 +3964,14 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ca => (_opcode & 0x20) != 0;
     }
 
-    struct InstPexit
+    readonly struct InstPexit
     {
         private readonly ulong _opcode;
         public InstPexit(ulong opcode) => _opcode = opcode;
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstPixld
+    readonly struct InstPixld
     {
         private readonly ulong _opcode;
         public InstPixld(ulong opcode) => _opcode = opcode;
@@ -3984,7 +3984,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm8 => (int)((_opcode >> 20) & 0xFF);
     }
 
-    struct InstPlongjmp
+    readonly struct InstPlongjmp
     {
         private readonly ulong _opcode;
         public InstPlongjmp(ulong opcode) => _opcode = opcode;
@@ -3992,7 +3992,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ca => (_opcode & 0x20) != 0;
     }
 
-    struct InstPopcR
+    readonly struct InstPopcR
     {
         private readonly ulong _opcode;
         public InstPopcR(ulong opcode) => _opcode = opcode;
@@ -4003,7 +4003,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstPopcI
+    readonly struct InstPopcI
     {
         private readonly ulong _opcode;
         public InstPopcI(ulong opcode) => _opcode = opcode;
@@ -4014,7 +4014,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstPopcC
+    readonly struct InstPopcC
     {
         private readonly ulong _opcode;
         public InstPopcC(ulong opcode) => _opcode = opcode;
@@ -4026,7 +4026,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool NegB => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstPret
+    readonly struct InstPret
     {
         private readonly ulong _opcode;
         public InstPret(ulong opcode) => _opcode = opcode;
@@ -4035,7 +4035,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Inc => (_opcode & 0x40) != 0;
     }
 
-    struct InstPrmtR
+    readonly struct InstPrmtR
     {
         private readonly ulong _opcode;
         public InstPrmtR(ulong opcode) => _opcode = opcode;
@@ -4048,7 +4048,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public PMode PMode => (PMode)((_opcode >> 48) & 0xF);
     }
 
-    struct InstPrmtI
+    readonly struct InstPrmtI
     {
         private readonly ulong _opcode;
         public InstPrmtI(ulong opcode) => _opcode = opcode;
@@ -4061,7 +4061,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public PMode PMode => (PMode)((_opcode >> 48) & 0xF);
     }
 
-    struct InstPrmtC
+    readonly struct InstPrmtC
     {
         private readonly ulong _opcode;
         public InstPrmtC(ulong opcode) => _opcode = opcode;
@@ -4075,7 +4075,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public PMode PMode => (PMode)((_opcode >> 48) & 0xF);
     }
 
-    struct InstPrmtRc
+    readonly struct InstPrmtRc
     {
         private readonly ulong _opcode;
         public InstPrmtRc(ulong opcode) => _opcode = opcode;
@@ -4089,7 +4089,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public PMode PMode => (PMode)((_opcode >> 48) & 0xF);
     }
 
-    struct InstPset
+    readonly struct InstPset
     {
         private readonly ulong _opcode;
         public InstPset(ulong opcode) => _opcode = opcode;
@@ -4108,7 +4108,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVal => (_opcode & 0x100000000000) != 0;
     }
 
-    struct InstPsetp
+    readonly struct InstPsetp
     {
         private readonly ulong _opcode;
         public InstPsetp(ulong opcode) => _opcode = opcode;
@@ -4126,7 +4126,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public BoolOp BoolOpC => (BoolOp)((_opcode >> 45) & 0x3);
     }
 
-    struct InstR2b
+    readonly struct InstR2b
     {
         private readonly ulong _opcode;
         public InstR2b(ulong opcode) => _opcode = opcode;
@@ -4137,7 +4137,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Name => (int)((_opcode >> 28) & 0xF);
     }
 
-    struct InstR2pR
+    readonly struct InstR2pR
     {
         private readonly ulong _opcode;
         public InstR2pR(ulong opcode) => _opcode = opcode;
@@ -4149,7 +4149,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ccpr => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstR2pI
+    readonly struct InstR2pI
     {
         private readonly ulong _opcode;
         public InstR2pI(ulong opcode) => _opcode = opcode;
@@ -4161,7 +4161,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ccpr => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstR2pC
+    readonly struct InstR2pC
     {
         private readonly ulong _opcode;
         public InstR2pC(ulong opcode) => _opcode = opcode;
@@ -4174,13 +4174,13 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ccpr => (_opcode & 0x10000000000) != 0;
     }
 
-    struct InstRam
+    readonly struct InstRam
     {
         private readonly ulong _opcode;
         public InstRam(ulong opcode) => _opcode = opcode;
     }
 
-    struct InstRed
+    readonly struct InstRed
     {
         private readonly ulong _opcode;
         public InstRed(ulong opcode) => _opcode = opcode;
@@ -4194,7 +4194,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool E => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstRet
+    readonly struct InstRet
     {
         private readonly ulong _opcode;
         public InstRet(ulong opcode) => _opcode = opcode;
@@ -4203,7 +4203,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstRroR
+    readonly struct InstRroR
     {
         private readonly ulong _opcode;
         public InstRroR(ulong opcode) => _opcode = opcode;
@@ -4216,7 +4216,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool RroOp => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstRroI
+    readonly struct InstRroI
     {
         private readonly ulong _opcode;
         public InstRroI(ulong opcode) => _opcode = opcode;
@@ -4229,7 +4229,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool RroOp => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstRroC
+    readonly struct InstRroC
     {
         private readonly ulong _opcode;
         public InstRroC(ulong opcode) => _opcode = opcode;
@@ -4243,13 +4243,13 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool RroOp => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstRtt
+    readonly struct InstRtt
     {
         private readonly ulong _opcode;
         public InstRtt(ulong opcode) => _opcode = opcode;
     }
 
-    struct InstS2r
+    readonly struct InstS2r
     {
         private readonly ulong _opcode;
         public InstS2r(ulong opcode) => _opcode = opcode;
@@ -4259,13 +4259,13 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SReg SReg => (SReg)((_opcode >> 20) & 0xFF);
     }
 
-    struct InstSam
+    readonly struct InstSam
     {
         private readonly ulong _opcode;
         public InstSam(ulong opcode) => _opcode = opcode;
     }
 
-    struct InstSelR
+    readonly struct InstSelR
     {
         private readonly ulong _opcode;
         public InstSelR(ulong opcode) => _opcode = opcode;
@@ -4278,7 +4278,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstSelI
+    readonly struct InstSelI
     {
         private readonly ulong _opcode;
         public InstSelI(ulong opcode) => _opcode = opcode;
@@ -4291,7 +4291,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstSelC
+    readonly struct InstSelC
     {
         private readonly ulong _opcode;
         public InstSelC(ulong opcode) => _opcode = opcode;
@@ -4305,21 +4305,21 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool SrcPredInv => (_opcode & 0x40000000000) != 0;
     }
 
-    struct InstSetcrsptr
+    readonly struct InstSetcrsptr
     {
         private readonly ulong _opcode;
         public InstSetcrsptr(ulong opcode) => _opcode = opcode;
         public int SrcA => (int)((_opcode >> 8) & 0xFF);
     }
 
-    struct InstSetlmembase
+    readonly struct InstSetlmembase
     {
         private readonly ulong _opcode;
         public InstSetlmembase(ulong opcode) => _opcode = opcode;
         public int SrcA => (int)((_opcode >> 8) & 0xFF);
     }
 
-    struct InstShfLR
+    readonly struct InstShfLR
     {
         private readonly ulong _opcode;
         public InstShfLR(ulong opcode) => _opcode = opcode;
@@ -4335,7 +4335,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public MaxShift MaxShift => (MaxShift)((_opcode >> 37) & 0x3);
     }
 
-    struct InstShfRR
+    readonly struct InstShfRR
     {
         private readonly ulong _opcode;
         public InstShfRR(ulong opcode) => _opcode = opcode;
@@ -4351,7 +4351,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public MaxShift MaxShift => (MaxShift)((_opcode >> 37) & 0x3);
     }
 
-    struct InstShfLI
+    readonly struct InstShfLI
     {
         private readonly ulong _opcode;
         public InstShfLI(ulong opcode) => _opcode = opcode;
@@ -4367,7 +4367,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm6 => (int)((_opcode >> 20) & 0x3F);
     }
 
-    struct InstShfRI
+    readonly struct InstShfRI
     {
         private readonly ulong _opcode;
         public InstShfRI(ulong opcode) => _opcode = opcode;
@@ -4383,7 +4383,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm6 => (int)((_opcode >> 20) & 0x3F);
     }
 
-    struct InstShfl
+    readonly struct InstShfl
     {
         private readonly ulong _opcode;
         public InstShfl(ulong opcode) => _opcode = opcode;
@@ -4401,7 +4401,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int DestPred => (int)((_opcode >> 48) & 0x7);
     }
 
-    struct InstShlR
+    readonly struct InstShlR
     {
         private readonly ulong _opcode;
         public InstShlR(ulong opcode) => _opcode = opcode;
@@ -4415,7 +4415,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool M => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstShlI
+    readonly struct InstShlI
     {
         private readonly ulong _opcode;
         public InstShlI(ulong opcode) => _opcode = opcode;
@@ -4429,7 +4429,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool M => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstShlC
+    readonly struct InstShlC
     {
         private readonly ulong _opcode;
         public InstShlC(ulong opcode) => _opcode = opcode;
@@ -4444,7 +4444,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool M => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstShrR
+    readonly struct InstShrR
     {
         private readonly ulong _opcode;
         public InstShrR(ulong opcode) => _opcode = opcode;
@@ -4460,7 +4460,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool M => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstShrI
+    readonly struct InstShrI
     {
         private readonly ulong _opcode;
         public InstShrI(ulong opcode) => _opcode = opcode;
@@ -4476,7 +4476,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool M => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstShrC
+    readonly struct InstShrC
     {
         private readonly ulong _opcode;
         public InstShrC(ulong opcode) => _opcode = opcode;
@@ -4493,7 +4493,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool M => (_opcode & 0x8000000000) != 0;
     }
 
-    struct InstSsy
+    readonly struct InstSsy
     {
         private readonly ulong _opcode;
         public InstSsy(ulong opcode) => _opcode = opcode;
@@ -4501,7 +4501,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ca => (_opcode & 0x20) != 0;
     }
 
-    struct InstSt
+    readonly struct InstSt
     {
         private readonly ulong _opcode;
         public InstSt(ulong opcode) => _opcode = opcode;
@@ -4516,7 +4516,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm32 => (int)(_opcode >> 20);
     }
 
-    struct InstStg
+    readonly struct InstStg
     {
         private readonly ulong _opcode;
         public InstStg(ulong opcode) => _opcode = opcode;
@@ -4530,7 +4530,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstStl
+    readonly struct InstStl
     {
         private readonly ulong _opcode;
         public InstStl(ulong opcode) => _opcode = opcode;
@@ -4543,7 +4543,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstStp
+    readonly struct InstStp
     {
         private readonly ulong _opcode;
         public InstStp(ulong opcode) => _opcode = opcode;
@@ -4551,7 +4551,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm8 => (int)((_opcode >> 20) & 0xFF);
     }
 
-    struct InstSts
+    readonly struct InstSts
     {
         private readonly ulong _opcode;
         public InstSts(ulong opcode) => _opcode = opcode;
@@ -4563,7 +4563,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm24 => (int)((_opcode >> 20) & 0xFFFFFF);
     }
 
-    struct InstSuatomB
+    readonly struct InstSuatomB
     {
         private readonly ulong _opcode;
         public InstSuatomB(ulong opcode) => _opcode = opcode;
@@ -4580,7 +4580,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ba => (_opcode & 0x10000000) != 0;
     }
 
-    struct InstSuatom
+    readonly struct InstSuatom
     {
         private readonly ulong _opcode;
         public InstSuatom(ulong opcode) => _opcode = opcode;
@@ -4597,7 +4597,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ba => (_opcode & 0x10000000) != 0;
     }
 
-    struct InstSuatomB2
+    readonly struct InstSuatomB2
     {
         private readonly ulong _opcode;
         public InstSuatomB2(ulong opcode) => _opcode = opcode;
@@ -4615,7 +4615,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ba => (_opcode & 0x10000000) != 0;
     }
 
-    struct InstSuatomCasB
+    readonly struct InstSuatomCasB
     {
         private readonly ulong _opcode;
         public InstSuatomCasB(ulong opcode) => _opcode = opcode;
@@ -4632,7 +4632,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ba => (_opcode & 0x10000000) != 0;
     }
 
-    struct InstSuatomCas
+    readonly struct InstSuatomCas
     {
         private readonly ulong _opcode;
         public InstSuatomCas(ulong opcode) => _opcode = opcode;
@@ -4649,7 +4649,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Ba => (_opcode & 0x10000000) != 0;
     }
 
-    struct InstSuldDB
+    readonly struct InstSuldDB
     {
         private readonly ulong _opcode;
         public InstSuldDB(ulong opcode) => _opcode = opcode;
@@ -4666,7 +4666,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuSize Size => (SuSize)((_opcode >> 20) & 0x7);
     }
 
-    struct InstSuldD
+    readonly struct InstSuldD
     {
         private readonly ulong _opcode;
         public InstSuldD(ulong opcode) => _opcode = opcode;
@@ -4683,7 +4683,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuSize Size => (SuSize)((_opcode >> 20) & 0x7);
     }
 
-    struct InstSuldB
+    readonly struct InstSuldB
     {
         private readonly ulong _opcode;
         public InstSuldB(ulong opcode) => _opcode = opcode;
@@ -4699,7 +4699,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuRgba Rgba => (SuRgba)((_opcode >> 20) & 0xF);
     }
 
-    struct InstSuld
+    readonly struct InstSuld
     {
         private readonly ulong _opcode;
         public InstSuld(ulong opcode) => _opcode = opcode;
@@ -4715,7 +4715,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuRgba Rgba => (SuRgba)((_opcode >> 20) & 0xF);
     }
 
-    struct InstSuredB
+    readonly struct InstSuredB
     {
         private readonly ulong _opcode;
         public InstSuredB(ulong opcode) => _opcode = opcode;
@@ -4731,7 +4731,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuatomSize Size => (SuatomSize)((_opcode >> 20) & 0x7);
     }
 
-    struct InstSured
+    readonly struct InstSured
     {
         private readonly ulong _opcode;
         public InstSured(ulong opcode) => _opcode = opcode;
@@ -4747,7 +4747,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuatomSize Size => (SuatomSize)((_opcode >> 20) & 0x7);
     }
 
-    struct InstSustDB
+    readonly struct InstSustDB
     {
         private readonly ulong _opcode;
         public InstSustDB(ulong opcode) => _opcode = opcode;
@@ -4763,7 +4763,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuSize Size => (SuSize)((_opcode >> 20) & 0x7);
     }
 
-    struct InstSustD
+    readonly struct InstSustD
     {
         private readonly ulong _opcode;
         public InstSustD(ulong opcode) => _opcode = opcode;
@@ -4779,7 +4779,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuSize Size => (SuSize)((_opcode >> 20) & 0x7);
     }
 
-    struct InstSustB
+    readonly struct InstSustB
     {
         private readonly ulong _opcode;
         public InstSustB(ulong opcode) => _opcode = opcode;
@@ -4794,7 +4794,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuRgba Rgba => (SuRgba)((_opcode >> 20) & 0xF);
     }
 
-    struct InstSust
+    readonly struct InstSust
     {
         private readonly ulong _opcode;
         public InstSust(ulong opcode) => _opcode = opcode;
@@ -4809,7 +4809,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public SuRgba Rgba => (SuRgba)((_opcode >> 20) & 0xF);
     }
 
-    struct InstSync
+    readonly struct InstSync
     {
         private readonly ulong _opcode;
         public InstSync(ulong opcode) => _opcode = opcode;
@@ -4818,7 +4818,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public Ccc Ccc => (Ccc)((_opcode >> 0) & 0x1F);
     }
 
-    struct InstTex
+    readonly struct InstTex
     {
         private readonly ulong _opcode;
         public InstTex(ulong opcode) => _opcode = opcode;
@@ -4839,7 +4839,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Nodep => (_opcode & 0x2000000000000) != 0;
     }
 
-    struct InstTexB
+    readonly struct InstTexB
     {
         private readonly ulong _opcode;
         public InstTexB(ulong opcode) => _opcode = opcode;
@@ -4859,7 +4859,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Nodep => (_opcode & 0x2000000000000) != 0;
     }
 
-    struct InstTexs
+    readonly struct InstTexs
     {
         private readonly ulong _opcode;
         public InstTexs(ulong opcode) => _opcode = opcode;
@@ -4875,7 +4875,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Dest2 => (int)((_opcode >> 28) & 0xFF);
     }
 
-    struct InstTld
+    readonly struct InstTld
     {
         private readonly ulong _opcode;
         public InstTld(ulong opcode) => _opcode = opcode;
@@ -4895,7 +4895,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexDim Dim => (TexDim)((_opcode >> 28) & 0x7);
     }
 
-    struct InstTldB
+    readonly struct InstTldB
     {
         private readonly ulong _opcode;
         public InstTldB(ulong opcode) => _opcode = opcode;
@@ -4914,7 +4914,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexDim Dim => (TexDim)((_opcode >> 28) & 0x7);
     }
 
-    struct InstTlds
+    readonly struct InstTlds
     {
         private readonly ulong _opcode;
         public InstTlds(ulong opcode) => _opcode = opcode;
@@ -4930,7 +4930,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Dest2 => (int)((_opcode >> 28) & 0xFF);
     }
 
-    struct InstTld4
+    readonly struct InstTld4
     {
         private readonly ulong _opcode;
         public InstTld4(ulong opcode) => _opcode = opcode;
@@ -4951,7 +4951,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Nodep => (_opcode & 0x2000000000000) != 0;
     }
 
-    struct InstTld4B
+    readonly struct InstTld4B
     {
         private readonly ulong _opcode;
         public InstTld4B(ulong opcode) => _opcode = opcode;
@@ -4971,7 +4971,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Nodep => (_opcode & 0x2000000000000) != 0;
     }
 
-    struct InstTld4s
+    readonly struct InstTld4s
     {
         private readonly ulong _opcode;
         public InstTld4s(ulong opcode) => _opcode = opcode;
@@ -4988,7 +4988,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Dest2 => (int)((_opcode >> 28) & 0xFF);
     }
 
-    struct InstTmml
+    readonly struct InstTmml
     {
         private readonly ulong _opcode;
         public InstTmml(ulong opcode) => _opcode = opcode;
@@ -5004,7 +5004,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexDim Dim => (TexDim)((_opcode >> 28) & 0x7);
     }
 
-    struct InstTmmlB
+    readonly struct InstTmmlB
     {
         private readonly ulong _opcode;
         public InstTmmlB(ulong opcode) => _opcode = opcode;
@@ -5019,7 +5019,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexDim Dim => (TexDim)((_opcode >> 28) & 0x7);
     }
 
-    struct InstTxa
+    readonly struct InstTxa
     {
         private readonly ulong _opcode;
         public InstTxa(ulong opcode) => _opcode = opcode;
@@ -5033,7 +5033,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int WMask => (int)((_opcode >> 31) & 0xF);
     }
 
-    struct InstTxd
+    readonly struct InstTxd
     {
         private readonly ulong _opcode;
         public InstTxd(ulong opcode) => _opcode = opcode;
@@ -5051,7 +5051,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexDim Dim => (TexDim)((_opcode >> 28) & 0x7);
     }
 
-    struct InstTxdB
+    readonly struct InstTxdB
     {
         private readonly ulong _opcode;
         public InstTxdB(ulong opcode) => _opcode = opcode;
@@ -5068,7 +5068,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexDim Dim => (TexDim)((_opcode >> 28) & 0x7);
     }
 
-    struct InstTxq
+    readonly struct InstTxq
     {
         private readonly ulong _opcode;
         public InstTxq(ulong opcode) => _opcode = opcode;
@@ -5082,7 +5082,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexQuery TexQuery => (TexQuery)((_opcode >> 22) & 0x3F);
     }
 
-    struct InstTxqB
+    readonly struct InstTxqB
     {
         private readonly ulong _opcode;
         public InstTxqB(ulong opcode) => _opcode = opcode;
@@ -5095,7 +5095,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public TexQuery TexQuery => (TexQuery)((_opcode >> 22) & 0x3F);
     }
 
-    struct InstVabsdiff
+    readonly struct InstVabsdiff
     {
         private readonly ulong _opcode;
         public InstVabsdiff(ulong opcode) => _opcode = opcode;
@@ -5114,7 +5114,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVabsdiff4
+    readonly struct InstVabsdiff4
     {
         private readonly ulong _opcode;
         public InstVabsdiff4(ulong opcode) => _opcode = opcode;
@@ -5135,7 +5135,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public BSelect4 Bsel4 => (BSelect4)((_opcode >> 28) & 0xF);
     }
 
-    struct InstVadd
+    readonly struct InstVadd
     {
         private readonly ulong _opcode;
         public InstVadd(ulong opcode) => _opcode = opcode;
@@ -5156,7 +5156,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVmad
+    readonly struct InstVmad
     {
         private readonly ulong _opcode;
         public InstVmad(ulong opcode) => _opcode = opcode;
@@ -5176,7 +5176,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVmnmx
+    readonly struct InstVmnmx
     {
         private readonly ulong _opcode;
         public InstVmnmx(ulong opcode) => _opcode = opcode;
@@ -5197,7 +5197,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVote
+    readonly struct InstVote
     {
         private readonly ulong _opcode;
         public InstVote(ulong opcode) => _opcode = opcode;
@@ -5210,7 +5210,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int VpDest => (int)((_opcode >> 45) & 0x7);
     }
 
-    struct InstVotevtg
+    readonly struct InstVotevtg
     {
         private readonly ulong _opcode;
         public InstVotevtg(ulong opcode) => _opcode = opcode;
@@ -5220,7 +5220,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public int Imm28 => (int)((_opcode >> 20) & 0xFFFFFFF);
     }
 
-    struct InstVset
+    readonly struct InstVset
     {
         private readonly ulong _opcode;
         public InstVset(ulong opcode) => _opcode = opcode;
@@ -5238,7 +5238,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVsetp
+    readonly struct InstVsetp
     {
         private readonly ulong _opcode;
         public InstVsetp(ulong opcode) => _opcode = opcode;
@@ -5258,7 +5258,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVshl
+    readonly struct InstVshl
     {
         private readonly ulong _opcode;
         public InstVshl(ulong opcode) => _opcode = opcode;
@@ -5278,7 +5278,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstVshr
+    readonly struct InstVshr
     {
         private readonly ulong _opcode;
         public InstVshr(ulong opcode) => _opcode = opcode;
@@ -5298,7 +5298,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool BVideo => (_opcode & 0x4000000000000) != 0;
     }
 
-    struct InstXmadR
+    readonly struct InstXmadR
     {
         private readonly ulong _opcode;
         public InstXmadR(ulong opcode) => _opcode = opcode;
@@ -5319,7 +5319,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool HiloB => (_opcode & 0x800000000) != 0;
     }
 
-    struct InstXmadI
+    readonly struct InstXmadI
     {
         private readonly ulong _opcode;
         public InstXmadI(ulong opcode) => _opcode = opcode;
@@ -5339,7 +5339,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool Psl => (_opcode & 0x1000000000) != 0;
     }
 
-    struct InstXmadC
+    readonly struct InstXmadC
     {
         private readonly ulong _opcode;
         public InstXmadC(ulong opcode) => _opcode = opcode;
@@ -5361,7 +5361,7 @@ namespace Ryujinx.Graphics.Shader.Decoders
         public bool ASigned => (_opcode & 0x1000000000000) != 0;
     }
 
-    struct InstXmadRc
+    readonly struct InstXmadRc
     {
         private readonly ulong _opcode;
         public InstXmadRc(ulong opcode) => _opcode = opcode;

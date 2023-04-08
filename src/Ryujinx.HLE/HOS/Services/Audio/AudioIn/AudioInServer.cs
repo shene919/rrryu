@@ -29,17 +29,21 @@ namespace Ryujinx.HLE.HOS.Services.Audio.AudioIn
 
         [CommandHipc(1)]
         // Start()
+#pragma warning disable IDE0060
         public ResultCode Start(ServiceCtx context)
         {
             return _impl.Start();
         }
+#pragma warning restore IDE0060
 
         [CommandHipc(2)]
         // Stop()
+#pragma warning disable IDE0060
         public ResultCode StopAudioIn(ServiceCtx context)
         {
             return _impl.Stop();
         }
+#pragma warning restore IDE0060
 
         [CommandHipc(3)]
         // AppendAudioInBuffer(u64 tag, buffer<nn::audio::AudioInBuffer, 5>)
