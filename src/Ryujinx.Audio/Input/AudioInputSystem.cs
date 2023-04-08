@@ -18,7 +18,7 @@ namespace Ryujinx.Audio.Input
         /// <summary>
         /// The session the <see cref="AudioInputSystem"/>.
         /// </summary>
-        private AudioDeviceSession _session;
+        private readonly AudioDeviceSession _session;
 
         /// <summary>
         /// The target device name of the <see cref="AudioInputSystem"/>.
@@ -43,12 +43,12 @@ namespace Ryujinx.Audio.Input
         /// <summary>
         /// The <see cref="AudioInputManager"/> owning this.
         /// </summary>
-        private AudioInputManager _manager;
+        private readonly AudioInputManager _manager;
 
         /// <summary>
         /// The lock of the parent.
         /// </summary>
-        private object _parentLock;
+        private readonly object _parentLock;
 
         /// <summary>
         /// The dispose state.
@@ -185,7 +185,7 @@ namespace Ryujinx.Audio.Input
         {
             lock (_parentLock)
             {
-                AudioBuffer buffer = new AudioBuffer
+                AudioBuffer buffer = new()
                 {
                     BufferTag = bufferTag,
                     DataPointer = userBuffer.Data,
@@ -213,7 +213,7 @@ namespace Ryujinx.Audio.Input
         {
             lock (_parentLock)
             {
-                AudioBuffer buffer = new AudioBuffer
+                AudioBuffer buffer = new()
                 {
                     BufferTag = bufferTag,
                     DataPointer = userBuffer.Data,

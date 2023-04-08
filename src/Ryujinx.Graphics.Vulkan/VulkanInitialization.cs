@@ -14,9 +14,9 @@ namespace Ryujinx.Graphics.Vulkan
     public unsafe static class VulkanInitialization
     {
         private const uint InvalidIndex = uint.MaxValue;
-        private static uint MinimalVulkanVersion = Vk.Version11.Value;
-        private static uint MinimalInstanceVulkanVersion = Vk.Version12.Value;
-        private static uint MaximumVulkanVersion = Vk.Version12.Value;
+        private static readonly uint MinimalVulkanVersion = Vk.Version11.Value;
+        private static readonly uint MinimalInstanceVulkanVersion = Vk.Version12.Value;
+        private static readonly uint MaximumVulkanVersion = Vk.Version12.Value;
         private const string AppName = "Ryujinx.Graphics.Vulkan";
         private const int QueuesCount = 2;
 
@@ -196,7 +196,7 @@ namespace Ryujinx.Graphics.Vulkan
 
             instance.EnumeratePhysicalDevices(out VulkanPhysicalDevice[] physicalDevices).ThrowOnError();
 
-            List<DeviceInfo> deviceInfos = new List<DeviceInfo>();
+            List<DeviceInfo> deviceInfos = new();
 
             foreach (VulkanPhysicalDevice physicalDevice in physicalDevices)
             {
@@ -285,12 +285,12 @@ namespace Ryujinx.Graphics.Vulkan
 
             bool useRobustBufferAccess = VendorUtils.FromId(physicalDevice.PhysicalDeviceProperties.VendorID) == Vendor.Nvidia;
 
-            PhysicalDeviceFeatures2 features2 = new PhysicalDeviceFeatures2()
+            PhysicalDeviceFeatures2 features2 = new()
             {
                 SType = StructureType.PhysicalDeviceFeatures2
             };
 
-            PhysicalDeviceVulkan11Features supportedFeaturesVk11 = new PhysicalDeviceVulkan11Features()
+            PhysicalDeviceVulkan11Features supportedFeaturesVk11 = new()
             {
                 SType = StructureType.PhysicalDeviceVulkan11Features,
                 PNext = features2.PNext
@@ -298,7 +298,7 @@ namespace Ryujinx.Graphics.Vulkan
 
             features2.PNext = &supportedFeaturesVk11;
 
-            PhysicalDeviceCustomBorderColorFeaturesEXT supportedFeaturesCustomBorderColor = new PhysicalDeviceCustomBorderColorFeaturesEXT()
+            PhysicalDeviceCustomBorderColorFeaturesEXT supportedFeaturesCustomBorderColor = new()
             {
                 SType = StructureType.PhysicalDeviceCustomBorderColorFeaturesExt,
                 PNext = features2.PNext
@@ -309,7 +309,7 @@ namespace Ryujinx.Graphics.Vulkan
                 features2.PNext = &supportedFeaturesCustomBorderColor;
             }
 
-            PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT supportedFeaturesPrimitiveTopologyListRestart = new PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT()
+            PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT supportedFeaturesPrimitiveTopologyListRestart = new()
             {
                 SType = StructureType.PhysicalDevicePrimitiveTopologyListRestartFeaturesExt,
                 PNext = features2.PNext
@@ -320,7 +320,7 @@ namespace Ryujinx.Graphics.Vulkan
                 features2.PNext = &supportedFeaturesPrimitiveTopologyListRestart;
             }
 
-            PhysicalDeviceTransformFeedbackFeaturesEXT supportedFeaturesTransformFeedback = new PhysicalDeviceTransformFeedbackFeaturesEXT()
+            PhysicalDeviceTransformFeedbackFeaturesEXT supportedFeaturesTransformFeedback = new()
             {
                 SType = StructureType.PhysicalDeviceTransformFeedbackFeaturesExt,
                 PNext = features2.PNext
@@ -331,7 +331,7 @@ namespace Ryujinx.Graphics.Vulkan
                 features2.PNext = &supportedFeaturesTransformFeedback;
             }
 
-            PhysicalDeviceRobustness2FeaturesEXT supportedFeaturesRobustness2 = new PhysicalDeviceRobustness2FeaturesEXT()
+            PhysicalDeviceRobustness2FeaturesEXT supportedFeaturesRobustness2 = new()
             {
                 SType = StructureType.PhysicalDeviceRobustness2FeaturesExt
             };

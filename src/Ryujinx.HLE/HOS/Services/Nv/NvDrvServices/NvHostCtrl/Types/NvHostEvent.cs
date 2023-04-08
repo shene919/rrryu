@@ -17,14 +17,14 @@ namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrl
         public KEvent           Event;
         public int              EventHandle;
 
-        private uint                  _eventId;
-        private NvHostSyncpt          _syncpointManager;
+        private readonly uint                  _eventId;
+        private readonly NvHostSyncpt          _syncpointManager;
         private SyncpointWaiterHandle _waiterInformation;
 
         private NvFence _previousFailingFence;
         private uint    _failingCount;
 
-        public readonly object Lock = new object();
+        public readonly object Lock = new();
 
         /// <summary>
         /// Max failing count until waiting on CPU.

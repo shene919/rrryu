@@ -43,14 +43,12 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
 
             long offset = context.RequestData.ReadInt64();
 
-            using (var region = context.Memory.GetWritableRegion(bufferAddress, (int)bufferLen, true))
-            {
-                Result result = _base.Get.Read(out long bytesRead, offset, region.Memory.Span);
+            using var region = context.Memory.GetWritableRegion(bufferAddress, (int)bufferLen, true);
+            Result result = _base.Get.Read(out long bytesRead, offset, region.Memory.Span);
 
-                context.ResponseData.Write(bytesRead);
+            context.ResponseData.Write(bytesRead);
 
-                return (ResultCode)result.Value;
-            }
+            return (ResultCode)result.Value;
         }
 
         [CommandHipc(2)]

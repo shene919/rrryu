@@ -17,9 +17,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
     {
         // Resource pools for Spirv generation. Note: Increase count when more threads are being used.
         private const int GeneratorPoolCount = 1;
-        private static ObjectPool<SpvInstructionPool> InstructionPool;
-        private static ObjectPool<SpvLiteralIntegerPool> IntegerPool;
-        private static object PoolLock;
+        private static readonly ObjectPool<SpvInstructionPool> InstructionPool;
+        private static readonly ObjectPool<SpvLiteralIntegerPool> IntegerPool;
+        private static readonly object PoolLock;
 
         static SpirvGenerator()
         {
@@ -46,7 +46,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 integerPool = IntegerPool.Allocate();
             }
 
-            CodeGenContext context = new CodeGenContext(info, config, instPool, integerPool);
+            CodeGenContext context = new(info, config, instPool, integerPool);
 
             context.AddCapability(Capability.GroupNonUniformBallot);
             context.AddCapability(Capability.GroupNonUniformShuffle);
@@ -155,7 +155,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             Generate(context, function.MainBlock);
 
             // Functions must always end with a return.
-            if (!(function.MainBlock.Last is AstOperation operation) ||
+            if (function.MainBlock.Last is not AstOperation operation ||
                 (operation.Inst != Instruction.Return && operation.Inst != Instruction.Discard))
             {
                 context.Return();
@@ -289,7 +289,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
         private static void Generate(CodeGenContext context, AstBlock block)
         {
-            AstBlockVisitor visitor = new AstBlockVisitor(block);
+            AstBlockVisitor visitor = new(block);
 
             var loopTargets = new Dictionary<AstBlock, (SpvInstruction, SpvInstruction)>();
 
@@ -395,10 +395,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
                         if (AttributeInfo.Validate(context.Config, dest.Value, isOutAttr: true, perPatch))
                         {
-                            AggregateType elemType;
 
                             var elemPointer = perPatch
-                                ? context.GetAttributePerPatchElemPointer(dest.Value, true, out elemType)
+                                ? context.GetAttributePerPatchElemPointer(dest.Value, true, out AggregateType elemType)
                                 : context.GetAttributeElemPointer(dest.Value, true, null, out elemType);
 
                             context.Store(elemPointer, context.Get(elemType, assignment.Source));

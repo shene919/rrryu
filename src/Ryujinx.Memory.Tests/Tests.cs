@@ -43,8 +43,8 @@ namespace Ryujinx.Memory.Tests
         [Platform(Exclude = "MacOsX")]
         public void Test_Alias()
         {
-            using MemoryBlock backing = new MemoryBlock(0x10000, MemoryAllocationFlags.Mirrorable);
-            using MemoryBlock toAlias = new MemoryBlock(0x10000, MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible);
+            using MemoryBlock backing = new(0x10000, MemoryAllocationFlags.Mirrorable);
+            using MemoryBlock toAlias = new(0x10000, MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible);
 
             toAlias.MapView(backing, 0x1000, 0, 0x4000);
             toAlias.UnmapView(backing, 0x3000, 0x1000);
@@ -58,10 +58,10 @@ namespace Ryujinx.Memory.Tests
         [Platform(Exclude = "MacOsX")]
         public void Test_AliasRandom()
         {
-            using MemoryBlock backing = new MemoryBlock(0x80000, MemoryAllocationFlags.Mirrorable);
-            using MemoryBlock toAlias = new MemoryBlock(0x80000, MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible);
+            using MemoryBlock backing = new(0x80000, MemoryAllocationFlags.Mirrorable);
+            using MemoryBlock toAlias = new(0x80000, MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible);
 
-            Random rng = new Random(123);
+            Random rng = new(123);
 
             for (int i = 0; i < 20000; i++)
             {
@@ -93,8 +93,8 @@ namespace Ryujinx.Memory.Tests
             ulong pageSize = 4096;
             ulong size = 100000 * pageSize; // The mappings limit on Linux is usually around 65K, so let's make sure we are above that.
 
-            using MemoryBlock backing = new MemoryBlock(pageSize, MemoryAllocationFlags.Mirrorable);
-            using MemoryBlock toAlias = new MemoryBlock(size, MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible);
+            using MemoryBlock backing = new(pageSize, MemoryAllocationFlags.Mirrorable);
+            using MemoryBlock toAlias = new(size, MemoryAllocationFlags.Reserve | MemoryAllocationFlags.ViewCompatible);
 
             for (ulong offset = 0; offset < size; offset += pageSize)
             {

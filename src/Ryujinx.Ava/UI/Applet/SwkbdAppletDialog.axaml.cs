@@ -19,7 +19,7 @@ namespace Ryujinx.Ava.UI.Controls
         private Predicate<int> _checkLength;
         private int _inputMax;
         private int _inputMin;
-        private string _placeholder;
+        private readonly string _placeholder;
 
         private ContentDialog _host;
 
@@ -50,11 +50,11 @@ namespace Ryujinx.Ava.UI.Controls
 
         public static async Task<(UserResult Result, string Input)> ShowInputDialog(StyleableWindow window, string title, SoftwareKeyboardUiArgs args)
         {
-            ContentDialog contentDialog = new ContentDialog();
+            ContentDialog contentDialog = new();
 
             UserResult result = UserResult.Cancel;
 
-            SwkbdAppletDialog content = new SwkbdAppletDialog(args.HeaderText, args.SubtitleText, args.GuideText)
+            SwkbdAppletDialog content = new(args.HeaderText, args.SubtitleText, args.GuideText)
             {
                 Message = args.InitialText ?? ""
             };
@@ -89,14 +89,14 @@ namespace Ryujinx.Ava.UI.Controls
             contentDialog.CloseButtonText = LocaleManager.Instance[LocaleKeys.InputDialogCancel];
             contentDialog.Content = content;
 
-            TypedEventHandler<ContentDialog, ContentDialogClosedEventArgs> handler = (sender, eventArgs) =>
+            void handler(ContentDialog sender, ContentDialogClosedEventArgs eventArgs)
             {
                 if (eventArgs.Result == ContentDialogResult.Primary)
                 {
                     result = UserResult.Ok;
                     input = content.Input.Text;
                 }
-            };
+            }
             contentDialog.Closed += handler;
 
             overlay.Opened += OverlayOnActivated;

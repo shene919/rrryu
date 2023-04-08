@@ -1,6 +1,6 @@
 namespace Ryujinx.Horizon
 {
-    public struct HorizonOptions
+    public readonly struct HorizonOptions
     {
         public bool IgnoreMissingServices    { get; }
         public bool ThrowOnInvalidCommandIds { get; }

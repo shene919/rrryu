@@ -27,7 +27,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl
             }
         }
 
-        private static Dictionary<int, BuiltInAttribute> _builtInAttributes = new Dictionary<int, BuiltInAttribute>()
+        private static readonly Dictionary<int, BuiltInAttribute> _builtInAttributes = new()
         {
             { AttributeConsts.Layer,         new BuiltInAttribute("gl_Layer",           AggregateType.S32)  },
             { AttributeConsts.PointSize,     new BuiltInAttribute("gl_PointSize",       AggregateType.FP32)  },
@@ -89,7 +89,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl
             { AttributeConsts.SupportBlockViewInverseY,  new BuiltInAttribute($"{DefaultNames.SupportBlockViewportInverse}.y",  AggregateType.FP32) }
         };
 
-        private Dictionary<AstOperand, string> _locals;
+        private readonly Dictionary<AstOperand, string> _locals;
 
         public OperandManager()
         {

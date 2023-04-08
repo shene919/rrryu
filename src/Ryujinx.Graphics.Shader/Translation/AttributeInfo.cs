@@ -4,7 +4,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 {
     readonly struct AttributeInfo
     {
-        private static readonly Dictionary<int, AttributeInfo> _builtInAttributes = new Dictionary<int, AttributeInfo>()
+        private static readonly Dictionary<int, AttributeInfo> _builtInAttributes = new()
         {
             { AttributeConsts.Layer,         new AttributeInfo(AttributeConsts.Layer,         0, 1, AggregateType.S32) },
             { AttributeConsts.ViewportIndex, new AttributeInfo(AttributeConsts.ViewportIndex, 0, 1, AggregateType.S32) },
@@ -54,7 +54,7 @@ namespace Ryujinx.Graphics.Shader.Translation
             { AttributeConsts.LtMask,              new AttributeInfo(AttributeConsts.LtMask,              0, 4, AggregateType.Vector4 | AggregateType.U32) },
         };
 
-        private static readonly Dictionary<int, AttributeInfo> _builtInAttributesPerPatch = new Dictionary<int, AttributeInfo>()
+        private static readonly Dictionary<int, AttributeInfo> _builtInAttributesPerPatch = new()
         {
             { AttributeConsts.TessLevelOuter0, new AttributeInfo(AttributeConsts.TessLevelOuter0, 0, 4, AggregateType.Array | AggregateType.FP32) },
             { AttributeConsts.TessLevelOuter1, new AttributeInfo(AttributeConsts.TessLevelOuter0, 1, 4, AggregateType.Array | AggregateType.FP32) },

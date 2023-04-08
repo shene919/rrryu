@@ -41,9 +41,9 @@ namespace Ryujinx.Ava.UI.Windows
 
         public static async Task Show(ControllerSettingsViewModel viewmodel)
         {
-            MotionSettingsWindow content = new MotionSettingsWindow(viewmodel);
+            MotionSettingsWindow content = new(viewmodel);
 
-            ContentDialog contentDialog = new ContentDialog
+            ContentDialog contentDialog = new()
             {
                 Title = LocaleManager.Instance[LocaleKeys.ControllerMotionTitle],
                 PrimaryButtonText = LocaleManager.Instance[LocaleKeys.ControllerSettingsSave],

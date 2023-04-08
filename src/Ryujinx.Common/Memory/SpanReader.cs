@@ -19,23 +19,23 @@ namespace Ryujinx.Common.Memory
         {
             T value = MemoryMarshal.Cast<byte, T>(_input)[0];
 
-            _input = _input.Slice(Unsafe.SizeOf<T>());
+            _input = _input[Unsafe.SizeOf<T>()..];
 
             return value;
         }
 
         public ReadOnlySpan<byte> GetSpan(int size)
         {
-            ReadOnlySpan<byte> data = _input.Slice(0, size);
+            ReadOnlySpan<byte> data = _input[..size];
 
-            _input = _input.Slice(size);
+            _input = _input[size..];
 
             return data;
         }
 
         public T ReadAt<T>(int offset) where T : unmanaged
         {
-            return MemoryMarshal.Cast<byte, T>(_input.Slice(offset))[0];
+            return MemoryMarshal.Cast<byte, T>(_input[offset..])[0];
         }
 
         public ReadOnlySpan<byte> GetSpanAt(int offset, int size)
@@ -45,7 +45,7 @@ namespace Ryujinx.Common.Memory
 
         public void Skip(int size)
         {
-            _input = _input.Slice(size);
+            _input = _input[size..];
         }
     }
 }

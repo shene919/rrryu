@@ -553,7 +553,7 @@ namespace Ryujinx.Ui.Common.Configuration
 
         public ConfigurationFileFormat ToFileFormat()
         {
-            ConfigurationFileFormat configurationFile = new ConfigurationFileFormat
+            ConfigurationFileFormat configurationFile = new()
             {
                 Version                    = ConfigurationFileFormat.CurrentVersion,
                 BackendThreading           = Graphics.BackendThreading,

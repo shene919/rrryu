@@ -33,7 +33,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
         private readonly ShaderProgramInfo[] _currentProgramInfo;
         private ShaderSpecializationState _shaderSpecState;
-        private SpecializationStateUpdater _currentSpecState;
+        private readonly SpecializationStateUpdater _currentSpecState;
 
         private ProgramPipelineState _pipeline;
 
@@ -43,7 +43,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         private uint _vbEnableMask;
 
         private bool _prevDrawIndexed;
-        private bool _prevDrawIndirect;
+        private readonly bool _prevDrawIndirect;
         private IndexType _prevIndexType;
         private uint _prevFirstVertex;
         private bool _prevTfEnable;
@@ -439,7 +439,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
             int samplesInY = msaaMode.SamplesInY();
 
             var scissor = _state.State.ScreenScissorState;
-            Size sizeHint = new Size((scissor.X + scissor.Width) * samplesInX, (scissor.Y + scissor.Height) * samplesInY, 1);
+            Size sizeHint = new((scissor.X + scissor.Width) * samplesInX, (scissor.Y + scissor.Height) * samplesInY, 1);
 
             int clipRegionWidth = int.MaxValue;
             int clipRegionHeight = int.MaxValue;
@@ -660,7 +660,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
         /// </summary>
         private void UpdateDepthTestState()
         {
-            DepthTestDescriptor descriptor = new DepthTestDescriptor(
+            DepthTestDescriptor descriptor = new(
                 _state.State.DepthTestEnable,
                 _state.State.DepthWriteEnable,
                 _state.State.DepthTestFunc);
@@ -730,7 +730,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                     height *= scale;
                 }
 
-                Rectangle<float> region = new Rectangle<float>(x, y, width, height);
+                Rectangle<float> region = new(x, y, width, height);
 
                 ViewportSwizzle swizzleX = transform.UnpackSwizzleX();
                 ViewportSwizzle swizzleY = transform.UnpackSwizzleY();
@@ -742,9 +742,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
                 if (transform.ScaleZ < 0)
                 {
-                    float temp = depthNear;
-                    depthNear = depthFar;
-                    depthFar = temp;
+                    (depthFar, depthNear) = (depthNear, depthFar);
                 }
 
                 viewports[index] = new Viewport(region, swizzleX, swizzleY, swizzleZ, swizzleW, depthNear, depthFar);
@@ -832,7 +830,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
                 backMask = test.FrontMask;
             }
 
-            StencilTestDescriptor descriptor = new StencilTestDescriptor(
+            StencilTestDescriptor descriptor = new(
                 test.Enable,
                 test.FrontFunc,
                 test.FrontSFail,
@@ -1325,7 +1323,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed
 
             _vtgWritesRtLayer = false;
 
-            ShaderAddresses addresses = new ShaderAddresses();
+            ShaderAddresses addresses = new();
             Span<ulong> addressesSpan = addresses.AsSpan();
 
             ulong baseAddress = _state.State.ShaderBaseAddress.Pack();

@@ -9,10 +9,10 @@ namespace Ryujinx.Graphics.Vulkan
     /// </summary>
     class MultiFenceHolder
     {
-        private static int BufferUsageTrackingGranularity = 4096;
+        private static readonly int BufferUsageTrackingGranularity = 4096;
 
         private readonly Dictionary<FenceHolder, int> _fences;
-        private BufferUsageBitmap _bufferUsageBitmap;
+        private readonly BufferUsageBitmap _bufferUsageBitmap;
 
         /// <summary>
         /// Creates a new instance of the multiple fence holder.
@@ -193,7 +193,7 @@ namespace Ryujinx.Graphics.Vulkan
         /// <returns>Fences for the specified region</returns>
         private FenceHolder[] GetOverlappingFences(int offset, int size)
         {
-            List<FenceHolder> overlapping = new List<FenceHolder>();
+            List<FenceHolder> overlapping = new();
 
             foreach (var kv in _fences)
             {

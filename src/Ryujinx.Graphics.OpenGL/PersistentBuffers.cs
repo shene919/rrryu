@@ -10,8 +10,8 @@ namespace Ryujinx.Graphics.OpenGL
 {
     class PersistentBuffers : IDisposable
     {
-        private PersistentBuffer _main = new PersistentBuffer();
-        private PersistentBuffer _background = new PersistentBuffer();
+        private readonly PersistentBuffer _main = new();
+        private readonly PersistentBuffer _background = new();
 
         public PersistentBuffer Default => BackgroundContextWorker.InBackground ? _background : _main;
 
@@ -106,7 +106,7 @@ namespace Ryujinx.Graphics.OpenGL
 
             Sync();
 
-            return new ReadOnlySpan<byte>(_bufferMap.ToPointer(), size).Slice(offset);
+            return new ReadOnlySpan<byte>(_bufferMap.ToPointer(), size)[offset..];
         }
 
         public unsafe ReadOnlySpan<byte> GetBufferData(BufferHandle buffer, int offset, int size)

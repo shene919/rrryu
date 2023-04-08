@@ -142,12 +142,12 @@ namespace Ryujinx.Graphics.Vulkan
                 BackgroundQueueLock = new object();
             }
 
-            PhysicalDeviceProperties2 properties2 = new PhysicalDeviceProperties2()
+            PhysicalDeviceProperties2 properties2 = new()
             {
                 SType = StructureType.PhysicalDeviceProperties2
             };
 
-            PhysicalDeviceBlendOperationAdvancedPropertiesEXT propertiesBlendOperationAdvanced = new PhysicalDeviceBlendOperationAdvancedPropertiesEXT()
+            PhysicalDeviceBlendOperationAdvancedPropertiesEXT propertiesBlendOperationAdvanced = new()
             {
                 SType = StructureType.PhysicalDeviceBlendOperationAdvancedPropertiesExt
             };
@@ -160,7 +160,7 @@ namespace Ryujinx.Graphics.Vulkan
                 properties2.PNext = &propertiesBlendOperationAdvanced;
             }
 
-            PhysicalDeviceSubgroupSizeControlPropertiesEXT propertiesSubgroupSizeControl = new PhysicalDeviceSubgroupSizeControlPropertiesEXT()
+            PhysicalDeviceSubgroupSizeControlPropertiesEXT propertiesSubgroupSizeControl = new()
             {
                 SType = StructureType.PhysicalDeviceSubgroupSizeControlPropertiesExt
             };
@@ -174,7 +174,7 @@ namespace Ryujinx.Graphics.Vulkan
 
             bool supportsTransformFeedback = _physicalDevice.IsDeviceExtensionPresent(ExtTransformFeedback.ExtensionName);
 
-            PhysicalDeviceTransformFeedbackPropertiesEXT propertiesTransformFeedback = new PhysicalDeviceTransformFeedbackPropertiesEXT()
+            PhysicalDeviceTransformFeedbackPropertiesEXT propertiesTransformFeedback = new()
             {
                 SType = StructureType.PhysicalDeviceTransformFeedbackPropertiesExt
             };
@@ -185,37 +185,37 @@ namespace Ryujinx.Graphics.Vulkan
                 properties2.PNext = &propertiesTransformFeedback;
             }
 
-            PhysicalDevicePortabilitySubsetPropertiesKHR propertiesPortabilitySubset = new PhysicalDevicePortabilitySubsetPropertiesKHR()
+            PhysicalDevicePortabilitySubsetPropertiesKHR propertiesPortabilitySubset = new()
             {
                 SType = StructureType.PhysicalDevicePortabilitySubsetPropertiesKhr
             };
 
-            PhysicalDeviceFeatures2 features2 = new PhysicalDeviceFeatures2()
+            PhysicalDeviceFeatures2 features2 = new()
             {
                 SType = StructureType.PhysicalDeviceFeatures2
             };
 
-            PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT featuresPrimitiveTopologyListRestart = new PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT()
+            PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT featuresPrimitiveTopologyListRestart = new()
             {
                 SType = StructureType.PhysicalDevicePrimitiveTopologyListRestartFeaturesExt
             };
 
-            PhysicalDeviceRobustness2FeaturesEXT featuresRobustness2 = new PhysicalDeviceRobustness2FeaturesEXT()
+            PhysicalDeviceRobustness2FeaturesEXT featuresRobustness2 = new()
             {
                 SType = StructureType.PhysicalDeviceRobustness2FeaturesExt
             };
 
-            PhysicalDeviceShaderFloat16Int8FeaturesKHR featuresShaderInt8 = new PhysicalDeviceShaderFloat16Int8FeaturesKHR()
+            PhysicalDeviceShaderFloat16Int8FeaturesKHR featuresShaderInt8 = new()
             {
                 SType = StructureType.PhysicalDeviceShaderFloat16Int8Features
             };
 
-            PhysicalDeviceCustomBorderColorFeaturesEXT featuresCustomBorderColor = new PhysicalDeviceCustomBorderColorFeaturesEXT()
+            PhysicalDeviceCustomBorderColorFeaturesEXT featuresCustomBorderColor = new()
             {
                 SType = StructureType.PhysicalDeviceCustomBorderColorFeaturesExt
             };
 
-            PhysicalDevicePortabilitySubsetFeaturesKHR featuresPortabilitySubset = new PhysicalDevicePortabilitySubsetFeaturesKHR()
+            PhysicalDevicePortabilitySubsetFeaturesKHR featuresPortabilitySubset = new()
             {
                 SType = StructureType.PhysicalDevicePortabilitySubsetFeaturesKhr
             };
@@ -522,12 +522,12 @@ namespace Ryujinx.Graphics.Vulkan
                 GAL.Format.Astc12x10Srgb,
                 GAL.Format.Astc12x12Srgb);
 
-            PhysicalDeviceVulkan12Features featuresVk12 = new PhysicalDeviceVulkan12Features()
+            PhysicalDeviceVulkan12Features featuresVk12 = new()
             {
                 SType = StructureType.PhysicalDeviceVulkan12Features
             };
 
-            PhysicalDeviceFeatures2 features2 = new PhysicalDeviceFeatures2()
+            PhysicalDeviceFeatures2 features2 = new()
             {
                 SType = StructureType.PhysicalDeviceFeatures2,
                 PNext = &featuresVk12

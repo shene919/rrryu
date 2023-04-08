@@ -2,6 +2,7 @@
 using Ryujinx.Horizon.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ryujinx.Horizon.Sdk.OsTypes.Impl
 {
@@ -13,7 +14,7 @@ namespace Ryujinx.Horizon.Sdk.OsTypes.Impl
 
         private readonly List<MultiWaitHolderBase> _multiWaits;
 
-        private object _lock;
+        private readonly object _lock;
 
         private int _waitingThreadHandle;
 
@@ -65,10 +66,7 @@ namespace Ryujinx.Horizon.Sdk.OsTypes.Impl
                 }
             }
 
-            if (result == null)
-            {
-                result = WaitAnyHandleImpl(infinite, timeout);
-            }
+            result ??= WaitAnyHandleImpl(infinite, timeout);
 
             UnlinkHoldersFromObjectsList();
             _waitingThreadHandle = 0;
@@ -100,7 +98,7 @@ namespace Ryujinx.Horizon.Sdk.OsTypes.Impl
                 }
                 else
                 {
-                    index = WaitSynchronization(objectHandles.Slice(0, count), minTimeout);
+                    index = WaitSynchronization(objectHandles[..count], minTimeout);
 
                     DebugUtil.Assert(index != WaitInvalid);
                 }
@@ -173,7 +171,7 @@ namespace Ryujinx.Horizon.Sdk.OsTypes.Impl
 
             long minTime = endTime;
 
-            foreach (MultiWaitHolder holder in _multiWaits)
+            foreach (MultiWaitHolder holder in _multiWaits.Cast<MultiWaitHolder>())
             {
                 long currentTime = holder.GetAbsoluteTimeToWakeup();
 

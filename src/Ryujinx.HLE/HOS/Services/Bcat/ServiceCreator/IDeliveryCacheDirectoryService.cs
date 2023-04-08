@@ -41,14 +41,12 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
             ulong bufferAddress = context.Request.ReceiveBuff[0].Position;
             ulong bufferLen = context.Request.ReceiveBuff[0].Size;
 
-            using (var region = context.Memory.GetWritableRegion(bufferAddress, (int)bufferLen, true))
-            {
-                Result result = _base.Get.Read(out int entriesRead, MemoryMarshal.Cast<byte, DeliveryCacheDirectoryEntry>(region.Memory.Span));
+            using var region = context.Memory.GetWritableRegion(bufferAddress, (int)bufferLen, true);
+            Result result = _base.Get.Read(out int entriesRead, MemoryMarshal.Cast<byte, DeliveryCacheDirectoryEntry>(region.Memory.Span));
 
-                context.ResponseData.Write(entriesRead);
+            context.ResponseData.Write(entriesRead);
 
-                return (ResultCode)result.Value;
-            }
+            return (ResultCode)result.Value;
         }
 
         [CommandHipc(2)]

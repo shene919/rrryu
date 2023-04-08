@@ -41,7 +41,7 @@ namespace Ryujinx.HLE.HOS.Services.Time
         {
             TimeSpanType ticksTimeSpan = TimeSpanType.FromTicks(tickSource.Counter, tickSource.Frequency);
 
-            SteadyClockContext context = new SteadyClockContext
+            SteadyClockContext context = new()
             {
                 InternalOffset = (ulong)(currentTimePoint.NanoSeconds - ticksTimeSpan.NanoSeconds),
                 ClockSourceId  = clockSourceId

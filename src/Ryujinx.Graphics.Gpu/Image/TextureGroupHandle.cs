@@ -15,10 +15,10 @@ namespace Ryujinx.Graphics.Gpu.Image
     /// </summary>
     class TextureGroupHandle : IDisposable
     {
-        private TextureGroup _group;
+        private readonly TextureGroup _group;
         private int _bindCount;
-        private int _firstLevel;
-        private int _firstLayer;
+        private readonly int _firstLevel;
+        private readonly int _firstLayer;
 
         // Sync state for texture flush.
 
@@ -361,8 +361,8 @@ namespace Ryujinx.Graphics.Gpu.Image
             _group.HasCopyDependencies = true;
             other._group.HasCopyDependencies = true;
 
-            TextureDependency dependency = new TextureDependency(this);
-            TextureDependency otherDependency = new TextureDependency(other);
+            TextureDependency dependency = new(this);
+            TextureDependency otherDependency = new(other);
 
             dependency.Other = otherDependency;
             otherDependency.Other = dependency;

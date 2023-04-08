@@ -11,17 +11,17 @@ namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.Sys
     {
         private readonly ulong _pid;
 
-        private KEvent _libraryAppletLaunchableEvent;
+        private readonly KEvent _libraryAppletLaunchableEvent;
         private int    _libraryAppletLaunchableEventHandle;
 
         private KEvent _accumulatedSuspendedTickChangedEvent;
         private int    _accumulatedSuspendedTickChangedEventHandle;
 
-        private object _fatalSectionLock = new object();
+        private readonly object _fatalSectionLock = new();
         private int    _fatalSectionCount;
 
         // TODO: Set this when the game goes in suspension (go back to home menu ect), we currently don't support that so we can keep it set to 0.
-        private ulong _accumulatedSuspendedTickValue = 0;
+        private readonly ulong _accumulatedSuspendedTickValue = 0;
 
         // TODO: Determine where those fields are used.
         private bool _screenShotPermission               = false;

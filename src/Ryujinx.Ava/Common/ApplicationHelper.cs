@@ -170,7 +170,7 @@ namespace Ryujinx.Ava.Common
                             cancellationToken.Cancel();
                         }
                     });
-                    
+
                     using FileStream file = new(titleFilePath, FileMode.Open, FileAccess.Read);
 
                     Nca mainNca  = null;
@@ -287,10 +287,11 @@ namespace Ryujinx.Ava.Common
                             await ContentDialogHelper.CreateErrorDialog(ex.Message);
                         });
                     }
-                });
-
-                extractorThread.Name = "GUI.NcaSectionExtractorThread";
-                extractorThread.IsBackground = true;
+                })
+                {
+                    Name         = "GUI.NcaSectionExtractorThread",
+                    IsBackground = true
+                };
                 extractorThread.Start();
             }
         }

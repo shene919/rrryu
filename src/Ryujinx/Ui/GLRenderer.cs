@@ -15,7 +15,7 @@ namespace Ryujinx.Ui
 {
     public partial class GlRenderer : RendererWidgetBase
     {
-        private GraphicsDebugLevel _glLogLevel;
+        private readonly GraphicsDebugLevel _glLogLevel;
 
         private bool _initializedOpenGL;
 

@@ -247,7 +247,7 @@ namespace Ryujinx.Cpu.Jit
 
                         size = Math.Min(data.Length, PageSize - (int)(va & PageMask));
 
-                        data.Slice(0, size).CopyTo(_backingMemory.GetSpan(pa, size));
+                        data[..size].CopyTo(_backingMemory.GetSpan(pa, size));
 
                         offset += size;
                     }
@@ -483,7 +483,7 @@ namespace Ryujinx.Cpu.Jit
 
                     size = Math.Min(data.Length, PageSize - (int)(va & PageMask));
 
-                    _backingMemory.GetSpan(pa, size).CopyTo(data.Slice(0, size));
+                    _backingMemory.GetSpan(pa, size).CopyTo(data[..size]);
 
                     offset += size;
                 }

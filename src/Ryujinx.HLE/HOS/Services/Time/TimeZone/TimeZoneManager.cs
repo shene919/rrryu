@@ -13,7 +13,7 @@ namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
         private UInt128              _timeZoneRuleVersion;
         private uint                 _totalLocationNameCount;
         private SteadyClockTimePoint _timeZoneUpdateTimePoint;
-        private object               _lock;
+        private readonly object               _lock;
 
         public TimeZoneManager()
         {
@@ -70,7 +70,7 @@ namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
 
             lock (_lock)
             {
-                Box<TimeZoneRule> rules = new Box<TimeZoneRule>();
+                Box<TimeZoneRule> rules = new();
 
                 bool timeZoneConversionSuccess = TimeZone.ParseTimeZoneBinary(ref rules.Data, timeZoneBinaryStream);
 

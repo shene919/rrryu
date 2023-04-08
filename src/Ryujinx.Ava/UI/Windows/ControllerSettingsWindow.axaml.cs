@@ -30,7 +30,7 @@ namespace Ryujinx.Ava.UI.Windows
 
             foreach (ILogical visual in SettingButtons.GetLogicalDescendants())
             {
-                if (visual is ToggleButton button && !(visual is CheckBox))
+                if (visual is ToggleButton button && visual is not CheckBox)
                 {
                     button.Checked += Button_Checked;
                     button.Unchecked += Button_Unchecked;

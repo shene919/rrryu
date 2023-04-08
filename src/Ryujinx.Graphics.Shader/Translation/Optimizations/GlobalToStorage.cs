@@ -40,7 +40,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                     }
                 }
 
-                if (!(node.Value is Operation operation))
+                if (node.Value is not Operation operation)
                 {
                     continue;
                 }
@@ -166,12 +166,12 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
 
                 Operand alignMask = Const(-config.GpuAccessor.QueryHostStorageBufferOffsetAlignment());
 
-                Operation andOp = new Operation(Instruction.BitwiseAnd, baseAddrTrunc, baseAddrLow, alignMask);
+                Operation andOp = new(Instruction.BitwiseAnd, baseAddrTrunc, baseAddrLow, alignMask);
 
                 node.List.AddBefore(node, andOp);
 
                 Operand offset = Local();
-                Operation subOp = new Operation(Instruction.Subtract, offset, addrLow, baseAddrTrunc);
+                Operation subOp = new(Instruction.Subtract, offset, addrLow, baseAddrTrunc);
 
                 node.List.AddBefore(node, subOp);
 
@@ -180,7 +180,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
             else if (constantOffset != 0)
             {
                 Operand offset = Local();
-                Operation addOp = new Operation(Instruction.Add, offset, byteOffset, Const(constantOffset));
+                Operation addOp = new(Instruction.Add, offset, byteOffset, Const(constantOffset));
 
                 node.List.AddBefore(node, addOp);
 
@@ -193,7 +193,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
             }
 
             Operand wordOffset = Local();
-            Operation shrOp = new Operation(Instruction.ShiftRightU32, wordOffset, byteOffset, Const(2));
+            Operation shrOp = new(Instruction.ShiftRightU32, wordOffset, byteOffset, Const(2));
 
             node.List.AddBefore(node, shrOp);
 
@@ -236,7 +236,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                         if (node != null)
                         {
                             Operand offset = Local();
-                            Operation addOp = new Operation(Instruction.Add, offset, byteOffset, Const(constantOffset));
+                            Operation addOp = new(Instruction.Add, offset, byteOffset, Const(constantOffset));
                             list.AddBefore(node, addOp);
 
                             op.SetSource(addressIndex, offset);
@@ -264,7 +264,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                 return (Const(0), constantOffset);
             }
 
-            if (!(address.AsgOp is Operation offsetAdd) || offsetAdd.Inst != Instruction.Add)
+            if (address.AsgOp is not Operation offsetAdd || offsetAdd.Inst != Instruction.Add)
             {
                 return (null, 0);
             }
@@ -286,7 +286,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
 
         private static (Operand, int) GetStorageConstantOffset(BasicBlock block, Operand address)
         {
-            if (!(address.AsgOp is Operation offsetAdd) || offsetAdd.Inst != Instruction.Add)
+            if (address.AsgOp is not Operation offsetAdd || offsetAdd.Inst != Instruction.Add)
             {
                 return (address, 0);
             }
@@ -316,15 +316,15 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
 
                 Operand alignMask = Const(-config.GpuAccessor.QueryHostStorageBufferOffsetAlignment());
 
-                Operation andOp = new Operation(Instruction.BitwiseAnd, baseAddrTrunc, baseAddrLow, alignMask);
+                Operation andOp = new(Instruction.BitwiseAnd, baseAddrTrunc, baseAddrLow, alignMask);
 
                 node.List.AddBefore(node, andOp);
 
                 Operand byteOffset = Local();
                 Operand wordOffset = Local();
 
-                Operation subOp = new Operation(Instruction.Subtract, byteOffset, addrLow, baseAddrTrunc);
-                Operation shrOp = new Operation(Instruction.ShiftRightU32, wordOffset, byteOffset, Const(2));
+                Operation subOp = new(Instruction.Subtract, byteOffset, addrLow, baseAddrTrunc);
+                Operation shrOp = new(Instruction.ShiftRightU32, wordOffset, byteOffset, Const(2));
 
                 node.List.AddBefore(node, subOp);
                 node.List.AddBefore(node, shrOp);
@@ -346,7 +346,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                 sources[index] = operation.GetSource(index);
             }
 
-            Operation ldcOp = new Operation(Instruction.LoadConstant, operation.Dest, sources);
+            Operation ldcOp = new(Instruction.LoadConstant, operation.Dest, sources);
 
             for (int index = 0; index < operation.SourcesCount; index++)
             {
@@ -371,9 +371,8 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                 return GetStorageIndex(globalAddress, sbStart, sbEnd);
             }
 
-            Operation operation = globalAddress.AsgOp as Operation;
 
-            if (operation == null || operation.Inst != Instruction.Add)
+            if (globalAddress.AsgOp is not Operation operation || operation.Inst != Instruction.Add)
             {
                 return -1;
             }

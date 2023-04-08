@@ -13,7 +13,7 @@ namespace Ryujinx.Headless.SDL2
         private const int CursorHideIdleTime = 5; // seconds
 
         private bool _isDisposed;
-        private HideCursor _hideCursor;
+        private readonly HideCursor _hideCursor;
         private bool _isHidden;
         private long _lastCursorMoveTime;
 

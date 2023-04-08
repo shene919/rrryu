@@ -17,7 +17,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
             // The base offset of the array of handles on the constant buffer is the constant offset.
             for (LinkedListNode<INode> node = block.Operations.First; node != null; node = node.Next)
             {
-                if (!(node.Value is TextureOperation texOp))
+                if (node.Value is not TextureOperation texOp)
                 {
                     continue;
                 }
@@ -27,7 +27,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                     continue;
                 }
 
-                if (!(texOp.GetSource(0).AsgOp is Operation handleAsgOp))
+                if (texOp.GetSource(0).AsgOp is not Operation handleAsgOp)
                 {
                     continue;
                 }
@@ -45,12 +45,12 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
                     continue;
                 }
 
-                if (!(ldcSrc1.AsgOp is Operation shrOp) || shrOp.Inst != Instruction.ShiftRightU32)
+                if (ldcSrc1.AsgOp is not Operation shrOp || shrOp.Inst != Instruction.ShiftRightU32)
                 {
                     continue;
                 }
 
-                if (!(shrOp.GetSource(0).AsgOp is Operation addOp) || addOp.Inst != Instruction.Add)
+                if (shrOp.GetSource(0).AsgOp is not Operation addOp || addOp.Inst != Instruction.Add)
                 {
                     continue;
                 }
@@ -68,7 +68,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
 
                 Operand source = addOp.GetSource(0);
 
-                Operation shrBy3 = new Operation(Instruction.ShiftRightU32, index, source, Const(3));
+                Operation shrBy3 = new(Instruction.ShiftRightU32, index, source, Const(3));
 
                 block.Operations.AddBefore(node, shrBy3);
 

@@ -53,14 +53,12 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
             ulong bufferAddress = context.Request.ReceiveBuff[0].Position;
             ulong bufferLen = context.Request.ReceiveBuff[0].Size;
 
-            using (var region = context.Memory.GetWritableRegion(bufferAddress, (int)bufferLen, true))
-            {
-                Result result = _base.Get.EnumerateDeliveryCacheDirectory(out int count, MemoryMarshal.Cast<byte, DirectoryName>(region.Memory.Span));
+            using var region = context.Memory.GetWritableRegion(bufferAddress, (int)bufferLen, true);
+            Result result = _base.Get.EnumerateDeliveryCacheDirectory(out int count, MemoryMarshal.Cast<byte, DirectoryName>(region.Memory.Span));
 
-                context.ResponseData.Write(count);
+            context.ResponseData.Write(count);
 
-                return (ResultCode)result.Value;
-            }
+            return (ResultCode)result.Value;
         }
 
         protected override void Dispose(bool isDisposing)

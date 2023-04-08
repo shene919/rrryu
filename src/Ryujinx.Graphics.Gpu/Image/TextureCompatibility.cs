@@ -789,7 +789,7 @@ namespace Ryujinx.Graphics.Gpu.Image
             if (lhsDefined == rhsDefined)
             {
                 // If both are undefined, return true. Otherwise just check if they're equal.
-                return lhsDefined ? swizzleLhs == swizzleRhs : true;
+                return !lhsDefined || swizzleLhs == swizzleRhs;
             }
             else
             {

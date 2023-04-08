@@ -216,7 +216,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
             IAstNode src2 = operation.GetSource(1);
             IAstNode src3 = operation.GetSource(2);
 
-            if (!(src1 is AstOperand baseAttr) || baseAttr.Type != OperandType.Constant)
+            if (src1 is not AstOperand baseAttr || baseAttr.Type != OperandType.Constant)
             {
                 throw new InvalidOperationException($"First input of {nameof(Instruction.LoadAttribute)} must be a constant operand.");
             }
@@ -343,7 +343,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
             IAstNode src2 = operation.GetSource(1);
             IAstNode src3 = operation.GetSource(2);
 
-            if (!(src1 is AstOperand baseAttr) || baseAttr.Type != OperandType.Constant)
+            if (src1 is not AstOperand baseAttr || baseAttr.Type != OperandType.Constant)
             {
                 throw new InvalidOperationException($"First input of {nameof(Instruction.StoreAttribute)} must be a constant operand.");
             }
@@ -449,7 +449,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
 
             string src = TypeConversion.ReinterpretCast(context, src3, srcType, AggregateType.U32);
 
-            string sb = GetStorageBufferAccessor(indexExpr, offsetExpr, context.Config.Stage);
+            _ = GetStorageBufferAccessor(indexExpr, offsetExpr, context.Config.Stage);
 
             return $"{HelperFunctionNames.StoreStorage16}({indexExpr}, {offsetExpr}, {src})";
         }
@@ -467,7 +467,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
 
             string src = TypeConversion.ReinterpretCast(context, src3, srcType, AggregateType.U32);
 
-            string sb = GetStorageBufferAccessor(indexExpr, offsetExpr, context.Config.Stage);
+            _ = GetStorageBufferAccessor(indexExpr, offsetExpr, context.Config.Stage);
 
             return $"{HelperFunctionNames.StoreStorage8}({indexExpr}, {offsetExpr}, {src})";
         }

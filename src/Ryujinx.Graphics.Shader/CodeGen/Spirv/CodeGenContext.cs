@@ -40,15 +40,15 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
         public Dictionary<int, Instruction> OutputsPerPatch { get; } = new Dictionary<int, Instruction>();
 
         public Instruction CoordTemp { get; set; }
-        private readonly Dictionary<AstOperand, Instruction> _locals = new Dictionary<AstOperand, Instruction>();
-        private readonly Dictionary<int, Instruction[]> _localForArgs = new Dictionary<int, Instruction[]>();
-        private readonly Dictionary<int, Instruction> _funcArgs = new Dictionary<int, Instruction>();
-        private readonly Dictionary<int, (StructuredFunction, Instruction)> _functions = new Dictionary<int, (StructuredFunction, Instruction)>();
+        private readonly Dictionary<AstOperand, Instruction> _locals = new();
+        private readonly Dictionary<int, Instruction[]> _localForArgs = new();
+        private readonly Dictionary<int, Instruction> _funcArgs = new();
+        private readonly Dictionary<int, (StructuredFunction, Instruction)> _functions = new();
 
         private class BlockState
         {
             private int _entryCount;
-            private readonly List<Instruction> _labels = new List<Instruction>();
+            private readonly List<Instruction> _labels = new();
 
             public Instruction GetNextLabel(CodeGenContext context)
             {
@@ -71,7 +71,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             }
         }
 
-        private readonly Dictionary<AstBlock, BlockState> _labels = new Dictionary<AstBlock, BlockState>();
+        private readonly Dictionary<AstBlock, BlockState> _labels = new();
 
         public Dictionary<AstBlock, (Instruction, Instruction)> LoopTargets { get; set; }
 

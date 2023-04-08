@@ -27,8 +27,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
         public KPageTableBase MemoryManager { get; private set; }
 
-        private SortedDictionary<ulong, KTlsPageInfo> _fullTlsPages;
-        private SortedDictionary<ulong, KTlsPageInfo> _freeTlsPages;
+        private readonly SortedDictionary<ulong, KTlsPageInfo> _fullTlsPages;
+        private readonly SortedDictionary<ulong, KTlsPageInfo> _freeTlsPages;
 
         public int DefaultCpuCore { get; set; }
 
@@ -40,8 +40,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
         public ProcessState State { get; private set; }
 
-        private object _processLock;
-        private object _threadingLock;
+        private readonly object _processLock;
+        private readonly object _threadingLock;
 
         public KAddressArbiter AddressArbiter { get; private set; }
 
@@ -78,7 +78,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
         public ulong UserExceptionContextAddress { get; private set; }
 
-        private LinkedList<KThread> _threads;
+        private readonly LinkedList<KThread> _threads;
 
         public bool IsPaused { get; private set; }
 
@@ -479,9 +479,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
             Result result = Result.Success;
 
-            KTlsPageInfo pageInfo;
 
-            if (_fullTlsPages.TryGetValue(tlsPageAddr, out pageInfo))
+            if (_fullTlsPages.TryGetValue(tlsPageAddr, out KTlsPageInfo pageInfo))
             {
                 // TLS page was full, free slot and move to free pages tree.
                 _fullTlsPages.Remove(tlsPageAddr);
@@ -1033,10 +1032,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
         private void SignalExit()
         {
-            if (ResourceLimit != null)
-            {
-                ResourceLimit.Release(LimitableResource.Memory, GetMemoryUsage());
-            }
+            ResourceLimit?.Release(LimitableResource.Memory, GetMemoryUsage());
 
             KernelContext.CriticalSection.Enter();
 

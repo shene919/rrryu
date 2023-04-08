@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrlGpu.Types
 {
     [StructLayout(LayoutKind.Sequential)]
-    struct ZbcColorArray
+    readonly struct ZbcColorArray
     {
-        private uint element0;
-        private uint element1;
-        private uint element2;
-        private uint element3;
+        private readonly uint element0;
+        private readonly uint element1;
+        private readonly uint element2;
+        private readonly uint element3;
 
         public uint this[int index]
         {

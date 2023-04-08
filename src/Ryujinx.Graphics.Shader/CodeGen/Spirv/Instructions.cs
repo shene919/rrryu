@@ -867,7 +867,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             var src2 = operation.GetSource(1);
             var src3 = operation.GetSource(2);
 
-            if (!(src1 is AstOperand baseAttr) || baseAttr.Type != OperandType.Constant)
+            if (src1 is not AstOperand baseAttr || baseAttr.Type != OperandType.Constant)
             {
                 throw new InvalidOperationException($"First input of {nameof(Instruction.LoadAttribute)} must be a constant operand.");
             }
@@ -1341,7 +1341,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             var src2 = operation.GetSource(1);
             var src3 = operation.GetSource(2);
 
-            if (!(src1 is AstOperand baseAttr) || baseAttr.Type != OperandType.Constant)
+            if (src1 is not AstOperand baseAttr || baseAttr.Type != OperandType.Constant)
             {
                 throw new InvalidOperationException($"First input of {nameof(Instruction.StoreAttribute)} must be a constant operand.");
             }

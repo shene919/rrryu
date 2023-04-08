@@ -10,7 +10,7 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
 {
     class IDeliveryCacheProgressService : IpcService
     {
-        private KEvent _event;
+        private readonly KEvent _event;
         private int    _eventHandle;
 
         public IDeliveryCacheProgressService(ServiceCtx context)
@@ -41,7 +41,7 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
         // GetImpl() -> buffer<nn::bcat::detail::DeliveryCacheProgressImpl, 0x1a>
         public ResultCode GetImpl(ServiceCtx context)
         {
-            DeliveryCacheProgressImpl deliveryCacheProgress = new DeliveryCacheProgressImpl
+            DeliveryCacheProgressImpl deliveryCacheProgress = new()
             {
                 State  = DeliveryCacheProgressImpl.Status.Done,
                 Result = 0

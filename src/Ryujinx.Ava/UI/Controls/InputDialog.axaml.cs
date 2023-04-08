@@ -35,8 +35,8 @@ namespace Ryujinx.Ava.UI.Controls
         {
             UserResult result = UserResult.Cancel;
 
-            InputDialog content = new InputDialog(message, input, subMessage, maxLength);
-            ContentDialog contentDialog = new ContentDialog
+            InputDialog content = new(message, input, subMessage, maxLength);
+            ContentDialog contentDialog = new()
             {
                 Title = title,
                 PrimaryButtonText = LocaleManager.Instance[LocaleKeys.InputDialogOk],

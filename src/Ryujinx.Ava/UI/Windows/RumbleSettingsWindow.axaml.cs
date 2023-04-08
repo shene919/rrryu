@@ -33,9 +33,9 @@ namespace Ryujinx.Ava.UI.Windows
 
         public static async Task Show(ControllerSettingsViewModel viewmodel)
         {
-            RumbleSettingsWindow content = new RumbleSettingsWindow(viewmodel);
+            RumbleSettingsWindow content = new(viewmodel);
 
-            ContentDialog contentDialog = new ContentDialog
+            ContentDialog contentDialog = new()
             {
                 Title = LocaleManager.Instance[LocaleKeys.ControllerRumbleTitle],
                 PrimaryButtonText = LocaleManager.Instance[LocaleKeys.ControllerSettingsSave],

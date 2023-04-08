@@ -260,7 +260,7 @@ namespace Ryujinx.Graphics.Gpu.Image
                 width = copyTexture.Width;
             }
 
-            TextureInfo info = new TextureInfo(
+            TextureInfo info = new(
                 copyTexture.Address.Pack() + offset,
                 GetMinimumWidthInGob(width, sizeHint.Width, formatInfo.BytesPerPixel, copyTexture.LinearLayout),
                 copyTexture.Height,
@@ -357,7 +357,7 @@ namespace Ryujinx.Graphics.Gpu.Image
                 stride = 0;
             }
 
-            TextureInfo info = new TextureInfo(
+            TextureInfo info = new(
                 colorState.Address.Pack(),
                 GetMinimumWidthInGob(width, sizeHint.Width, formatInfo.BytesPerPixel, isLinear),
                 colorState.Height,
@@ -426,7 +426,7 @@ namespace Ryujinx.Graphics.Gpu.Image
 
             FormatInfo formatInfo = dsState.Format.Convert();
 
-            TextureInfo info = new TextureInfo(
+            TextureInfo info = new(
                 dsState.Address.Pack(),
                 GetMinimumWidthInGob(size.Width, sizeHint.Width, formatInfo.BytesPerPixel, false),
                 size.Height,

@@ -10,7 +10,7 @@ namespace Ryujinx.Graphics.Shader.StructuredIr
     {
         public static StructuredProgramInfo MakeStructuredProgram(Function[] functions, ShaderConfig config)
         {
-            StructuredProgramContext context = new StructuredProgramContext(config);
+            StructuredProgramContext context = new(config);
 
             for (int funcIndex = 0; funcIndex < functions.Length; funcIndex++)
             {
@@ -182,7 +182,7 @@ namespace Ryujinx.Graphics.Shader.StructuredIr
                 for (int i = 0; i < operation.DestsCount; i++)
                 {
                     AstOperand dest = context.GetOperandDef(operation.GetDest(i));
-                    AstOperand index = new AstOperand(OperandType.Constant, i);
+                    AstOperand index = new(OperandType.Constant, i);
 
                     dest.VarType = destElemType;
 
@@ -309,9 +309,9 @@ namespace Ryujinx.Graphics.Shader.StructuredIr
 
         private static AggregateType GetVarTypeFromUses(Operand dest)
         {
-            HashSet<Operand> visited = new HashSet<Operand>();
+            HashSet<Operand> visited = new();
 
-            Queue<Operand> pending = new Queue<Operand>();
+            Queue<Operand> pending = new();
 
             bool Enqueue(Operand operand)
             {

@@ -65,11 +65,11 @@ namespace Ryujinx.Input.SDL2
             SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_INVALID,
         };
 
-        private object _userMappingLock = new object();
+        private readonly object _userMappingLock = new();
 
-        private List<ButtonMappingEntry> _buttonsUserMapping;
+        private readonly List<ButtonMappingEntry> _buttonsUserMapping;
 
-        private StickInputId[] _stickUserMapping = new StickInputId[(int)StickInputId.Count]
+        private readonly StickInputId[] _stickUserMapping = new StickInputId[(int)StickInputId.Count]
         {
             StickInputId.Unbound,
             StickInputId.Left,
@@ -192,7 +192,7 @@ namespace Ryujinx.Input.SDL2
 
                     if (result == 0)
                     {
-                        Vector3 value = new Vector3(values[0], values[1], values[2]);
+                        Vector3 value = new(values[0], values[1], values[2]);
 
                         if (inputId == MotionInputId.Gyroscope)
                         {

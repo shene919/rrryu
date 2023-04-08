@@ -416,29 +416,25 @@ namespace Ryujinx.Ava.UI.ViewModels
             if (response.IsSuccessStatusCode)
             {
                 byte[] amiiboPreviewBytes = await response.Content.ReadAsByteArrayAsync();
-                using (MemoryStream memoryStream = new(amiiboPreviewBytes))
-                {
-                    Bitmap bitmap = new(memoryStream);
+                using MemoryStream memoryStream = new(amiiboPreviewBytes);
+                Bitmap bitmap = new(memoryStream);
 
-                    double ratio = Math.Min(AmiiboImageSize / bitmap.Size.Width,
+                double ratio = Math.Min(AmiiboImageSize / bitmap.Size.Width,
                         AmiiboImageSize / bitmap.Size.Height);
 
-                    int resizeHeight = (int)(bitmap.Size.Height * ratio);
-                    int resizeWidth = (int)(bitmap.Size.Width * ratio);
+                int resizeHeight = (int)(bitmap.Size.Height * ratio);
+                int resizeWidth = (int)(bitmap.Size.Width * ratio);
 
-                    AmiiboImage = bitmap.CreateScaledBitmap(new PixelSize(resizeWidth, resizeHeight));
-                }
+                AmiiboImage = bitmap.CreateScaledBitmap(new PixelSize(resizeWidth, resizeHeight));
             }
         }
 
         private void ResetAmiiboPreview()
         {
-            using (MemoryStream memoryStream = new(_amiiboLogoBytes))
-            {
-                Bitmap bitmap = new(memoryStream);
+            using MemoryStream memoryStream = new(_amiiboLogoBytes);
+            Bitmap bitmap = new(memoryStream);
 
-                AmiiboImage = bitmap;
-            }
+            AmiiboImage = bitmap;
         }
 
         private async void ShowInfoDialog()

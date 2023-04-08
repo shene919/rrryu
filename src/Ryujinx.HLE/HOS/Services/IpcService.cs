@@ -17,7 +17,7 @@ namespace Ryujinx.HLE.HOS.Services
         public ServerBase Server { get; private set; }
 
         private IpcService _parent;
-        private IdDictionary _domainObjects;
+        private readonly IdDictionary _domainObjects;
         private int _selfId;
         private bool _isDomain;
 
@@ -125,9 +125,8 @@ namespace Ryujinx.HLE.HOS.Services
                 {
                     string serviceName;
 
-                    DummyService dummyService = service as DummyService;
 
-                    serviceName = (dummyService == null) ? service.GetType().FullName : dummyService.ServiceName;
+                    serviceName = (service is not DummyService dummyService) ? service.GetType().FullName : dummyService.ServiceName;
 
                     Logger.Warning?.Print(LogClass.KernelIpc, $"Missing service {serviceName}: {commandId} ignored");
                 }
@@ -179,9 +178,8 @@ namespace Ryujinx.HLE.HOS.Services
                 {
                     string serviceName;
 
-                    DummyService dummyService = this as DummyService;
 
-                    serviceName = (dummyService == null) ? GetType().FullName : dummyService.ServiceName;
+                    serviceName = (this is not DummyService dummyService) ? GetType().FullName : dummyService.ServiceName;
 
                     Logger.Warning?.Print(LogClass.KernelIpc, $"Missing service {serviceName}: {commandId} ignored");
                 }

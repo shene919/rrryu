@@ -23,9 +23,9 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
 
         protected BufferQueueConsumer Consumer;
 
-        protected readonly object Lock = new object();
+        protected readonly object Lock = new();
 
-        private IConsumerListener _listener;
+        private readonly IConsumerListener _listener;
 
         public ConsumerBase(BufferQueueConsumer consumer, bool controlledByApp, IConsumerListener listener)
         {

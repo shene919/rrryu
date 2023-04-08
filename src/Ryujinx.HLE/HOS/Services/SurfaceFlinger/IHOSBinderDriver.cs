@@ -26,7 +26,7 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
 
             ReadOnlySpan<byte> inputParcel = context.Memory.GetSpan(dataPos, (int)dataSize);
 
-            Span<byte> outputParcel = new Span<byte>(new byte[replySize]);
+            Span<byte> outputParcel = new(new byte[replySize]);
 
             ResultCode result = OnTransact(binderId, code, flags, inputParcel, outputParcel);
 
@@ -83,7 +83,7 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
 
             ReadOnlySpan<byte> inputParcel = context.Memory.GetSpan(dataPos, (int)dataSize);
 
-            Span<byte> outputParcel = new Span<byte>(new byte[replySize]);
+            Span<byte> outputParcel = new(new byte[replySize]);
 
             ResultCode result = OnTransact(binderId, code, flags, inputParcel, outputParcel);
 

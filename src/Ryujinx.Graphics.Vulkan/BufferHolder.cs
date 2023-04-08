@@ -45,7 +45,7 @@ namespace Ryujinx.Graphics.Vulkan
 
         private bool _lastAccessIsWrite;
 
-        private BufferAllocationType _baseType;
+        private readonly BufferAllocationType _baseType;
         private BufferAllocationType _currentType;
         private bool _swapQueued;
 
@@ -56,7 +56,7 @@ namespace Ryujinx.Graphics.Vulkan
         private int _flushCount;
         private int _flushTemp;
 
-        private ReaderWriterLock _flushLock;
+        private readonly ReaderWriterLock _flushLock;
         private FenceHolder _flushFence;
         private int _flushWaiting;
 
@@ -121,10 +121,7 @@ namespace Ryujinx.Graphics.Vulkan
                         }
                         else
                         {
-                            if (cbs == null)
-                            {
-                                cbs = _gd.CommandBufferPool.Rent();
-                            }
+                            cbs ??= _gd.CommandBufferPool.Rent();
 
                             CommandBufferScoped cbsV = cbs.Value;
 
@@ -258,7 +255,7 @@ namespace Ryujinx.Graphics.Vulkan
 
             if (needsBarrier)
             {
-                MemoryBarrier memoryBarrier = new MemoryBarrier()
+                MemoryBarrier memoryBarrier = new()
                 {
                     SType = StructureType.MemoryBarrier,
                     SrcAccessMask = DefaultAccessFlags,
@@ -468,7 +465,7 @@ namespace Ryujinx.Graphics.Vulkan
                 {
                     WaitForFences(offset, dataSize);
 
-                    data.Slice(0, dataSize).CopyTo(new Span<byte>((void*)(_map + offset), dataSize));
+                    data[..dataSize].CopyTo(new Span<byte>((void*)(_map + offset), dataSize));
 
                     SignalWrite(offset, dataSize);
 
@@ -507,7 +504,7 @@ namespace Ryujinx.Graphics.Vulkan
 
             if (_map != IntPtr.Zero)
             {
-                data.Slice(0, dataSize).CopyTo(new Span<byte>((void*)(_map + offset), dataSize));
+                data[..dataSize].CopyTo(new Span<byte>((void*)(_map + offset), dataSize));
             }
             else
             {
@@ -621,7 +618,7 @@ namespace Ryujinx.Graphics.Vulkan
             int offset,
             int size)
         {
-            BufferMemoryBarrier memoryBarrier = new BufferMemoryBarrier()
+            BufferMemoryBarrier memoryBarrier = new()
             {
                 SType = StructureType.BufferMemoryBarrier,
                 SrcAccessMask = srcAccessMask,

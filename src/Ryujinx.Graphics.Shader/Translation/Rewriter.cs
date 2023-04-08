@@ -499,7 +499,7 @@ namespace Ryujinx.Graphics.Shader.Translation
                         newSources[coordsIndex + index] = coordPlusOffset;
                     }
 
-                    TextureOperation newTexOp = new TextureOperation(
+                    TextureOperation newTexOp = new(
                         Instruction.TextureSample,
                         texOp.Type,
                         texOp.Format,
@@ -557,7 +557,7 @@ namespace Ryujinx.Graphics.Shader.Translation
                     }
                 }
 
-                TextureOperation newTexOp = new TextureOperation(
+                TextureOperation newTexOp = new(
                     Instruction.TextureSample,
                     texOp.Type,
                     texOp.Format,
@@ -681,8 +681,8 @@ namespace Ryujinx.Graphics.Shader.Translation
 
                 INode[] uses = dest.UseOps.ToArray();
 
-                Operation convOp = new Operation(Instruction.ConvertS32ToFP32, Local(), dest);
-                Operation normOp = new Operation(Instruction.FP32 | Instruction.Multiply, Local(), convOp.Dest, ConstF(1f / maxPositive));
+                Operation convOp = new(Instruction.ConvertS32ToFP32, Local(), dest);
+                Operation normOp = new(Instruction.FP32 | Instruction.Multiply, Local(), convOp.Dest, ConstF(1f / maxPositive));
 
                 node = node.List.AddAfter(node, convOp);
                 node = node.List.AddAfter(node, normOp);

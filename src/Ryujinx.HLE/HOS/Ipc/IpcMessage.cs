@@ -38,12 +38,10 @@ namespace Ryujinx.HLE.HOS.Ipc
 
         public IpcMessage(ReadOnlySpan<byte> data, long cmdPtr) : this()
         {
-            using (RecyclableMemoryStream ms = MemoryStreamManager.Shared.GetStream(data))
-            {
-                BinaryReader reader = new BinaryReader(ms);
+            using RecyclableMemoryStream ms = MemoryStreamManager.Shared.GetStream(data);
+            BinaryReader reader = new(ms);
 
-                Initialize(reader, cmdPtr);
-            }
+            Initialize(reader, cmdPtr);
         }
 
         private void Initialize(BinaryReader reader, long cmdPtr)

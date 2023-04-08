@@ -69,10 +69,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             _context.CriticalSection.Leave();
             _context.CriticalSection.Enter();
 
-            if (currentThread.MutexOwner != null)
-            {
-                currentThread.MutexOwner.RemoveMutexWaiter(currentThread);
-            }
+            currentThread.MutexOwner?.RemoveMutexWaiter(currentThread);
 
             _context.CriticalSection.Leave();
 
@@ -158,10 +155,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
             _context.CriticalSection.Enter();
 
-            if (currentThread.MutexOwner != null)
-            {
-                currentThread.MutexOwner.RemoveMutexWaiter(currentThread);
-            }
+            currentThread.MutexOwner?.RemoveMutexWaiter(currentThread);
 
             _condVarThreads.Remove(currentThread);
 

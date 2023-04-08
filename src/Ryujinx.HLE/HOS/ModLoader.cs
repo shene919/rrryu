@@ -205,12 +205,12 @@ namespace Ryujinx.HLE.HOS
                 mods.ExefsContainers.Add(new Mod<FileInfo>($"<{titleDir.Name} ExeFs>", fsFile));
             }
 
-            System.Text.StringBuilder types = new System.Text.StringBuilder(5);
+            System.Text.StringBuilder types = new(5);
 
             foreach (var modDir in titleDir.EnumerateDirectories())
             {
                 types.Clear();
-                Mod<DirectoryInfo> mod = new Mod<DirectoryInfo>("", null);
+                Mod<DirectoryInfo> mod = new("", null);
 
                 if (StrEquals(RomfsDir, modDir.Name))
                 {
@@ -313,8 +313,8 @@ namespace Ryujinx.HLE.HOS
         private static IEnumerable<Cheat> GetCheatsInFile(FileInfo cheatFile)
         {
             string cheatName = DefaultCheatName;
-            List<string> instructions = new List<string>();
-            List<Cheat> cheats = new List<Cheat>();
+            List<string> instructions = new();
+            List<Cheat> cheats = new();
 
             using (StreamReader cheatData = cheatFile.OpenText())
             {
@@ -342,7 +342,7 @@ namespace Ryujinx.HLE.HOS
                         }
 
                         // Start a new cheat section.
-                        cheatName = line.Substring(1, line.Length - 2);
+                        cheatName = line[1..^1];
                         instructions = new List<string>();
                     }
                     else if (line.Length > 0)
@@ -537,7 +537,7 @@ namespace Ryujinx.HLE.HOS
 
         internal ModLoadResult ApplyExefsMods(ulong titleId, NsoExecutable[] nsos)
         {
-            ModLoadResult modLoadResult = new ModLoadResult
+            ModLoadResult modLoadResult = new()
             {
                 Stubs = new BitVector32(),
                 Replaces = new BitVector32()
@@ -561,7 +561,7 @@ namespace Ryujinx.HLE.HOS
                 {
                     var nsoName = ProcessConst.ExeFsPrefixes[i];
 
-                    FileInfo nsoFile = new FileInfo(Path.Combine(mod.Path.FullName, nsoName));
+                    FileInfo nsoFile = new(Path.Combine(mod.Path.FullName, nsoName));
                     if (nsoFile.Exists)
                     {
                         if (modLoadResult.Replaces[1 << i])
@@ -580,7 +580,7 @@ namespace Ryujinx.HLE.HOS
                     modLoadResult.Stubs[1 << i] |= File.Exists(Path.Combine(mod.Path.FullName, nsoName + StubExtension));
                 }
 
-                FileInfo npdmFile = new FileInfo(Path.Combine(mod.Path.FullName, "main.npdm"));
+                FileInfo npdmFile = new(Path.Combine(mod.Path.FullName, "main.npdm"));
                 if (npdmFile.Exists)
                 {
                     if (modLoadResult.Npdm != null)
@@ -652,7 +652,7 @@ namespace Ryujinx.HLE.HOS
 
             var cheats = mods.Cheats;
             var processExes = tamperInfo.BuildIds.Zip(tamperInfo.CodeAddresses, (k, v) => new { k, v })
-                .ToDictionary(x => x.k.Substring(0, Math.Min(Cheat.CheatIdSize, x.k.Length)), x => x.v);
+                .ToDictionary(x => x.k[..Math.Min(Cheat.CheatIdSize, x.k.Length)], x => x.v);
 
             foreach (var cheat in cheats)
             {

@@ -10,14 +10,14 @@ namespace Ryujinx.Audio.Backends.OpenAL
 {
     class OpenALHardwareDeviceSession : HardwareDeviceSessionOutputBase
     {
-        private OpenALHardwareDeviceDriver _driver;
-        private int _sourceId;
-        private ALFormat _targetFormat;
+        private readonly OpenALHardwareDeviceDriver _driver;
+        private readonly int _sourceId;
+        private readonly ALFormat _targetFormat;
         private bool _isActive;
-        private Queue<OpenALAudioBuffer> _queuedBuffers;
+        private readonly Queue<OpenALAudioBuffer> _queuedBuffers;
         private ulong _playedSampleCount;
 
-        private object _lock = new object();
+        private readonly object _lock = new();
 
         public OpenALHardwareDeviceSession(OpenALHardwareDeviceDriver driver, IVirtualMemoryManager memoryManager, SampleFormat requestedSampleFormat, uint requestedSampleRate, uint requestedChannelCount, float requestedVolume) : base(memoryManager, requestedSampleFormat, requestedSampleRate, requestedChannelCount)
         {
@@ -69,7 +69,7 @@ namespace Ryujinx.Audio.Backends.OpenAL
         {
             lock (_lock)
             {
-                OpenALAudioBuffer driverBuffer = new OpenALAudioBuffer
+                OpenALAudioBuffer driverBuffer = new()
                 {
                     DriverIdentifier = buffer.DataPointer,
                     BufferId = AL.GenBuffer(),

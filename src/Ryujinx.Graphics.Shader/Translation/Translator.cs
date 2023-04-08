@@ -141,7 +141,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
             for (int index = 0; index < functions.Length; index++)
             {
-                EmitterContext context = new EmitterContext(program, config, index != 0);
+                EmitterContext context = new(program, config, index != 0);
 
                 if (initializeOutputs && index == 0)
                 {
@@ -263,7 +263,7 @@ namespace Ryujinx.Graphics.Shader.Translation
                     context.Add(new CommentNode(dbgComment));
                 }
 
-                InstConditional opConditional = new InstConditional(op.RawOpCode);
+                InstConditional opConditional = new(op.RawOpCode);
 
                 bool noPred = op.Props.HasFlag(InstProps.NoPred);
                 if (!noPred && opConditional.Pred == RegisterConsts.PredicateTrueIndex && opConditional.PredInv)

@@ -21,7 +21,7 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
         private uint _currentCallbackTicket;
         private uint _callbackTicket;
 
-        private readonly object _callbackLock = new object();
+        private readonly object _callbackLock = new();
 
         public BufferQueueProducer(BufferQueueCore core, ITickSource tickSource)
         {
@@ -350,7 +350,7 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
                     return Status.BadValue;
             }
 
-            BufferItem item = new BufferItem();
+            BufferItem item = new();
 
             IConsumerListener frameAvailableListener = null;
             IConsumerListener frameReplaceListener   = null;
