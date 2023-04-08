@@ -12,7 +12,7 @@ updates:
       prefix: "ci"
 
   - package-ecosystem: nuget
-    directory: /
+    directory: "/src"
     open-pull-requests-limit: 5
     schedule:
       interval: daily

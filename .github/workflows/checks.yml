@@ -21,15 +21,17 @@ jobs:
 
       - uses: actions/setup-dotnet@v3
         with:
-          global-json-file: global.json
+          global-json-file: src/global.json
 
       - run: dotnet restore
+        working-directory: src
 
       - name: Run dotnet format
+        working-directory: src
         run: |
           dotnet tool install -g dotnet-format
-          dotnet format style --severity info --verify-no-changes --report ./style-report.json
-          dotnet format analyzers --severity info --verify-no-changes --report ./analyzers-report.json
+          dotnet format style --severity info --verify-no-changes --report ../style-report.json
+          dotnet format analyzers --severity info --verify-no-changes --report ../analyzers-report.json
 
       - name: Upload report
         if: failure()

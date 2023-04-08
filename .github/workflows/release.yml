@@ -24,11 +24,14 @@ env:
 jobs:
   release:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: src
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-dotnet@v3
         with:
-          global-json-file: global.json
+          global-json-file: src/global.json
       - name: Get version info
         id: version_info
         run: |
@@ -102,7 +105,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ steps.version_info.outputs.build_version }}
-          artifacts: "release_output/*.tar.gz,release_output/*.zip"
+          artifacts: "src/release_output/*.tar.gz,src/release_output/*.zip"
           tag: ${{ steps.version_info.outputs.build_version }}
           body: "For more informations about this release please check out the official [Changelog](https://github.com/Ryujinx/Ryujinx/wiki/Changelog)."
           allowUpdates: true
