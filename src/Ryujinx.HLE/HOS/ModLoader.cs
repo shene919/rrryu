@@ -552,7 +552,7 @@ namespace Ryujinx.HLE.HOS
 
             if (nsos.Length != ProcessConst.ExeFsPrefixes.Length)
             {
-                throw new ArgumentOutOfRangeException("NSO Count is incorrect");
+                throw new ArgumentOutOfRangeException(nameof(nsos), nsos.Length, "NSO Count is incorrect");
             }
 
             var exeMods = mods.ExefsDirs;

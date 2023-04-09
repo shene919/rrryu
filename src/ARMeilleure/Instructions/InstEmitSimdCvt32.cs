@@ -257,7 +257,9 @@ namespace ARMeilleure.Instructions
                         0b01 => Intrinsic.Arm64FcvtnuS,
                         0b10 => Intrinsic.Arm64FcvtpuS,
                         0b11 => Intrinsic.Arm64FcvtmuS,
-                        _ => throw new ArgumentOutOfRangeException(nameof(rm))
+#pragma warning disable CA2208
+                        _ => throw new ArgumentOutOfRangeException(nameof(rm), rm, null)
+#pragma warning restore CA2208
                     };
                 }
                 else
@@ -267,7 +269,9 @@ namespace ARMeilleure.Instructions
                         0b01 => Intrinsic.Arm64FcvtnsS,
                         0b10 => Intrinsic.Arm64FcvtpsS,
                         0b11 => Intrinsic.Arm64FcvtmsS,
-                        _ => throw new ArgumentOutOfRangeException(nameof(rm))
+#pragma warning disable CA2208
+                        _ => throw new ArgumentOutOfRangeException(nameof(rm), rm, null)
+#pragma warning restore CA2208
                     };
                 }
 
@@ -387,7 +391,9 @@ namespace ARMeilleure.Instructions
                     0b01 => Intrinsic.Arm64FrintnS,
                     0b10 => Intrinsic.Arm64FrintpS,
                     0b11 => Intrinsic.Arm64FrintmS,
-                    _ => throw new ArgumentOutOfRangeException(nameof(rm))
+#pragma warning disable CA2208
+                    _ => throw new ArgumentOutOfRangeException(nameof(rm), rm, null)
+#pragma warning restore CA2208
                 };
 
                 InstEmitSimdHelper32Arm64.EmitScalarUnaryOpF32(context, inst);
