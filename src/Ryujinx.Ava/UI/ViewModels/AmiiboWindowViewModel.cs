@@ -42,7 +42,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         private bool _showAllAmiibo;
         private bool _useRandomUuid;
         private string _usage;
-        
+
         private static readonly AmiiboJsonSerializerContext SerializerContext = new(JsonHelper.GetDefaultSerializerOptions());
 
         public AmiiboWindowViewModel(StyleableWindow owner, string lastScannedAmiiboId, string titleId)
@@ -181,6 +181,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             _httpClient.Dispose();
         }
 

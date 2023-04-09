@@ -15,7 +15,12 @@ namespace Ryujinx.Cpu.Tracking
             _impl = impl;
         }
 
-        public void Dispose() => _impl.Dispose();
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            _impl.Dispose();
+        }
+
         public void ForceDirty(ulong address, ulong size) => _impl.ForceDirty(address, size);
         public IEnumerable<IRegionHandle> GetHandles() => _impl.GetHandles();
         public void QueryModified(Action<ulong, ulong> modifiedAction) => _impl.QueryModified(modifiedAction);

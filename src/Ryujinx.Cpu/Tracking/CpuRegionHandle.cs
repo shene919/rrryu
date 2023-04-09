@@ -18,7 +18,12 @@ namespace Ryujinx.Cpu.Tracking
             _impl = impl;
         }
 
-        public void Dispose() => _impl.Dispose();
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            _impl.Dispose();
+        }
+
         public bool DirtyOrVolatile() => _impl.DirtyOrVolatile();
         public void ForceDirty() => _impl.ForceDirty();
         public IRegionHandle GetHandle() => _impl;

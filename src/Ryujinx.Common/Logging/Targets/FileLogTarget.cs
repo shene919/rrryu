@@ -47,6 +47,7 @@ namespace Ryujinx.Common.Logging
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             _logWriter.WriteLine("---- End of Log ----");
             _logWriter.Flush();
             _logWriter.Dispose();
