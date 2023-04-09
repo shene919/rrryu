@@ -156,7 +156,7 @@ namespace Ryujinx.Ava
 
             if (ApplicationPath.StartsWith("@SystemContent"))
             {
-                ApplicationPath = _viewModel.VirtualFileSystem.SwitchPathToSystemPath(ApplicationPath);
+                ApplicationPath = VirtualFileSystem.SwitchPathToSystemPath(ApplicationPath);
 
                 _isFirmwareTitle = true;
             }
@@ -447,7 +447,7 @@ namespace Ryujinx.Ava
         {
             if (Device.Processes != null)
             {
-                _viewModel.UpdateGameMetadata(Device.Processes.ActiveApplication.ProgramIdText);
+                MainWindowViewModel.UpdateGameMetadata(Device.Processes.ActiveApplication.ProgramIdText);
             }
 
             ConfigurationState.Instance.System.IgnoreMissingServices.Event -= UpdateIgnoreMissingServicesState;
