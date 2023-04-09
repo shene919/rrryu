@@ -624,7 +624,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 return context.Get(type, texOp.GetSource(srcIndex++));
             }
 
+#pragma warning disable IDE0059
             SpvInstruction index = null;
+#pragma warning restore IDE0059
 
             if (isIndexed)
             {
@@ -717,7 +719,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 return context.Get(type, texOp.GetSource(srcIndex++));
             }
 
+#pragma warning disable IDE0059
             SpvInstruction index = null;
+#pragma warning restore IDE0059
 
             if (isIndexed)
             {
@@ -785,7 +789,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 return context.Get(type, texOp.GetSource(srcIndex++));
             }
 
+#pragma warning disable IDE0059
             SpvInstruction index = null;
+#pragma warning restore IDE0059
 
             if (isIndexed)
             {
@@ -1011,7 +1017,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 return context.Get(type, texOp.GetSource(srcIndex++));
             }
 
+#pragma warning disable IDE0059
             SpvInstruction index = null;
+#pragma warning restore IDE0059
 
             if (isIndexed)
             {
@@ -1516,7 +1524,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                 return context.Get(type, texOp.GetSource(srcIndex++));
             }
 
+#pragma warning disable IDE0059
             SpvInstruction index = null;
+#pragma warning restore IDE0059
 
             if (isIndexed)
             {
@@ -1795,7 +1805,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             bool isIndexed = (texOp.Type & SamplerType.Indexed) != 0;
 
+#pragma warning disable IDE0059
             SpvInstruction index = null;
+#pragma warning restore IDE0059
 
             if (isIndexed)
             {
