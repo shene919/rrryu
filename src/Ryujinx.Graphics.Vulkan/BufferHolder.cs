@@ -281,6 +281,7 @@ namespace Ryujinx.Graphics.Vulkan
             return _buffer;
         }
 
+#pragma warning disable IDE0060
         public Auto<DisposableBuffer> GetBuffer(CommandBuffer commandBuffer, bool isWrite = false, bool isSSBO = false)
         {
             if (isWrite)
@@ -300,7 +301,9 @@ namespace Ryujinx.Graphics.Vulkan
 
             return _buffer;
         }
+#pragma warning restore IDE0060
 
+#pragma warning disable IDE0060
         public Auto<DisposableBuffer> GetBuffer(CommandBuffer commandBuffer, int offset, int size, bool isWrite = false)
         {
             if (isWrite)
@@ -312,6 +315,7 @@ namespace Ryujinx.Graphics.Vulkan
 
             return _buffer;
         }
+#pragma warning restore IDE0060
 
         public void SignalWrite(int offset, int size)
         {
@@ -333,10 +337,12 @@ namespace Ryujinx.Graphics.Vulkan
             return Unsafe.As<ulong, BufferHandle>(ref handle);
         }
 
+#pragma warning disable IDE0060
         public unsafe IntPtr Map(int offset, int mappingSize)
         {
             return _map;
         }
+#pragma warning restore IDE0060
 
         private void ClearFlushFence()
         {

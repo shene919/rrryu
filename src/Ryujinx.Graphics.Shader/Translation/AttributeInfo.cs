@@ -150,6 +150,7 @@ namespace Ryujinx.Graphics.Shader.Translation
             return new AttributeInfo(value, 0, 0, AggregateType.Invalid);
         }
 
+#pragma warning disable IDE0060
         public static AttributeInfo FromPatch(ShaderConfig config, int value, bool isOutAttr)
         {
             value &= ~3;
@@ -166,6 +167,7 @@ namespace Ryujinx.Graphics.Shader.Translation
 
             return new AttributeInfo(value, 0, 0, AggregateType.Invalid);
         }
+#pragma warning restore IDE0060
 
         public static bool IsArrayBuiltIn(int attr)
         {

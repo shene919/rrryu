@@ -40,6 +40,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl
             return context.GetCode();
         }
 
+#pragma warning disable IDE0060
         private static void PrintFunction(CodeGenContext context, StructuredProgramInfo info, StructuredFunction function, string funcName = null)
         {
             context.CurrentFunction = function;
@@ -53,6 +54,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl
 
             context.LeaveScope();
         }
+#pragma warning restore IDE0060
 
         private static string GetFunctionSignature(CodeGenContext context, StructuredFunction function, string funcName = null)
         {

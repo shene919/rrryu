@@ -93,6 +93,7 @@ namespace Ryujinx.Graphics.Vulkan
         /// </summary>
         /// <param name="cbIndex">Command buffer index of the command buffer that owns the fence</param>
         /// <param name="fence">Fence to be removed</param>
+#pragma warning disable IDE0060
         public void RemoveFence(int cbIndex, FenceHolder fence)
         {
             lock (_fences)
@@ -100,6 +101,7 @@ namespace Ryujinx.Graphics.Vulkan
                 _fences.Remove(fence);
             }
         }
+#pragma warning restore IDE0060
 
         /// <summary>
         /// Wait until all the fences on the holder are signaled.

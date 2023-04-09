@@ -284,6 +284,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
             return (null, 0);
         }
 
+#pragma warning disable IDE0060
         private static (Operand, int) GetStorageConstantOffset(BasicBlock block, Operand address)
         {
             if (address.AsgOp is not Operation offsetAdd || offsetAdd.Inst != Instruction.Add)
@@ -301,6 +302,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Optimizations
 
             return (src1, src2.Value);
         }
+#pragma warning restore IDE0060
 
         private static LinkedListNode<INode> ReplaceLdgWithLdc(LinkedListNode<INode> node, ShaderConfig config, int storageIndex)
         {
