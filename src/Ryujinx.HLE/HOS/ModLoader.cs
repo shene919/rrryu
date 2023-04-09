@@ -137,8 +137,8 @@ namespace Ryujinx.HLE.HOS
 
         private static bool StrEquals(string s1, string s2) => string.Equals(s1, s2, StringComparison.OrdinalIgnoreCase);
 
-        public string GetModsBasePath()   => EnsureBaseDirStructure(AppDataManager.GetModsPath());
-        public string GetSdModsBasePath() => EnsureBaseDirStructure(AppDataManager.GetSdModsPath());
+        public static string GetModsBasePath()   => EnsureBaseDirStructure(AppDataManager.GetModsPath());
+        public static string GetSdModsBasePath() => EnsureBaseDirStructure(AppDataManager.GetSdModsPath());
 
         private static string EnsureBaseDirStructure(string modsBasePath)
         {
@@ -675,7 +675,7 @@ namespace Ryujinx.HLE.HOS
             EnableCheats(titleId, tamperMachine);
         }
 
-        internal void EnableCheats(ulong titleId, TamperMachine tamperMachine)
+        internal static void EnableCheats(ulong titleId, TamperMachine tamperMachine)
         {
             var contentDirectory = FindTitleDir(new DirectoryInfo(Path.Combine(GetModsBasePath(), AmsContentsDir)), $"{titleId:x16}");
             string enabledCheatsPath = Path.Combine(contentDirectory.FullName, CheatDir, "enabled.txt");

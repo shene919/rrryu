@@ -39,7 +39,7 @@ namespace Ryujinx.HLE.HOS.Services.Bcat.ServiceCreator
 
         [CommandHipc(1)]
         // GetImpl() -> buffer<nn::bcat::detail::DeliveryCacheProgressImpl, 0x1a>
-        public ResultCode GetImpl(ServiceCtx context)
+        public static ResultCode GetImpl(ServiceCtx context)
         {
             DeliveryCacheProgressImpl deliveryCacheProgress = new()
             {

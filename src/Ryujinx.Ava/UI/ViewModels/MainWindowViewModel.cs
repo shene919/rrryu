@@ -1536,7 +1536,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         {
             if (SelectedApplication != null)
             {
-                string modsBasePath  = VirtualFileSystem.ModLoader.GetModsBasePath();
+                string modsBasePath  = ModLoader.GetModsBasePath();
                 string titleModsPath = ModLoader.GetTitleDir(modsBasePath, SelectedApplication.TitleId);
 
                 OpenHelper.OpenFolder(titleModsPath);
@@ -1547,7 +1547,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         {
             if (SelectedApplication != null)
             {
-                string sdModsBasePath = VirtualFileSystem.ModLoader.GetSdModsBasePath();
+                string sdModsBasePath = ModLoader.GetSdModsBasePath();
                 string titleModsPath  = ModLoader.GetTitleDir(sdModsBasePath, SelectedApplication.TitleId);
 
                 OpenHelper.OpenFolder(titleModsPath);
@@ -1731,7 +1731,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             });
         }
 
-        public void UpdateGameMetadata(string titleId)
+        public static void UpdateGameMetadata(string titleId)
         {
             ApplicationLibrary.LoadAndSaveMetaData(titleId, appMetadata =>
             {

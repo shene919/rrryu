@@ -139,7 +139,7 @@ namespace Ryujinx.Ui.Widgets
                 return;
             }
 
-            string saveRootPath = System.IO.Path.Combine(_virtualFileSystem.GetNandPath(), $"user/save/{saveDataId:x16}");
+            string saveRootPath = System.IO.Path.Combine(VirtualFileSystem.GetNandPath(), $"user/save/{saveDataId:x16}");
 
             if (!Directory.Exists(saveRootPath))
             {
@@ -459,7 +459,7 @@ namespace Ryujinx.Ui.Widgets
 
         private void OpenTitleModDir_Clicked(object sender, EventArgs args)
         {
-            string modsBasePath  = _virtualFileSystem.ModLoader.GetModsBasePath();
+            string modsBasePath  = ModLoader.GetModsBasePath();
             string titleModsPath = ModLoader.GetTitleDir(modsBasePath, _titleIdText);
 
             OpenHelper.OpenFolder(titleModsPath);
@@ -467,7 +467,7 @@ namespace Ryujinx.Ui.Widgets
 
         private void OpenTitleSdModDir_Clicked(object sender, EventArgs args)
         {
-            string sdModsBasePath  = _virtualFileSystem.ModLoader.GetSdModsBasePath();
+            string sdModsBasePath  = ModLoader.GetSdModsBasePath();
             string titleModsPath   = ModLoader.GetTitleDir(sdModsBasePath, _titleIdText);
 
             OpenHelper.OpenFolder(titleModsPath);

@@ -35,8 +35,8 @@ namespace Ryujinx.HLE.Loaders.Processes.Extensions
             // Collecting mods related to AocTitleIds and ProgramId.
             device.Configuration.VirtualFileSystem.ModLoader.CollectMods(
                 device.Configuration.ContentManager.GetAocTitleIds().Prepend(metaLoader.GetProgramId()),
-                device.Configuration.VirtualFileSystem.ModLoader.GetModsBasePath(),
-                device.Configuration.VirtualFileSystem.ModLoader.GetSdModsBasePath());
+                HOS.ModLoader.GetModsBasePath(),
+                HOS.ModLoader.GetSdModsBasePath());
 
             // Load Nacp file.
             var nacpData = new BlitStruct<ApplicationControlProperty>(1);

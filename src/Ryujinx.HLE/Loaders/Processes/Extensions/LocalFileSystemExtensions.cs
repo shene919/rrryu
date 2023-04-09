@@ -17,8 +17,8 @@ namespace Ryujinx.HLE.Loaders.Processes
 
             device.Configuration.VirtualFileSystem.ModLoader.CollectMods(
                 new[] { programId },
-                device.Configuration.VirtualFileSystem.ModLoader.GetModsBasePath(),
-                device.Configuration.VirtualFileSystem.ModLoader.GetSdModsBasePath());
+                HOS.ModLoader.GetModsBasePath(),
+                HOS.ModLoader.GetSdModsBasePath());
 
             if (programId != 0)
             {

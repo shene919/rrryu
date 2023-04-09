@@ -35,7 +35,7 @@ namespace Ryujinx.Ava.UI.Windows
 
             InitializeComponent();
 
-            string modsBasePath = virtualFileSystem.ModLoader.GetModsBasePath();
+            string modsBasePath = ModLoader.GetModsBasePath();
             string titleModsPath = ModLoader.GetTitleDir(modsBasePath, titleId);
             ulong titleIdValue = ulong.Parse(titleId, System.Globalization.NumberStyles.HexNumber);
 

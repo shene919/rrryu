@@ -84,7 +84,7 @@ namespace Ryujinx.Memory.Tests
             return regionCount;
         }
 
-        private void PreparePages(IMultiRegionHandle handle, int pageCount, ulong address = 0)
+        private static void PreparePages(IMultiRegionHandle handle, int pageCount, ulong address = 0)
         {
             Random random = new();
 
