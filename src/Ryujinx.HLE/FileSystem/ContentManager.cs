@@ -177,15 +177,12 @@ namespace Ryujinx.HLE.FileSystem
                         }
                     }
 
-                    if (_locationEntries.ContainsKey(storageId) && _locationEntries[storageId]?.Count == 0)
+                    if (_locationEntries.TryGetValue(storageId, out LinkedList<LocationEntry> value) && value?.Count == 0)
                     {
                         _locationEntries.Remove(storageId);
                     }
 
-                    if (!_locationEntries.ContainsKey(storageId))
-                    {
-                        _locationEntries.Add(storageId, locationList);
-                    }
+                    _locationEntries.TryAdd(storageId, locationList);
                 }
 
                 if (device != null)
@@ -343,9 +340,9 @@ namespace Ryujinx.HLE.FileSystem
         {
             lock (_lock)
             {
-                if (_contentDictionary.ContainsKey((titleId, contentType)))
+                if (_contentDictionary.TryGetValue((titleId, contentType), out string value))
                 {
-                    return UInt128Utils.FromHex(_contentDictionary[(titleId, contentType)]);
+                    return UInt128Utils.FromHex(value);
                 }
             }
 
@@ -420,9 +417,9 @@ namespace Ryujinx.HLE.FileSystem
         {
             LinkedList<LocationEntry> locationList = null;
 
-            if (_locationEntries.ContainsKey(storageId))
+            if (_locationEntries.TryGetValue(storageId, out LinkedList<LocationEntry> locationEntry))
             {
-                locationList = _locationEntries[storageId];
+                locationList = locationEntry;
             }
 
             if (locationList != null)
@@ -440,9 +437,9 @@ namespace Ryujinx.HLE.FileSystem
         {
             LinkedList<LocationEntry> locationList = null;
 
-            if (_locationEntries.ContainsKey(storageId))
+            if (_locationEntries.TryGetValue(storageId, out LinkedList<LocationEntry> locationEntry))
             {
-                locationList = _locationEntries[storageId];
+                locationList = locationEntry;
             }
 
             if (locationList != null)
@@ -708,9 +705,9 @@ namespace Ryujinx.HLE.FileSystem
 
                         Nca nca = new(_virtualFileSystem.KeySet, storage);
 
-                        if (updateNcas.ContainsKey(nca.Header.TitleId))
+                        if (updateNcas.TryGetValue(nca.Header.TitleId, out List<(NcaContentType type, string path)> updateNca))
                         {
-                            updateNcas[nca.Header.TitleId].Add((nca.Header.ContentType, entry.FullName));
+                            updateNca.Add((nca.Header.ContentType, entry.FullName));
                         }
                         else
                         {
@@ -720,9 +717,9 @@ namespace Ryujinx.HLE.FileSystem
                     }
                 }
 
-                if (updateNcas.ContainsKey(SystemUpdateTitleId))
+                if (updateNcas.TryGetValue(SystemUpdateTitleId, out List<(NcaContentType type, string path)> value))
                 {
-                    var ncaEntry = updateNcas[SystemUpdateTitleId];
+                    var ncaEntry = value;
 
                     string metaPath = ncaEntry.Find(x => x.type == NcaContentType.Meta).path;
 
@@ -758,9 +755,9 @@ namespace Ryujinx.HLE.FileSystem
                         throw new FileNotFoundException("System update title was not found in the firmware package.");
                     }
 
-                    if (updateNcas.ContainsKey(SystemVersionTitleId))
+                    if (updateNcas.TryGetValue(SystemVersionTitleId, out List<(NcaContentType type, string path)> updateNca))
                     {
-                        string versionEntry = updateNcas[SystemVersionTitleId].Find(x => x.type != NcaContentType.Meta).path;
+                        string versionEntry = updateNca.Find(x => x.type != NcaContentType.Meta).path;
 
                         using Stream ncaStream = GetZipStream(archive.GetEntry(versionEntry));
                         Nca nca = new(_virtualFileSystem.KeySet, ncaStream.AsStorage());
@@ -898,9 +895,9 @@ namespace Ryujinx.HLE.FileSystem
                         }
                     }
 
-                    if (updateNcas.ContainsKey(nca.Header.TitleId))
+                    if (updateNcas.TryGetValue(nca.Header.TitleId, out List<(NcaContentType type, string path)> updateNca))
                     {
-                        updateNcas[nca.Header.TitleId].Add((nca.Header.ContentType, entry.FullPath));
+                        updateNca.Add((nca.Header.ContentType, entry.FullPath));
                     }
                     else
                     {
