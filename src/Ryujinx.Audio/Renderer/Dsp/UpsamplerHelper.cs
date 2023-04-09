@@ -38,7 +38,7 @@ namespace Ryujinx.Audio.Renderer.Dsp
                 const float a2 = 0.5f * a;
                 return a0 + a1 * MathF.Cos(2 * MathF.PI * x) + a2 * MathF.Cos(4 * MathF.PI * x);
             }
-            
+
             Array20<float> result = new();
 
             for (int i = 0; i < FilterBankLength; i++)
@@ -61,7 +61,7 @@ namespace Ryujinx.Audio.Renderer.Dsp
                     40  => 6.0f,
                     80  => 3.0f,
                     160 => 1.5f,
-                    _   => throw new ArgumentOutOfRangeException()
+                    _   => throw new ArgumentOutOfRangeException(nameof(inputSampleCount), inputSampleCount, null)
                 };
                 state.Initialized = true;
             }
@@ -112,7 +112,7 @@ namespace Ryujinx.Audio.Renderer.Dsp
             int inputBufferIndex = 0;
 
             switch (state.Scale)
-            { 
+            {
                 case 6.0f:
                     for (int i = 0; i < outputSampleCount; i++)
                     {
@@ -185,7 +185,7 @@ namespace Ryujinx.Audio.Renderer.Dsp
                     }
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(state), state.Scale, null);
             }
         }
     }
