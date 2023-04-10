@@ -1,5 +1,4 @@
 using Gtk;
-using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS;
 using System;
 using System.Collections.Generic;
@@ -21,9 +20,9 @@ namespace Ryujinx.Ui.Windows
         [GUI] Button   _saveButton;
 #pragma warning restore CS0649, IDE0044
 
-        public CheatWindow(VirtualFileSystem virtualFileSystem, ulong titleId, string titleName) : this(new Builder("Ryujinx.Ui.Windows.CheatWindow.glade"), virtualFileSystem, titleId, titleName) { }
+        public CheatWindow(ulong titleId, string titleName) : this(new Builder("Ryujinx.Ui.Windows.CheatWindow.glade"), titleId, titleName) { }
 
-        private CheatWindow(Builder builder, VirtualFileSystem virtualFileSystem, ulong titleId, string titleName) : base(builder.GetRawOwnedObject("_cheatWindow"))
+        private CheatWindow(Builder builder, ulong titleId, string titleName) : base(builder.GetRawOwnedObject("_cheatWindow"))
         {
             builder.Autoconnect(this);
             _baseTitleInfoLabel.Text = $"Cheats Available for {titleName} [{titleId:X16}]";
