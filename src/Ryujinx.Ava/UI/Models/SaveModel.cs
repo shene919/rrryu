@@ -57,7 +57,7 @@ namespace Ryujinx.Ava.UI.Models
             return "0 KiB";
         }
 
-        public SaveModel(SaveDataInfo info, VirtualFileSystem virtualFileSystem)
+        public SaveModel(SaveDataInfo info)
         {
             SaveId = info.SaveDataId;
             TitleId = info.ProgramId;
