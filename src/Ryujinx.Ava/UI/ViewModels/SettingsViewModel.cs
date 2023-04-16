@@ -22,8 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using TimeZone = Ryujinx.Ava.UI.Models.TimeZone;
 using Silk.NET.Vulkan;
 
@@ -248,7 +248,7 @@ namespace Ryujinx.Ava.UI.ViewModels
 
         public AvaloniaList<string> NetworkInterfaceList
         {
-            get => new AvaloniaList<string>(_networkInterfaces.Keys);
+            get => new(_networkInterfaces.Keys);
         }
 
         public KeyboardHotkeys KeyboardHotkeys
