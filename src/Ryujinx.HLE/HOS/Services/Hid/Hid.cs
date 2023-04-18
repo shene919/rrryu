@@ -51,7 +51,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
 
         internal Hid(in Switch device, SharedMemoryStorage storage)
         {
-            _device  = device;
+            _device = device;
             _storage = storage;
 
             SharedMemory = SharedMemory.Create();
@@ -61,11 +61,11 @@ namespace Ryujinx.HLE.HOS.Services.Hid
 
         private void InitDevices()
         {
-            DebugPad    = new DebugPadDevice(_device, true);
+            DebugPad = new DebugPadDevice(_device, true);
             Touchscreen = new TouchDevice(_device, true);
-            Mouse       = new MouseDevice(_device, false);
-            Keyboard    = new KeyboardDevice(_device, false);
-            Npads       = new NpadDevices(_device, true);
+            Mouse = new MouseDevice(_device, false);
+            Keyboard = new KeyboardDevice(_device, false);
+            Npads = new NpadDevices(_device, true);
         }
 
         public void RefreshInputConfig(List<InputConfig> inputConfig)
@@ -86,6 +86,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
             const int stickButtonThreshold = short.MaxValue / 2;
             ControllerKeys result = 0;
 
+#pragma warning disable IDE0055 // Disable formatting
             result |= (leftStick.Dx < -stickButtonThreshold) ? ControllerKeys.LStickLeft  : result;
             result |= (leftStick.Dx > stickButtonThreshold)  ? ControllerKeys.LStickRight : result;
             result |= (leftStick.Dy < -stickButtonThreshold) ? ControllerKeys.LStickDown  : result;
@@ -95,6 +96,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
             result |= (rightStick.Dx > stickButtonThreshold)  ? ControllerKeys.RStickRight : result;
             result |= (rightStick.Dy < -stickButtonThreshold) ? ControllerKeys.RStickDown  : result;
             result |= (rightStick.Dy > stickButtonThreshold)  ? ControllerKeys.RStickUp    : result;
+#pragma warning restore IDE0055#pragma warning restore IDE0055
 
             return result;
         }

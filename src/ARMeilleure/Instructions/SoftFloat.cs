@@ -8,7 +8,7 @@ namespace ARMeilleure.Instructions
     {
         static SoftFloat()
         {
-            RecipEstimateTable     = BuildRecipEstimateTable();
+            RecipEstimateTable = BuildRecipEstimateTable();
             RecipSqrtEstimateTable = BuildRecipSqrtEstimateTable();
         }
 
@@ -185,12 +185,12 @@ namespace ARMeilleure.Instructions
 
             if (real < 0d)
             {
-                sign     = true;
+                sign = true;
                 mantissa = -real;
             }
             else
             {
-                sign     = false;
+                sign = false;
                 mantissa = real;
             }
 
@@ -230,22 +230,22 @@ namespace ARMeilleure.Instructions
             {
                 default:
                 case FPRoundingMode.ToNearest:
-                    roundUp       = (error > 0.5d || (error == 0.5d && (intMant & 1u) == 1u));
+                    roundUp = (error > 0.5d || (error == 0.5d && (intMant & 1u) == 1u));
                     overflowToInf = true;
                     break;
 
                 case FPRoundingMode.TowardsPlusInfinity:
-                    roundUp       = (error != 0d && !sign);
+                    roundUp = (error != 0d && !sign);
                     overflowToInf = !sign;
                     break;
 
                 case FPRoundingMode.TowardsMinusInfinity:
-                    roundUp       = (error != 0d && sign);
+                    roundUp = (error != 0d && sign);
                     overflowToInf = sign;
                     break;
 
                 case FPRoundingMode.TowardsZero:
-                    roundUp       = false;
+                    roundUp = false;
                     overflowToInf = false;
                     break;
             }
@@ -362,12 +362,12 @@ namespace ARMeilleure.Instructions
 
             if (real < 0d)
             {
-                sign     = true;
+                sign = true;
                 mantissa = -real;
             }
             else
             {
-                sign     = false;
+                sign = false;
                 mantissa = real;
             }
 
@@ -414,22 +414,22 @@ namespace ARMeilleure.Instructions
             {
                 default:
                 case FPRoundingMode.ToNearest:
-                    roundUp       = (error > 0.5d || (error == 0.5d && (intMant & 1u) == 1u));
+                    roundUp = (error > 0.5d || (error == 0.5d && (intMant & 1u) == 1u));
                     overflowToInf = true;
                     break;
 
                 case FPRoundingMode.TowardsPlusInfinity:
-                    roundUp       = (error != 0d && !sign);
+                    roundUp = (error != 0d && !sign);
                     overflowToInf = !sign;
                     break;
 
                 case FPRoundingMode.TowardsMinusInfinity:
-                    roundUp       = (error != 0d && sign);
+                    roundUp = (error != 0d && sign);
                     overflowToInf = sign;
                     break;
 
                 case FPRoundingMode.TowardsZero:
-                    roundUp       = false;
+                    roundUp = false;
                     overflowToInf = false;
                     break;
             }
@@ -535,12 +535,12 @@ namespace ARMeilleure.Instructions
 
             if (real < 0d)
             {
-                sign     = true;
+                sign = true;
                 mantissa = -real;
             }
             else
             {
-                sign     = false;
+                sign = false;
                 mantissa = real;
             }
 
@@ -587,22 +587,22 @@ namespace ARMeilleure.Instructions
             {
                 default:
                 case FPRoundingMode.ToNearest:
-                    roundUp       = (error > 0.5d || (error == 0.5d && (intMant & 1u) == 1u));
+                    roundUp = (error > 0.5d || (error == 0.5d && (intMant & 1u) == 1u));
                     overflowToInf = true;
                     break;
 
                 case FPRoundingMode.TowardsPlusInfinity:
-                    roundUp       = (error != 0d && !sign);
+                    roundUp = (error != 0d && !sign);
                     overflowToInf = !sign;
                     break;
 
                 case FPRoundingMode.TowardsMinusInfinity:
-                    roundUp       = (error != 0d && sign);
+                    roundUp = (error != 0d && sign);
                     overflowToInf = sign;
                     break;
 
                 case FPRoundingMode.TowardsZero:
-                    roundUp       = false;
+                    roundUp = false;
                     overflowToInf = false;
                     break;
             }
@@ -792,8 +792,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if (inf1 && inf2 && sign1 == !sign2)
                 {
@@ -989,8 +991,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && inf2) || (zero1 && zero2))
                 {
@@ -1226,8 +1230,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -1270,11 +1276,13 @@ namespace ARMeilleure.Instructions
             FPCR fpcr = standardFpscr ? context.StandardFpcrValue : context.Fpcr;
 
             valueA = valueA.FPUnpack(out FPType typeA, out bool signA, out uint addend, context, fpcr);
-            value1 = value1.FPUnpack(out FPType type1, out bool sign1, out uint op1,    context, fpcr);
-            value2 = value2.FPUnpack(out FPType type2, out bool sign2, out uint op2,    context, fpcr);
+            value1 = value1.FPUnpack(out FPType type1, out bool sign1, out uint op1, context, fpcr);
+            value2 = value2.FPUnpack(out FPType type2, out bool sign2, out uint op2, context, fpcr);
 
-            bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-            bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+            bool inf1 = type1 == FPType.Infinity;
+            bool zero1 = type1 == FPType.Zero;
+            bool inf2 = type2 == FPType.Infinity;
+            bool zero2 = type2 == FPType.Zero;
 
             float result = FPProcessNaNs3(typeA, type1, type2, addend, op1, op2, out bool done, context, fpcr);
 
@@ -1287,7 +1295,8 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool infA = typeA == FPType.Infinity; bool zeroA = typeA == FPType.Zero;
+                bool infA = typeA == FPType.Infinity;
+                bool zeroA = typeA == FPType.Zero;
 
                 bool signP = sign1 ^  sign2;
                 bool infP  = inf1  || inf2;
@@ -1353,8 +1362,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -1439,7 +1450,7 @@ namespace ARMeilleure.Instructions
                 result = overflowToInf ? FPInfinity(sign) : FPMaxNormal(sign);
 
                 SoftFloat.FPProcessException(FPException.Overflow, context, fpcr);
-                SoftFloat.FPProcessException(FPException.Inexact,  context, fpcr);
+                SoftFloat.FPProcessException(FPException.Inexact, context, fpcr);
             }
             else if ((fpcr & FPCR.Fz) != 0 && (MathF.Abs(value) >= MathF.Pow(2f, 126)))
             {
@@ -1502,8 +1513,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 float product;
 
@@ -1536,8 +1549,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -1668,8 +1683,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if (inf1 && inf2 && sign1 == sign2)
                 {
@@ -1717,8 +1734,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 float product;
 
@@ -1751,8 +1770,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -1837,8 +1858,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if (inf1 && inf2 && sign1 == sign2)
                 {
@@ -1935,7 +1958,7 @@ namespace ARMeilleure.Instructions
             {
                 if ((valueBits & 0x007FFFFFu) == 0u || (fpcr & FPCR.Fz) != 0)
                 {
-                    type  = FPType.Zero;
+                    type = FPType.Zero;
                     value = FPZero(sign);
 
                     if ((valueBits & 0x007FFFFFu) != 0u)
@@ -1956,7 +1979,7 @@ namespace ARMeilleure.Instructions
                 }
                 else
                 {
-                    type  = (~valueBits & 0x00400000u) == 0u ? FPType.QNaN : FPType.SNaN;
+                    type = (~valueBits & 0x00400000u) == 0u ? FPType.QNaN : FPType.SNaN;
                     value = FPZero(sign);
                 }
             }
@@ -2200,8 +2223,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if (inf1 && inf2 && sign1 == !sign2)
                 {
@@ -2397,8 +2422,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && inf2) || (zero1 && zero2))
                 {
@@ -2634,8 +2661,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -2678,11 +2707,13 @@ namespace ARMeilleure.Instructions
             FPCR fpcr = standardFpscr ? context.StandardFpcrValue : context.Fpcr;
 
             valueA = valueA.FPUnpack(out FPType typeA, out bool signA, out ulong addend, context, fpcr);
-            value1 = value1.FPUnpack(out FPType type1, out bool sign1, out ulong op1,    context, fpcr);
-            value2 = value2.FPUnpack(out FPType type2, out bool sign2, out ulong op2,    context, fpcr);
+            value1 = value1.FPUnpack(out FPType type1, out bool sign1, out ulong op1, context, fpcr);
+            value2 = value2.FPUnpack(out FPType type2, out bool sign2, out ulong op2, context, fpcr);
 
-            bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-            bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+            bool inf1 = type1 == FPType.Infinity;
+            bool zero1 = type1 == FPType.Zero;
+            bool inf2 = type2 == FPType.Infinity;
+            bool zero2 = type2 == FPType.Zero;
 
             double result = FPProcessNaNs3(typeA, type1, type2, addend, op1, op2, out bool done, context, fpcr);
 
@@ -2695,7 +2726,8 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool infA = typeA == FPType.Infinity; bool zeroA = typeA == FPType.Zero;
+                bool infA = typeA == FPType.Infinity;
+                bool zeroA = typeA == FPType.Zero;
 
                 bool signP = sign1 ^  sign2;
                 bool infP  = inf1  || inf2;
@@ -2761,8 +2793,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -2847,7 +2881,7 @@ namespace ARMeilleure.Instructions
                 result = overflowToInf ? FPInfinity(sign) : FPMaxNormal(sign);
 
                 SoftFloat.FPProcessException(FPException.Overflow, context, fpcr);
-                SoftFloat.FPProcessException(FPException.Inexact,  context, fpcr);
+                SoftFloat.FPProcessException(FPException.Inexact, context, fpcr);
             }
             else if ((fpcr & FPCR.Fz) != 0 && (Math.Abs(value) >= Math.Pow(2d, 1022)))
             {
@@ -2910,8 +2944,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 double product;
 
@@ -2944,8 +2980,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -3076,8 +3114,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if (inf1 && inf2 && sign1 == sign2)
                 {
@@ -3125,8 +3165,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 double product;
 
@@ -3159,8 +3201,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if ((inf1 && zero2) || (zero1 && inf2))
                 {
@@ -3245,8 +3289,10 @@ namespace ARMeilleure.Instructions
 
             if (!done)
             {
-                bool inf1 = type1 == FPType.Infinity; bool zero1 = type1 == FPType.Zero;
-                bool inf2 = type2 == FPType.Infinity; bool zero2 = type2 == FPType.Zero;
+                bool inf1 = type1 == FPType.Infinity;
+                bool zero1 = type1 == FPType.Zero;
+                bool inf2 = type2 == FPType.Infinity;
+                bool zero2 = type2 == FPType.Zero;
 
                 if (inf1 && inf2 && sign1 == sign2)
                 {
@@ -3343,7 +3389,7 @@ namespace ARMeilleure.Instructions
             {
                 if ((valueBits & 0x000FFFFFFFFFFFFFul) == 0ul || (fpcr & FPCR.Fz) != 0)
                 {
-                    type  = FPType.Zero;
+                    type = FPType.Zero;
                     value = FPZero(sign);
 
                     if ((valueBits & 0x000FFFFFFFFFFFFFul) != 0ul)
@@ -3364,7 +3410,7 @@ namespace ARMeilleure.Instructions
                 }
                 else
                 {
-                    type  = (~valueBits & 0x0008000000000000ul) == 0ul ? FPType.QNaN : FPType.SNaN;
+                    type = (~valueBits & 0x0008000000000000ul) == 0ul ? FPType.QNaN : FPType.SNaN;
                     value = FPZero(sign);
                 }
             }
