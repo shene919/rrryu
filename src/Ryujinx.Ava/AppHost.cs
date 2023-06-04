@@ -93,7 +93,7 @@ namespace Ryujinx.Ava
         private bool _isActive;
         private bool _renderingStarted;
 
-        private ManualResetEvent _gpuDoneEvent;
+        private readonly ManualResetEvent _gpuDoneEvent;
 
         private IRenderer                        _renderer;
         private readonly Thread                  _renderingThread;
