@@ -525,7 +525,7 @@ namespace Ryujinx.Ava
 
                                 if (result != UserResult.Yes)
                                 {
-                                    await UserErrorDialog.ShowUserErrorDialog(userError, (desktop.MainWindow as MainWindow));
+                                    await UserErrorDialog.ShowUserErrorDialog(userError);
                                     Device.Dispose();
 
                                     return false;
@@ -534,7 +534,7 @@ namespace Ryujinx.Ava
 
                             if (!SetupValidator.TryFixStartApplication(ContentManager, ApplicationPath, userError, out _))
                             {
-                                await UserErrorDialog.ShowUserErrorDialog(userError, (desktop.MainWindow as MainWindow));
+                                await UserErrorDialog.ShowUserErrorDialog(userError);
                                 Device.Dispose();
 
                                 return false;
@@ -557,7 +557,7 @@ namespace Ryujinx.Ava
                         }
                         else
                         {
-                            await UserErrorDialog.ShowUserErrorDialog(userError, (desktop.MainWindow as MainWindow));
+                            await UserErrorDialog.ShowUserErrorDialog(userError);
                             Device.Dispose();
 
                             return false;
