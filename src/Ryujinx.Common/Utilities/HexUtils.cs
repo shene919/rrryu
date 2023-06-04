@@ -22,9 +22,8 @@ namespace Ryujinx.Common.Utilities
 
             int bytesLength = bytes.Length;
 
-            int firstHexColumn =
-                  HexTableColumnWidth
-                + HexTableColumnSpace;
+            const int firstHexColumn = HexTableColumnWidth
+                                       + HexTableColumnSpace;
 
             int firstCharColumn = firstHexColumn
                 + bytesPerLine * HexTableColumnSpace
