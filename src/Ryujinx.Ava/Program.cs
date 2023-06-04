@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Threading;
+using Ryujinx.Ava.Modules.Updater;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.Windows;
 using Ryujinx.Common;
@@ -8,7 +9,6 @@ using Ryujinx.Common.GraphicsDriver;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.SystemInfo;
 using Ryujinx.Common.SystemInterop;
-using Ryujinx.Modules;
 using Ryujinx.SDL2.Common;
 using Ryujinx.Ui.Common;
 using Ryujinx.Ui.Common.Configuration;

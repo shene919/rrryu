@@ -2,7 +2,7 @@
 using Ryujinx.HLE.HOS.Services.Mii.Types;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp.NfpManager
+namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp.NfpManager.Types
 {
     [StructLayout(LayoutKind.Sequential, Size = 0x100)]
     struct RegisterInfo

@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types.Color;
+using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
+namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types
 {
     [StructLayout(LayoutKind.Explicit, Size = 0x58)]
     struct NvGraphicBufferSurface

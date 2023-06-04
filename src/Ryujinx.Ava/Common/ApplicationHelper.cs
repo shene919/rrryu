@@ -19,7 +19,7 @@ using Ryujinx.Ava.UI.Windows;
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS.Services.Account.Acc;
-using Ryujinx.Ui.App.Common;
+using Ryujinx.Ui.Common.App;
 using Ryujinx.Ui.Common.Helper;
 using System;
 using System.Buffers;

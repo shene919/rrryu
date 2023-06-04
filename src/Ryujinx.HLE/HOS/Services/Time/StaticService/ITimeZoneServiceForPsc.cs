@@ -1,7 +1,8 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 using Ryujinx.HLE.HOS.Services.Time.TimeZone;
+using Ryujinx.HLE.HOS.Services.Time.TimeZone.Types;
 using Ryujinx.HLE.Utilities;
 using Ryujinx.Memory;
 using System;

@@ -2,6 +2,7 @@
 using Ryujinx.HLE.Exceptions;
 using Ryujinx.HLE.HOS.Kernel.Memory;
 using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 using Ryujinx.HLE.HOS.Services.Time.TimeZone;
 using System;
 using System.IO;

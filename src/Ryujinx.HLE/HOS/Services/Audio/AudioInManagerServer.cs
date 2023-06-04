@@ -1,5 +1,5 @@
 ﻿using Ryujinx.Audio.Common;
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
 using Ryujinx.Cpu;
 using Ryujinx.HLE.HOS.Services.Audio.AudioIn;

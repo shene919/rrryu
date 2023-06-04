@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ryujinx.HLE.HOS.Services.Ro
+namespace Ryujinx.HLE.HOS.Services.Ro.Types
 {
     class NrrInfo
     {

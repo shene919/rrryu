@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ryujinx.HLE.HOS.Services.Time
+namespace Ryujinx.HLE.HOS.Services.Time.Types
 {
     [Flags]
     enum TimePermissions

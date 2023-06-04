@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Utilities;
 using Ryujinx.Graphics.Gpu.Memory;
 using Ryujinx.Graphics.Nvdec.Image;
 using Ryujinx.Graphics.Nvdec.Types.Vp9;

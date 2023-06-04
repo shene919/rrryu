@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Utilities;
 using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.StructuredIr;
 using Ryujinx.Graphics.Shader.Translation;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-using static Spv.Specification;
+using static Spv.Generator.Specification;
 using SpvInstruction = Spv.Generator.Instruction;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv

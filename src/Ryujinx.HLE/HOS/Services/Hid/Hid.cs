@@ -3,6 +3,9 @@ using Ryujinx.Common.Configuration.Hid;
 using Ryujinx.Common.Memory;
 using Ryujinx.HLE.Exceptions;
 using Ryujinx.HLE.HOS.Kernel.Memory;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices.Types;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory;
 using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Common;
 using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.DebugPad;
@@ -12,6 +15,8 @@ using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Npad;
 using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.TouchScreen;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using ControllerType = Ryujinx.HLE.HOS.Services.Hid.Types.Npad.ControllerType;
+using PlayerIndex = Ryujinx.HLE.HOS.Services.Hid.Types.Npad.PlayerIndex;
 
 namespace Ryujinx.HLE.HOS.Services.Hid
 {

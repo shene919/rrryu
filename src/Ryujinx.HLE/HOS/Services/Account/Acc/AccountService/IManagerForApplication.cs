@@ -1,3 +1,5 @@
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
+
 namespace Ryujinx.HLE.HOS.Services.Account.Acc.AccountService
 {
     class IManagerForApplication : IpcService

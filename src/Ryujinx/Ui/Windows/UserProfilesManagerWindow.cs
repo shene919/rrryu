@@ -2,6 +2,7 @@
 using Ryujinx.Common.Memory;
 using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS.Services.Account.Acc;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using Ryujinx.Ui.Common.Configuration;
 using Ryujinx.Ui.Widgets;
 using SixLabors.ImageSharp;
@@ -13,7 +14,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Image = SixLabors.ImageSharp.Image;
-using UserId = Ryujinx.HLE.HOS.Services.Account.Acc.UserId;
+using UserId = Ryujinx.HLE.HOS.Services.Account.Acc.Types.UserId;
 
 namespace Ryujinx.Ui.Windows
 {

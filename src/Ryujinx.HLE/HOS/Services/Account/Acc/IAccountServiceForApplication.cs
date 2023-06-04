@@ -1,5 +1,6 @@
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Services.Account.Acc.AccountService;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using Ryujinx.HLE.HOS.Services.Arp;
 
 namespace Ryujinx.HLE.HOS.Services.Account.Acc

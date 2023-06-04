@@ -1,8 +1,7 @@
-﻿using Ryujinx.Input.Motion;
-using System;
+﻿using System;
 using System.Numerics;
 
-namespace Ryujinx.Input
+namespace Ryujinx.Input.Motion
 {
     public class MotionInput
     {

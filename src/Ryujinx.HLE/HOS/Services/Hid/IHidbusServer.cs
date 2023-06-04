@@ -1,5 +1,6 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 
 namespace Ryujinx.HLE.HOS.Services.Hid
 {

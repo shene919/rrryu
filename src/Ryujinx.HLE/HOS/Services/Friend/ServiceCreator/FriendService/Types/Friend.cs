@@ -1,7 +1,7 @@
-﻿using Ryujinx.HLE.HOS.Services.Account.Acc;
+﻿using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.FriendService
+namespace Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.FriendService.Types
 {
     [StructLayout(LayoutKind.Sequential, Pack = 0x8, Size = 0x200, CharSet = CharSet.Ansi)]
     struct Friend

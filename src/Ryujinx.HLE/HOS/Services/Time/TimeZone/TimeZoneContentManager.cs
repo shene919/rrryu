@@ -10,12 +10,13 @@ using Ryujinx.Common.Logging;
 using Ryujinx.Cpu;
 using Ryujinx.HLE.Exceptions;
 using Ryujinx.HLE.FileSystem;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
+using Ryujinx.HLE.HOS.Services.Time.TimeZone.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using TimeZoneRuleBox = Ryujinx.Common.Memory.Box<Ryujinx.HLE.HOS.Services.Time.TimeZone.TimeZoneRule>;
+using TimeZoneRuleBox = Ryujinx.Common.Memory.Box<Ryujinx.HLE.HOS.Services.Time.TimeZone.Types.TimeZoneRule>;
 
 namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
 {

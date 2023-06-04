@@ -20,7 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Modules
+namespace Ryujinx.Modules.Updater
 {
     public static class Updater
     {

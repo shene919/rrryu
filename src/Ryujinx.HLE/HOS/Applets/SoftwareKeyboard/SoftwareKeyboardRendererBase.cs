@@ -1,4 +1,5 @@
-﻿using Ryujinx.HLE.Ui;
+﻿using Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types.Color;
+using Ryujinx.HLE.Ui;
 using Ryujinx.Memory;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -264,7 +265,7 @@ namespace Ryujinx.HLE.HOS.Applets.SoftwareKeyboard
 
             _surfaceInfo = surfaceInfo;
 
-            Debug.Assert(_surfaceInfo.ColorFormat == Services.SurfaceFlinger.ColorFormat.A8B8G8R8);
+            Debug.Assert(_surfaceInfo.ColorFormat == ColorFormat.A8B8G8R8);
 
             // Use the whole area of the image to draw, even the alignment, otherwise it may shear the final
             // image if the pitch is different.

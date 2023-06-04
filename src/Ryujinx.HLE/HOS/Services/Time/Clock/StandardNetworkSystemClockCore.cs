@@ -1,4 +1,5 @@
 ﻿using Ryujinx.Cpu;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 
 namespace Ryujinx.HLE.HOS.Services.Time.Clock
 {

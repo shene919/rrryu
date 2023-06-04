@@ -1,6 +1,6 @@
 ﻿using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 using System;
 
 namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger

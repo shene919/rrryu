@@ -1,12 +1,13 @@
 using LibHac.Ns;
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Memory;
 using Ryujinx.Common.Utilities;
 using Ryujinx.HLE.HOS.Ipc;
 using Ryujinx.HLE.HOS.Kernel.Threading;
-using Ryujinx.HLE.HOS.Services.Account.Acc;
-using Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.FriendService;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
+using Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.FriendService.Types;
+using Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.Types;
 using Ryujinx.Horizon.Common;
 using System;
 using System.Runtime.InteropServices;

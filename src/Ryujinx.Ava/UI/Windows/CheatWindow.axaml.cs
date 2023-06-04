@@ -3,7 +3,7 @@ using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.UI.Models;
 using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS;
-using Ryujinx.Ui.App.Common;
+using Ryujinx.Ui.Common.App;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

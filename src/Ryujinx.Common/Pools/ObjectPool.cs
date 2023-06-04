@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Ryujinx.Common
+namespace Ryujinx.Common.Pools
 {
     public class ObjectPool<T>
         where T : class

@@ -2,7 +2,7 @@
 using Ryujinx.Cpu;
 using Ryujinx.HLE.HOS.Services.Mii.Types;
 using Ryujinx.HLE.HOS.Services.Time;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 using System;
 
 namespace Ryujinx.HLE.HOS.Services.Mii

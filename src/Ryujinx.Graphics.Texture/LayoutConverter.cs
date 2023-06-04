@@ -1,4 +1,4 @@
-using Ryujinx.Common;
+using Ryujinx.Common.Utilities;
 using System;
 using System.Runtime.Intrinsics;
 using static Ryujinx.Graphics.Texture.BlockLinearConstants;

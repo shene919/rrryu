@@ -1,4 +1,6 @@
-﻿namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
+﻿using Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types;
+
+namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
 {
     interface IConsumerListener
     {

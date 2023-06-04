@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Time.Clock
+namespace Ryujinx.HLE.HOS.Services.Time.Clock.Types
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct SystemClockContext

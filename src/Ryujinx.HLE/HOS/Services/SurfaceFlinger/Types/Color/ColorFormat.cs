@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
+namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types.Color
 {
     [SuppressMessage("Design", "CA1069: Enums values should not be duplicated")]
     enum ColorFormat : ulong

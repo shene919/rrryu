@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Hid
+﻿namespace Ryujinx.HLE.HOS.Services.Hid.Types.Npad
 {
     public enum NpadStyleIndex : byte
     {

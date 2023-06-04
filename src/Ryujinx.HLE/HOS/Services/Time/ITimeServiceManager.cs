@@ -1,8 +1,9 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.Cpu;
 using Ryujinx.HLE.Exceptions;
 using Ryujinx.HLE.HOS.Ipc;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
+using Ryujinx.HLE.HOS.Services.Time.Types;
 using Ryujinx.HLE.Utilities;
 using Ryujinx.Horizon.Common;
 using System;

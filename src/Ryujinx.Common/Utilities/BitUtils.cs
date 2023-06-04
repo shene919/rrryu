@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Ryujinx.Common
+namespace Ryujinx.Common.Utilities
 {
     public static class BitUtils
     {

@@ -1,7 +1,8 @@
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Kernel;
 using Ryujinx.HLE.HOS.Kernel.Process;
-using Ryujinx.HLE.HOS.Services.Hid;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices.Types;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 using Ryujinx.HLE.HOS.Tamper;
 using System;
 using System.Collections.Concurrent;

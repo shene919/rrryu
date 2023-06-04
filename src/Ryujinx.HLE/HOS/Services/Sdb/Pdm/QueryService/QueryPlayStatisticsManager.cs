@@ -1,6 +1,6 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.Cpu;
-using Ryujinx.HLE.HOS.Services.Account.Acc;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using Ryujinx.HLE.HOS.Services.Sdb.Pdm.QueryService.Types;
 using System;
 using System.Collections.Generic;

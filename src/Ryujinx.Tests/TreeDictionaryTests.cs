@@ -3,7 +3,7 @@ using Ryujinx.Common.Collections;
 using System;
 using System.Collections.Generic;
 
-namespace Ryujinx.Tests.Collections
+namespace Ryujinx.Tests
 {
     class TreeDictionaryTests
     {

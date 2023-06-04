@@ -1,11 +1,10 @@
 ﻿using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Ipc;
 using Ryujinx.HLE.HOS.Kernel.Threading;
-using Ryujinx.HLE.HOS.Services.Nim.ShopServiceAccessServerInterface.ShopServiceAccessServer.ShopServiceAccessor;
 using Ryujinx.Horizon.Common;
 using System;
 
-namespace Ryujinx.HLE.HOS.Services.Nim.ShopServiceAccessServerInterface.ShopServiceAccessServer
+namespace Ryujinx.HLE.HOS.Services.Nim
 {
     class IShopServiceAccessor : IpcService
     {

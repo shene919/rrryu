@@ -1,6 +1,6 @@
 using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.Translation;
-using static Spv.Specification;
+using static Spv.Generator.Specification;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {

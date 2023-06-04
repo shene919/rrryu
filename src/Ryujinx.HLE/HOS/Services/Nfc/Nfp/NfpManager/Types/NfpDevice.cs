@@ -1,7 +1,7 @@
 ﻿using Ryujinx.HLE.HOS.Kernel.Threading;
-using Ryujinx.HLE.HOS.Services.Hid;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 
-namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp.NfpManager
+namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp.NfpManager.Types
 {
     class NfpDevice
     {

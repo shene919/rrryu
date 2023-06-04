@@ -1,10 +1,10 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Pools;
 using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.StructuredIr;
 using Ryujinx.Graphics.Shader.Translation;
 using System;
 using System.Collections.Generic;
-using static Spv.Specification;
+using static Spv.Generator.Specification;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {

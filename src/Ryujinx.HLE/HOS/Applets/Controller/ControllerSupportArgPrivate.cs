@@ -1,4 +1,4 @@
-namespace Ryujinx.HLE.HOS.Applets
+namespace Ryujinx.HLE.HOS.Applets.Controller
 {
 #pragma warning disable CS0649 // Field is never assigned to
     struct ControllerSupportArgPrivate

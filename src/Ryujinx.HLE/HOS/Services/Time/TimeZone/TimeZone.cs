@@ -1,6 +1,7 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Memory;
 using Ryujinx.Common.Utilities;
+using Ryujinx.HLE.HOS.Services.Time.TimeZone.Types;
 using Ryujinx.HLE.Utilities;
 using System;
 using System.Buffers.Binary;
@@ -9,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using static Ryujinx.HLE.HOS.Services.Time.TimeZone.TimeZoneRule;
+using static Ryujinx.HLE.HOS.Services.Time.TimeZone.Types.TimeZoneRule;
 
 namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
 {

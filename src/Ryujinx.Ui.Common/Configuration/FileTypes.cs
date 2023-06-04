@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.Ui.Common
+﻿namespace Ryujinx.Ui.Common.Configuration
 {
     public enum FileTypes
     {

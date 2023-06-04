@@ -3,10 +3,9 @@ using LibHac.FsSystem;
 using LibHac.Loader;
 using LibHac.Ns;
 using Ryujinx.HLE.HOS;
-using Ryujinx.HLE.Loaders.Processes.Extensions;
 using ApplicationId = LibHac.Ncm.ApplicationId;
 
-namespace Ryujinx.HLE.Loaders.Processes
+namespace Ryujinx.HLE.Loaders.Processes.Extensions
 {
     static class LocalFileSystemExtensions
     {

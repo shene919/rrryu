@@ -8,7 +8,7 @@ using Ryujinx.Horizon.Common;
 using System;
 using System.Threading;
 
-namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrl
+namespace Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrl.Types
 {
     class NvHostEvent
     {

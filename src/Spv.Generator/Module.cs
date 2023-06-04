@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using static Spv.Specification;
+using static Spv.Generator.Specification;
 
 namespace Spv.Generator
 {

@@ -5,7 +5,7 @@ using LibHac.Fs.Fsa;
 using LibHac.FsSystem;
 using LibHac.Ncm;
 using LibHac.Tools.FsSystem.NcaUtils;
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.SystemState;
 using System;

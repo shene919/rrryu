@@ -1,4 +1,5 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
+using Ryujinx.HLE.HOS.Services.Am.AppletAE.Types;
 using System;
 
 namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.AllSystemAppletProxiesService.LibraryAppletProxy

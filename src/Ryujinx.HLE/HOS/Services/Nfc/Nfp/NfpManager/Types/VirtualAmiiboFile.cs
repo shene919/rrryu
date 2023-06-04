@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp.NfpManager
+namespace Ryujinx.HLE.HOS.Services.Nfc.Nfp.NfpManager.Types
 {
     struct VirtualAmiiboFile
     {

@@ -1,5 +1,5 @@
 using Microsoft.IO;
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Memory;
 using System;
 using System.Collections.Generic;

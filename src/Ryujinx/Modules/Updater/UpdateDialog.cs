@@ -8,7 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Ryujinx.Modules
+namespace Ryujinx.Modules.Updater
 {
     public class UpdateDialog : Gtk.Window
     {

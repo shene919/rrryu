@@ -1,6 +1,6 @@
 using Ryujinx.HLE.HOS.Services.Am.AppletOE.ApplicationProxyService;
 
-namespace Ryujinx.HLE.HOS.Services.Am
+namespace Ryujinx.HLE.HOS.Services.Am.AppletOE
 {
     [Service("appletOE")]
     class IApplicationProxyService : IpcService

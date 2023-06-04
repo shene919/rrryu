@@ -2,7 +2,7 @@ using Ryujinx.Common.Memory;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Applets
+namespace Ryujinx.HLE.HOS.Applets.Controller
 {
 #pragma warning disable CS0649 // Field is never assigned to
     // (8.0.0+ version)

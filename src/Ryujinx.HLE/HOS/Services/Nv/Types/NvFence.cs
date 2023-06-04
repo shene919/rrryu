@@ -1,5 +1,5 @@
 ﻿using Ryujinx.Graphics.Gpu;
-using Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrl;
+using Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvHostCtrl.Types;
 using System;
 using System.Runtime.InteropServices;
 

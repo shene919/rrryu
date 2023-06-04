@@ -1,5 +1,6 @@
 ﻿using Ryujinx.Common.Memory;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
+using Ryujinx.HLE.HOS.Services.Time.TimeZone.Types;
 using System;
 using System.IO;
 

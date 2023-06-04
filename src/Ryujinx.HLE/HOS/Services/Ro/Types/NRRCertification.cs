@@ -1,7 +1,7 @@
 using Ryujinx.Common.Memory;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Ro
+namespace Ryujinx.HLE.HOS.Services.Ro.Types
 {
     [StructLayout(LayoutKind.Sequential, Size = 0x220)]
     struct NRRCertification

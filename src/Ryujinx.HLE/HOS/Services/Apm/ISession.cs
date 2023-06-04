@@ -1,3 +1,5 @@
+using Ryujinx.HLE.HOS.Services.Apm.Types;
+
 namespace Ryujinx.HLE.HOS.Services.Apm
 {
     abstract class ISession : IpcService

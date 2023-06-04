@@ -1,3 +1,4 @@
+using Ryujinx.Graphics.Shader.CodeGen.Glsl.HelperFunctions;
 using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.StructuredIr;
 using Ryujinx.Graphics.Shader.Translation;

@@ -28,7 +28,7 @@ using System.Threading;
 using Path = System.IO.Path;
 using TimeSpan = System.TimeSpan;
 
-namespace Ryujinx.Ui.App.Common
+namespace Ryujinx.Ui.Common.App
 {
     public class ApplicationLibrary
     {
@@ -527,7 +527,7 @@ namespace Ryujinx.Ui.App.Common
 
             try
             {
-                appMetadata = JsonHelper.DeserializeFromFile(metadataFile, SerializerContext.ApplicationMetadata);
+                appMetadata = JsonHelper.DeserializeFromFile<ApplicationMetadata>(metadataFile, SerializerContext.ApplicationMetadata);
             }
             catch (JsonException)
             {

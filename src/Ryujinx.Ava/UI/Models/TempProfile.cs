@@ -1,5 +1,5 @@
 using Ryujinx.Ava.UI.ViewModels;
-using Ryujinx.HLE.HOS.Services.Account.Acc;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using System;
 
 namespace Ryujinx.Ava.UI.Models

@@ -5,13 +5,12 @@ using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.UI.Helpers;
-using Ryujinx.HLE.HOS.Applets;
 using Ryujinx.HLE.HOS.Applets.SoftwareKeyboard;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Ava.UI.Controls
+namespace Ryujinx.Ava.UI.Applet
 {
     internal partial class SwkbdAppletDialog : UserControl
     {
@@ -34,7 +33,7 @@ namespace Ryujinx.Ava.UI.Controls
 
             Input.Watermark = _placeholder;
 
-            Input.AddHandler(TextInputEvent, Message_TextInput, RoutingStrategies.Tunnel, true);
+            AddHandler<TextInputEventArgs>(TextInputEvent, Message_TextInput, RoutingStrategies.Tunnel, true);
         }
 
         public SwkbdAppletDialog()
@@ -47,7 +46,7 @@ namespace Ryujinx.Ava.UI.Controls
         {
             // FIXME: This does not work. Might be a bug in Avalonia with DialogHost
             //        Currently focus will be redirected to the overlay window instead.
-            Input.Focus();
+            Focus();
         }
 
         public string Message { get; set; } = "";

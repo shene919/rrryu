@@ -1,8 +1,8 @@
-﻿using Ryujinx.HLE.HOS.Services.Time.TimeZone;
+﻿using Ryujinx.HLE.HOS.Services.Time.TimeZone.Types;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Time.Clock
+namespace Ryujinx.HLE.HOS.Services.Time.Clock.Types
 {
     [StructLayout(LayoutKind.Sequential, Size = 0xD0)]
     struct ClockSnapshot

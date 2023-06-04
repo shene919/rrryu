@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Hid
+﻿namespace Ryujinx.HLE.HOS.Services.Hid.HidServer.Types.Vibration
 {
     public enum VibrationDeviceType
     {

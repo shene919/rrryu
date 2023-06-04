@@ -1,7 +1,6 @@
-﻿using Ryujinx.Common;
-using Ryujinx.Common.Configuration.Hid;
+﻿using Ryujinx.Common.Configuration.Hid;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
-using Ryujinx.HLE.HOS.Applets.SoftwareKeyboard;
 using Ryujinx.HLE.HOS.Services.Am.AppletAE;
 using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Npad;
 using Ryujinx.HLE.Ui;
@@ -15,7 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Ryujinx.HLE.HOS.Applets
+namespace Ryujinx.HLE.HOS.Applets.SoftwareKeyboard
 {
     internal class SoftwareKeyboardApplet : IApplet
     {

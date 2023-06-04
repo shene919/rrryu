@@ -1,7 +1,7 @@
 ﻿using Ryujinx.Common.Memory;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Time.TimeZone
+namespace Ryujinx.HLE.HOS.Services.Time.TimeZone.Types
 {
     [StructLayout(LayoutKind.Sequential, Pack = 0x4, Size = 0x18, CharSet = CharSet.Ansi)]
     struct CalendarAdditionalInfo

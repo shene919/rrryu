@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ryujinx.HLE.HOS.Services.Am.AppletAE
+namespace Ryujinx.HLE.HOS.Services.Am.AppletAE.Types
 {
     [Flags]
     enum LibraryAppletMode : uint

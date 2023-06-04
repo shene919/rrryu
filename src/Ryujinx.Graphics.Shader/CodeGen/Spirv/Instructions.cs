@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-using static Spv.Specification;
+using static Spv.Generator.Specification;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {

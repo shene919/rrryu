@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Bgct
+﻿namespace Ryujinx.HLE.HOS.Services.Bgtc
 {
     [Service("bgtc:sc")]
     class IStateControlService : IpcService

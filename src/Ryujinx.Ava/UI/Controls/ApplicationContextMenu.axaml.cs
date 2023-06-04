@@ -11,7 +11,7 @@ using Ryujinx.Ava.UI.ViewModels;
 using Ryujinx.Ava.UI.Windows;
 using Ryujinx.Common.Configuration;
 using Ryujinx.HLE.HOS;
-using Ryujinx.Ui.App.Common;
+using Ryujinx.Ui.Common.App;
 using Ryujinx.Ui.Common.Helper;
 using System;
 using System.Collections.Generic;

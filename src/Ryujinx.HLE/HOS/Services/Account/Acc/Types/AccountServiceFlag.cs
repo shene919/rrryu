@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Account.Acc
+﻿namespace Ryujinx.HLE.HOS.Services.Account.Acc.Types
 {
     enum AccountServiceFlag
     {

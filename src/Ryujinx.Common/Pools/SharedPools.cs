@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.Common
+﻿namespace Ryujinx.Common.Pools
 {
     public static class SharedPools
     {

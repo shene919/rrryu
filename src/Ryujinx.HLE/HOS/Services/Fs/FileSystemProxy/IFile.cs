@@ -2,7 +2,7 @@ using LibHac;
 using LibHac.Common;
 using LibHac.Fs;
 using LibHac.Sf;
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 
 namespace Ryujinx.HLE.HOS.Services.Fs.FileSystemProxy
 {

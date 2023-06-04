@@ -1,4 +1,4 @@
-using Ryujinx.Common;
+using Ryujinx.Common.Utilities;
 using System;
 using System.Buffers.Binary;
 using System.Runtime.InteropServices;

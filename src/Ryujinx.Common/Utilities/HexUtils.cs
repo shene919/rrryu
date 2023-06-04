@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Ryujinx.Common
+namespace Ryujinx.Common.Utilities
 {
     public static class HexUtils
     {

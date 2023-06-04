@@ -1,4 +1,4 @@
-using Ryujinx.HLE.HOS.Services.Hid;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 
 namespace Ryujinx.HLE.HOS.Tamper
 {

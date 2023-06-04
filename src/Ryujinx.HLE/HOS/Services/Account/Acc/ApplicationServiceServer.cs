@@ -1,9 +1,10 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
 using Ryujinx.Cpu;
 using Ryujinx.HLE.HOS.Kernel.Threading;
 using Ryujinx.HLE.HOS.Services.Account.Acc.AccountService;
 using Ryujinx.HLE.HOS.Services.Account.Acc.AsyncContext;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

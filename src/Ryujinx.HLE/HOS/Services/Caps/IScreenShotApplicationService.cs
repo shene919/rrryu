@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.HLE.HOS.Services.Caps.Types;
 
 namespace Ryujinx.HLE.HOS.Services.Caps

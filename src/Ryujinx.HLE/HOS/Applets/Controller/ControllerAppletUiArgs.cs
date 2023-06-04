@@ -1,7 +1,7 @@
-using Ryujinx.HLE.HOS.Services.Hid;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 using System.Collections.Generic;
 
-namespace Ryujinx.HLE.HOS.Applets
+namespace Ryujinx.HLE.HOS.Applets.Controller
 {
     public struct ControllerAppletUiArgs
     {

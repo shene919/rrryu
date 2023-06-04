@@ -1,6 +1,9 @@
 ﻿using Ryujinx.HLE.HOS.Applets.Browser;
+using Ryujinx.HLE.HOS.Applets.Controller;
 using Ryujinx.HLE.HOS.Applets.Error;
-using Ryujinx.HLE.HOS.Services.Am.AppletAE;
+using Ryujinx.HLE.HOS.Applets.PlayerSelect;
+using Ryujinx.HLE.HOS.Applets.SoftwareKeyboard;
+using Ryujinx.HLE.HOS.Services.Am.AppletAE.Types;
 using System;
 using System.Collections.Generic;
 

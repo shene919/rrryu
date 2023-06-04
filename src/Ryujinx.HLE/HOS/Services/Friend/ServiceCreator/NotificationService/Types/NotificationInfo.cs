@@ -1,7 +1,7 @@
 ﻿using Ryujinx.Common.Memory;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.NotificationService
+namespace Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.NotificationService.Types
 {
     [StructLayout(LayoutKind.Sequential, Size = 0x10)]
     struct NotificationInfo

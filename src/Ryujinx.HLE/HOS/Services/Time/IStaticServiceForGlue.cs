@@ -1,8 +1,9 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Extensions;
 using Ryujinx.HLE.HOS.Services.Pcv.Bpc;
 using Ryujinx.HLE.HOS.Services.Settings;
-using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 using Ryujinx.HLE.HOS.Services.Time.StaticService;
+using Ryujinx.HLE.HOS.Services.Time.Types;
 using System;
 
 namespace Ryujinx.HLE.HOS.Services.Time

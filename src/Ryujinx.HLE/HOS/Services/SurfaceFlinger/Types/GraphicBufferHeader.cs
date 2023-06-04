@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
+namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types
 {
     [StructLayout(LayoutKind.Sequential, Size = 0x28, Pack = 1)]
     struct GraphicBufferHeader

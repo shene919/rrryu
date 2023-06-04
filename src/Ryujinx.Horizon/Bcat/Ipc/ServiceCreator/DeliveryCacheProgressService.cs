@@ -1,5 +1,4 @@
 ﻿using Ryujinx.Common.Logging;
-using Ryujinx.Horizon.Bcat.Ipc.Types;
 using Ryujinx.Horizon.Common;
 using Ryujinx.Horizon.Sdk.Bcat;
 using Ryujinx.Horizon.Sdk.OsTypes;
@@ -34,11 +33,11 @@ namespace Ryujinx.Horizon.Bcat.Ipc
         }
 
         [CmifCommand(1)]
-        public Result GetImpl([Buffer(HipcBufferFlags.Out | HipcBufferFlags.Pointer, 0x200)] out DeliveryCacheProgressImpl deliveryCacheProgressImpl)
+        public Result GetImpl([Buffer(HipcBufferFlags.Out | HipcBufferFlags.Pointer, 0x200)] out Types.DeliveryCacheProgressImpl deliveryCacheProgressImpl)
         {
-            deliveryCacheProgressImpl = new DeliveryCacheProgressImpl
+            deliveryCacheProgressImpl = new Types.DeliveryCacheProgressImpl
             {
-                State = DeliveryCacheProgressImpl.Status.Done,
+                State = Types.DeliveryCacheProgressImpl.Status.Done,
                 Result = 0
             };
 

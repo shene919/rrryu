@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Ryujinx.Common
+namespace Ryujinx.Common.Extensions
 {
     public static class BinaryWriterExtensions
     {

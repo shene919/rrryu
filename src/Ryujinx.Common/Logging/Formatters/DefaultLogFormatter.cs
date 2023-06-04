@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Ryujinx.Common.Pools;
+using System.Diagnostics;
 using System.Text;
 
 namespace Ryujinx.Common.Logging.Formatters

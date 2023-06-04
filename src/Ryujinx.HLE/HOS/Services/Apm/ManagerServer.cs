@@ -1,4 +1,6 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Apm
+﻿using Ryujinx.HLE.HOS.Services.Apm.Types;
+
+namespace Ryujinx.HLE.HOS.Services.Apm
 {
     [Service("apm")]
     [Service("apm:am")] // 8.0.0+

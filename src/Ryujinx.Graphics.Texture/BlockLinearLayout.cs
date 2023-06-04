@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+﻿using Ryujinx.Common.Utilities;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Ryujinx.HLE.HOS.Services.Nifm.StaticService.GeneralService.Types;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ryujinx.HLE.HOS.Services.Nifm.StaticService.GeneralService

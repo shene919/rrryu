@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
+namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 0x24)]
     struct AndroidFence : IFlattenable

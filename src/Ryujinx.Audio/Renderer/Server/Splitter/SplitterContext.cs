@@ -1,7 +1,7 @@
 using Ryujinx.Audio.Renderer.Common;
 using Ryujinx.Audio.Renderer.Parameter;
 using Ryujinx.Audio.Renderer.Utils;
-using Ryujinx.Common;
+using Ryujinx.Common.Utilities;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;

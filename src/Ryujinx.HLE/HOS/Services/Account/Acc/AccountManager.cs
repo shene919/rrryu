@@ -2,12 +2,14 @@
 using LibHac.Common;
 using LibHac.Fs;
 using LibHac.Fs.Shim;
-using Ryujinx.Common;
 using Ryujinx.Common.Logging;
+using Ryujinx.Common.Utilities;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using UserId = Ryujinx.HLE.HOS.Services.Account.Acc.Types.UserId;
 
 namespace Ryujinx.HLE.HOS.Services.Account.Acc
 {

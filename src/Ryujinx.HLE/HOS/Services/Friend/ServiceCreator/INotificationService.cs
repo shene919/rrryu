@@ -1,8 +1,10 @@
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.HLE.HOS.Ipc;
 using Ryujinx.HLE.HOS.Kernel.Threading;
-using Ryujinx.HLE.HOS.Services.Account.Acc;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.NotificationService;
+using Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.NotificationService.Types;
+using Ryujinx.HLE.HOS.Services.Friend.ServiceCreator.Types;
 using Ryujinx.Horizon.Common;
 using System;
 using System.Collections.Generic;

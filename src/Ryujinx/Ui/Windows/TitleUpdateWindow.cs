@@ -9,7 +9,7 @@ using LibHac.Tools.FsSystem.NcaUtils;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Utilities;
 using Ryujinx.HLE.FileSystem;
-using Ryujinx.Ui.App.Common;
+using Ryujinx.Ui.Common.App;
 using Ryujinx.Ui.Widgets;
 using System;
 using System.Collections.Generic;

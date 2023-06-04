@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Apm
+﻿namespace Ryujinx.HLE.HOS.Services.Apm.Types
 {
     enum PerformanceConfiguration : uint  // Clocks are all in MHz.
     {                                            // CPU  | GPU   | RAM    | NOTE

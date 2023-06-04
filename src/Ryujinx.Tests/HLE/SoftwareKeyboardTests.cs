@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Ryujinx.HLE.HOS.Applets;
+using Ryujinx.HLE.HOS.Applets.SoftwareKeyboard;
 using System.Text;
 
 namespace Ryujinx.Tests.HLE

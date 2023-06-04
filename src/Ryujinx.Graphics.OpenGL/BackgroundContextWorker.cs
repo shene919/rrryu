@@ -1,4 +1,4 @@
-using Ryujinx.Common;
+using Ryujinx.Common.Pools;
 using System;
 using System.Collections.Generic;
 using System.Threading;

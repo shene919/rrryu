@@ -1,4 +1,5 @@
 ﻿using Ryujinx.Common.Logging;
+using Ryujinx.HLE.HOS.Services.Apm.Types;
 
 namespace Ryujinx.HLE.HOS.Services.Apm
 {

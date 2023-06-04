@@ -1,7 +1,6 @@
-﻿using Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types;
-using System;
+﻿using System;
 
-namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
+namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types
 {
     class BufferItem : ICloneable
     {

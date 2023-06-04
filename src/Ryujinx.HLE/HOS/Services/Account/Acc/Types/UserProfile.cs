@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ryujinx.HLE.HOS.Services.Account.Acc
+namespace Ryujinx.HLE.HOS.Services.Account.Acc.Types
 {
     public class UserProfile
     {

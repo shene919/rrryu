@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Apm
+﻿namespace Ryujinx.HLE.HOS.Services.Apm.Types
 {
     enum CpuBoostMode
     {

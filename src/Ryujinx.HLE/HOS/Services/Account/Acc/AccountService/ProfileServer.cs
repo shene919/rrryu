@@ -1,5 +1,6 @@
 ﻿using Ryujinx.Common.Logging;
 using Ryujinx.Cpu;
+using Ryujinx.HLE.HOS.Services.Account.Acc.Types;
 using Ryujinx.HLE.Utilities;
 using System.Text;
 

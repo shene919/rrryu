@@ -1,4 +1,5 @@
 ﻿using Ryujinx.Common.Logging;
+using Ryujinx.HLE.HOS.Services.Nfc.NfcManager.Types;
 
 namespace Ryujinx.HLE.HOS.Services.Nfc.NfcManager
 {

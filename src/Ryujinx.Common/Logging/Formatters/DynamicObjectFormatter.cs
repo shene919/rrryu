@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Ryujinx.Common.Pools;
 using System;
 using System.Reflection;
 using System.Text;

@@ -1,6 +1,7 @@
-﻿using Ryujinx.Common;
-using Ryujinx.Common.Logging;
+﻿using Ryujinx.Common.Logging;
+using Ryujinx.Common.Utilities;
 using Ryujinx.Graphics.Gpu.Memory;
+using Ryujinx.HLE.HOS.Services.Nv.NvDrvServices.NvMap.Types;
 using Ryujinx.Memory;
 using System;
 

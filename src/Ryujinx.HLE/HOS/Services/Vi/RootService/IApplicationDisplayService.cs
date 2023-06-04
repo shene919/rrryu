@@ -1,9 +1,10 @@
-using Ryujinx.Common;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Memory;
+using Ryujinx.Common.Utilities;
 using Ryujinx.HLE.HOS.Applets;
 using Ryujinx.HLE.HOS.Ipc;
 using Ryujinx.HLE.HOS.Services.SurfaceFlinger;
+using Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types.Color;
 using Ryujinx.HLE.HOS.Services.Vi.RootService.ApplicationDisplayService;
 using Ryujinx.HLE.HOS.Services.Vi.RootService.ApplicationDisplayService.Types;
 using Ryujinx.HLE.HOS.Services.Vi.Types;

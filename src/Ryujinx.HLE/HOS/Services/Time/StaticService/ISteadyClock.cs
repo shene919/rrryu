@@ -1,6 +1,7 @@
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Cpu;
 using Ryujinx.HLE.HOS.Services.Time.Clock;
+using Ryujinx.HLE.HOS.Services.Time.Clock.Types;
 
 namespace Ryujinx.HLE.HOS.Services.Time.StaticService
 {

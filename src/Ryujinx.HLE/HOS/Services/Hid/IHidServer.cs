@@ -1,9 +1,15 @@
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.HOS.Ipc;
 using Ryujinx.HLE.HOS.Kernel.Threading;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices.Types;
 using Ryujinx.HLE.HOS.Services.Hid.HidServer;
+using Ryujinx.HLE.HOS.Services.Hid.HidServer.Types.Npad;
+using Ryujinx.HLE.HOS.Services.Hid.HidServer.Types.SixAxis;
+using Ryujinx.HLE.HOS.Services.Hid.HidServer.Types.Vibration;
 using Ryujinx.HLE.HOS.Services.Hid.Types;
+using Ryujinx.HLE.HOS.Services.Hid.Types.Npad;
 using Ryujinx.HLE.HOS.Services.Hid.Types.SharedMemory.Npad;
 using Ryujinx.Horizon.Common;
 using System;

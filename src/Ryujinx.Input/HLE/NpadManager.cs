@@ -2,11 +2,14 @@ using Ryujinx.Common.Configuration.Hid;
 using Ryujinx.Common.Configuration.Hid.Controller;
 using Ryujinx.Common.Configuration.Hid.Keyboard;
 using Ryujinx.HLE.HOS.Services.Hid;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices;
+using Ryujinx.HLE.HOS.Services.Hid.HidDevices.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using CemuHookClient = Ryujinx.Input.Motion.CemuHook.Client;
+using PlayerIndex = Ryujinx.HLE.HOS.Services.Hid.Types.Npad.PlayerIndex;
 using Switch = Ryujinx.HLE.Switch;
 
 namespace Ryujinx.Input.HLE
@@ -178,7 +181,7 @@ namespace Ryujinx.Input.HLE
                     (SixAxisInput, SixAxisInput) motionState = default;
 
                     NpadController controller = _controllers[(int)inputConfig.PlayerIndex];
-                    Ryujinx.HLE.HOS.Services.Hid.PlayerIndex playerIndex = (Ryujinx.HLE.HOS.Services.Hid.PlayerIndex)inputConfig.PlayerIndex;
+                    PlayerIndex playerIndex = (PlayerIndex)inputConfig.PlayerIndex;
 
                     bool isJoyconPair = false;
 

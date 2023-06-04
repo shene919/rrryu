@@ -3,7 +3,7 @@ using LibHac.Fs;
 using LibHac.Ncm;
 using LibHac.Ns;
 using LibHac.Tools.FsSystem.NcaUtils;
-using Ryujinx.Common;
+using Ryujinx.Common.Extensions;
 using Ryujinx.Common.Logging;
 using Ryujinx.HLE.Exceptions;
 using Ryujinx.HLE.HOS.Ipc;
@@ -17,7 +17,7 @@ using Ryujinx.Horizon.Common;
 using System;
 using System.Numerics;
 using System.Threading;
-using AccountUid = Ryujinx.HLE.HOS.Services.Account.Acc.UserId;
+using AccountUid = Ryujinx.HLE.HOS.Services.Account.Acc.Types.UserId;
 using ApplicationId = LibHac.Ncm.ApplicationId;
 
 namespace Ryujinx.HLE.HOS.Services.Am.AppletOE.ApplicationProxyService.ApplicationProxy

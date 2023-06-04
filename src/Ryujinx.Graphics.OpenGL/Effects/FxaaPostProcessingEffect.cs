@@ -1,5 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
-using Ryujinx.Common;
+using Ryujinx.Common.Utilities;
 using Ryujinx.Graphics.OpenGL.Image;
 
 namespace Ryujinx.Graphics.OpenGL.Effects

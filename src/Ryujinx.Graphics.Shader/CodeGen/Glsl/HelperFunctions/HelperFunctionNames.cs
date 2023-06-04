@@ -1,4 +1,4 @@
-namespace Ryujinx.Graphics.Shader.CodeGen.Glsl
+namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.HelperFunctions
 {
     static class HelperFunctionNames
     {

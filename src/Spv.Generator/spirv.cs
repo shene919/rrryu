@@ -44,7 +44,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Spv
+namespace Spv.Generator
 {
 
     public static class Specification

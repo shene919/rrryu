@@ -3,6 +3,7 @@ using Ryujinx.HLE.HOS.Applets;
 using Ryujinx.HLE.HOS.Ipc;
 using Ryujinx.HLE.HOS.Kernel;
 using Ryujinx.HLE.HOS.Kernel.Threading;
+using Ryujinx.HLE.HOS.Services.Am.AppletAE.Types;
 using Ryujinx.Horizon.Common;
 using System;
 

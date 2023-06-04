@@ -1,7 +1,7 @@
 using Gtk;
 using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS;
-using Ryujinx.Ui.App.Common;
+using Ryujinx.Ui.Common.App;
 using System;
 using System.Collections.Generic;
 using System.IO;

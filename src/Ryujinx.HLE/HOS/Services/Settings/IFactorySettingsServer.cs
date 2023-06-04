@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Am.Tcap
+﻿namespace Ryujinx.HLE.HOS.Services.Settings
 {
     [Service("set:cal")]
     class IFactorySettingsServer : IpcService

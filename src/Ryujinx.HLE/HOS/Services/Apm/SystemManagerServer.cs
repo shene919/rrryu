@@ -1,4 +1,6 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Apm
+﻿using Ryujinx.HLE.HOS.Services.Apm.Types;
+
+namespace Ryujinx.HLE.HOS.Services.Apm
 {
     [Service("apm:sys")]
     class SystemManagerServer : ISystemManager

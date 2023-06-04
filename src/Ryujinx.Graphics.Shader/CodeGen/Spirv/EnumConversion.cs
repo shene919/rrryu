@@ -1,5 +1,5 @@
 ﻿using System;
-using static Spv.Specification;
+using static Spv.Generator.Specification;
 
 namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 {

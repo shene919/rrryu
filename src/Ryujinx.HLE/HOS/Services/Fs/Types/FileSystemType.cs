@@ -1,4 +1,4 @@
-﻿namespace Ryujinx.HLE.HOS.Services.Fs
+﻿namespace Ryujinx.HLE.HOS.Services.Fs.Types
 {
     enum FileSystemType
     {

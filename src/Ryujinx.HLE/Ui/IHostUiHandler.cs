@@ -1,4 +1,5 @@
-using Ryujinx.HLE.HOS.Applets;
+using Ryujinx.HLE.HOS.Applets.Controller;
+using Ryujinx.HLE.HOS.Applets.SoftwareKeyboard;
 using Ryujinx.HLE.HOS.Services.Am.AppletOE.ApplicationProxyService.ApplicationProxy.Types;
 
 namespace Ryujinx.HLE.Ui

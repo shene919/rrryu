@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Ryujinx.Ui.Common.Configuration;
+using System;
 using static Ryujinx.Ui.Common.Configuration.ConfigurationState.UiSection;
 
-namespace Ryujinx.Ui.Common
+namespace Ryujinx.Ui.Common.Extensions
 {
     public static class FileTypesExtensions
     {

@@ -1,11 +1,10 @@
-using Ryujinx.Common.Utilities;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Ryujinx.Common
+namespace Ryujinx.Common.Utilities
 {
     public static class EmbeddedResources
     {
