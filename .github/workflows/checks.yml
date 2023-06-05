@@ -2,6 +2,14 @@ name: Perform checks
 
 on:
   pull_request:
+    branches: [ master ]
+    paths:
+      - '!.github/**'
+      - '!*.yml'
+      - '!*.json'
+      - '!*.config'
+      - '!README.md'
+      - '.github/workflows/*.yml'
 
 permissions:
   pull-requests: write
@@ -38,3 +46,8 @@ jobs:
         with:
           name: dotnet-format
           path: ./*-report.json
+
+  pr_build:
+    uses: ./.github/workflows/build.yml
+    needs: format
+    secrets: inherit
