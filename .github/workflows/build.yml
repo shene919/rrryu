@@ -1,9 +1,6 @@
 name: Build job
 
 on:
-  workflow_dispatch:
-    inputs: {}
-
   workflow_call:
 
 concurrency:
