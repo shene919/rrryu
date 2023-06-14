@@ -283,7 +283,6 @@ namespace Ryujinx.HLE.HOS.Applets.SoftwareKeyboard
             }
         }
 
-#pragma warning disable IDE0060 // Remove unused parameter
         private void OnForegroundInteractiveData(byte[] data)
         {
             if (_foregroundState == SoftwareKeyboardState.ValidationPending)
@@ -314,7 +313,6 @@ namespace Ryujinx.HLE.HOS.Applets.SoftwareKeyboard
                 throw new InvalidOperationException("Software Keyboard is in an invalid state.");
             }
         }
-#pragma warning restore IDE0060
 
         private void OnBackgroundInteractiveData(byte[] data)
         {

@@ -144,7 +144,6 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
             }
         }
 
-#pragma warning disable IDE0060 // Remove unused parameter
         public ResultCode OpenLayer(ulong pid, long layerId, out IBinder producer)
         {
             Layer layer = GetLayerByIdLocked(layerId);
@@ -161,7 +160,6 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger
 
             return ResultCode.Success;
         }
-#pragma warning restore IDE0060
 
         public ResultCode CloseLayer(long layerId)
         {
