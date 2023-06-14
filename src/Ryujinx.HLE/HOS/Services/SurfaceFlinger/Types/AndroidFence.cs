@@ -81,12 +81,12 @@ namespace Ryujinx.HLE.HOS.Services.SurfaceFlinger.Types
             }
         }
 
-        public uint GetFlattenedSize()
+        public readonly uint GetFlattenedSize()
         {
             return (uint)Unsafe.SizeOf<AndroidFence>();
         }
 
-        public uint GetFdCount()
+        public readonly uint GetFdCount()
         {
             return 0;
         }

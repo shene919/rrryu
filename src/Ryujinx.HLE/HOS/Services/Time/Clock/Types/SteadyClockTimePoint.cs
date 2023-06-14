@@ -10,7 +10,7 @@ namespace Ryujinx.HLE.HOS.Services.Time.Clock.Types
         public long    TimePoint;
         public UInt128 ClockSourceId;
 
-        public ResultCode GetSpanBetween(SteadyClockTimePoint other, out long outSpan)
+        public readonly ResultCode GetSpanBetween(SteadyClockTimePoint other, out long outSpan)
         {
             outSpan = 0;
 
