@@ -842,21 +842,6 @@ namespace Ryujinx.Graphics.Vulkan
 
             MemoryAllocator.Dispose();
 
-            foreach (var shader in Shaders)
-            {
-                shader.Dispose();
-            }
-
-            foreach (var texture in Textures)
-            {
-                texture.Release();
-            }
-
-            foreach (var sampler in Samplers)
-            {
-                sampler.Dispose();
-            }
-
             SurfaceApi.DestroySurface(_instance.Instance, _surface, null);
 
             Api.DestroyDevice(_device, null);
