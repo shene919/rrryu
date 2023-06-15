@@ -143,6 +143,11 @@ namespace Ryujinx.Horizon.Sdk.Sf.Hipc
         {
             int sessionHandle = session.Handle;
 
+            if (session.IsLinked)
+            {
+                session.UnlinkFromMultiWaitHolder();
+            }
+
             Os.FinalizeMultiWaitHolder(session);
             DestroySession(session);
             HorizonStatic.Syscall.CloseHandle(sessionHandle).AbortOnFailure();
