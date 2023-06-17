@@ -246,7 +246,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         {
             int joyXpadId = context.RequestData.ReadInt32();
 
-            const int handle = 0;
+            int handle = 0;
 
             context.Response.HandleDesc = IpcHandleDesc.MakeCopy(handle);
 
@@ -295,7 +295,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         {
             int basicXpadId = context.RequestData.ReadInt32();
 
-            const int handle = 0;
+            int handle = 0;
 
             context.Response.HandleDesc = IpcHandleDesc.MakeCopy(handle);
 
@@ -332,7 +332,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         {
             int joyXpadId = context.RequestData.ReadInt32();
 
-            const int handle = 0;
+            int handle = 0;
 
             context.Response.HandleDesc = IpcHandleDesc.MakeCopy(handle);
 
@@ -594,7 +594,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
             context.RequestData.BaseStream.Position += 4; // Padding
             long appletResourceUserId = context.RequestData.ReadInt64();
 
-            const bool isAtRest = true;
+            bool isAtRest = true;
 
             context.ResponseData.Write(isAtRest);
 
@@ -1600,7 +1600,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
             int  unknown0             = context.RequestData.ReadInt32();
             long appletResourceUserId = context.RequestData.ReadInt64();
 
-            const int palmaConnectionHandle = 0;
+            int palmaConnectionHandle = 0;
 
             context.ResponseData.Write(palmaConnectionHandle);
 
@@ -1646,7 +1646,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid
         {
             int palmaConnectionHandle = context.RequestData.ReadInt32();
 
-            const long unknown0 = 0; //Counter?
+            long unknown0 = 0; //Counter?
 
             context.ResponseData.Write(unknown0);
 

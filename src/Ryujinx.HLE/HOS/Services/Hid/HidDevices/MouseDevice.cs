@@ -15,7 +15,7 @@ namespace Ryujinx.HLE.HOS.Services.Hid.HidDevices
 
             MouseState newState = new()
             {
-                SamplingNumber = previousEntry.SamplingNumber + 1
+                SamplingNumber = previousEntry.SamplingNumber + 1,
             };
 
             if (Active)
