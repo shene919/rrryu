@@ -167,13 +167,13 @@ csharp_preserve_single_line_statements = false
 
 # Naming rules
 
-# dotnet_naming_rule.interfaces_should_be_prefixed_with_I.severity = suggestion
-# dotnet_naming_rule.interfaces_should_be_prefixed_with_I.symbols = interface
-# dotnet_naming_rule.interfaces_should_be_prefixed_with_I.style = IPascalCase
+dotnet_naming_rule.interfaces_should_be_prefixed_with_I.severity = suggestion
+dotnet_naming_rule.interfaces_should_be_prefixed_with_I.symbols = interface
+dotnet_naming_rule.interfaces_should_be_prefixed_with_I.style = IPascalCase
 
-dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
-dotnet_naming_rule.types_should_be_pascal_case.symbols = types
-dotnet_naming_rule.types_should_be_pascal_case.style = PascalCase
+# dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
+# dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+# dotnet_naming_rule.types_should_be_pascal_case.style = PascalCase
 
 dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
@@ -189,13 +189,13 @@ dotnet_naming_rule.local_constants_should_be_pascal_case.style = PascalCase
 
 # Symbol specifications
 
-# dotnet_naming_symbols.interface.applicable_kinds = interface
-# dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-# dotnet_naming_symbols.interface.required_modifiers =
+dotnet_naming_symbols.interface.applicable_kinds = interface
+dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.interface.required_modifiers =
 
-dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
-dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.types.required_modifiers =
+# dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
+# dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+# dotnet_naming_symbols.types.required_modifiers =
 
 dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -221,10 +221,10 @@ dotnet_naming_style.PascalCase.required_suffix =
 dotnet_naming_style.PascalCase.word_separator =
 dotnet_naming_style.PascalCase.capitalization = pascal_case
 
-# dotnet_naming_style.IPascalCase.required_prefix = I
-# dotnet_naming_style.IPascalCase.required_suffix =
-# dotnet_naming_style.IPascalCase.word_separator =
-# dotnet_naming_style.IPascalCase.capitalization = pascal_case
+dotnet_naming_style.IPascalCase.required_prefix = I
+dotnet_naming_style.IPascalCase.required_suffix =
+dotnet_naming_style.IPascalCase.word_separator =
+dotnet_naming_style.IPascalCase.capitalization = pascal_case
 
 [src/Ryujinx.HLE/HOS/Services/**.cs]
 # Disable "mark members as static" rule for services
