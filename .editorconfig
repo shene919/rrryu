@@ -167,9 +167,9 @@ csharp_preserve_single_line_statements = false
 
 # Naming rules
 
-dotnet_naming_rule.interfaces_should_be_prefixed_with_I.severity = suggestion
-dotnet_naming_rule.interfaces_should_be_prefixed_with_I.symbols = interface
-dotnet_naming_rule.interfaces_should_be_prefixed_with_I.style = IPascalCase
+# dotnet_naming_rule.interfaces_should_be_prefixed_with_I.severity = suggestion
+# dotnet_naming_rule.interfaces_should_be_prefixed_with_I.symbols = interface
+# dotnet_naming_rule.interfaces_should_be_prefixed_with_I.style = IPascalCase
 
 dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.types_should_be_pascal_case.symbols = types
@@ -179,9 +179,9 @@ dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
 dotnet_naming_rule.non_field_members_should_be_pascal_case.style = PascalCase
 
-# dotnet_naming_rule.private_static_readonly_fields_should_be_camel_case_and_prefixed_with__.symbols = private_static_readonly_fields
-# dotnet_naming_rule.private_static_readonly_fields_should_be_camel_case_and_prefixed_with__.severity = suggestion
-# dotnet_naming_rule.private_static_readonly_fields_should_be_camel_case_and_prefixed_with__.style = _camelCase
+dotnet_naming_rule.private_static_readonly_fields_should_be_camel_case_and_prefixed_with__.symbols = private_static_readonly_fields
+dotnet_naming_rule.private_static_readonly_fields_should_be_camel_case_and_prefixed_with__.severity = suggestion
+dotnet_naming_rule.private_static_readonly_fields_should_be_camel_case_and_prefixed_with__.style = _camelCase
 
 dotnet_naming_rule.local_constants_should_be_pascal_case.symbols = local_constants
 dotnet_naming_rule.local_constants_should_be_pascal_case.severity = suggestion
@@ -189,9 +189,9 @@ dotnet_naming_rule.local_constants_should_be_pascal_case.style = PascalCase
 
 # Symbol specifications
 
-dotnet_naming_symbols.interface.applicable_kinds = interface
-dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.interface.required_modifiers =
+# dotnet_naming_symbols.interface.applicable_kinds = interface
+# dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+# dotnet_naming_symbols.interface.required_modifiers =
 
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -201,9 +201,9 @@ dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, meth
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.non_field_members.required_modifiers =
 
-# dotnet_naming_symbols.private_static_readonly_fields.applicable_kinds = field
-# dotnet_naming_symbols.private_static_readonly_fields.applicable_accessibilities = private
-# dotnet_naming_symbols.private_static_readonly_fields.required_modifiers = static, readonly
+dotnet_naming_symbols.private_static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.private_static_readonly_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_static_readonly_fields.required_modifiers = static, readonly
 
 dotnet_naming_symbols.local_constants.applicable_kinds = local
 dotnet_naming_symbols.local_constants.applicable_accessibilities = local
@@ -211,20 +211,20 @@ dotnet_naming_symbols.local_constants.required_modifiers = const
 
 # Naming styles
 
-# dotnet_naming_style._camelCase.required_prefix = _
-# dotnet_naming_style._camelCase.required_suffix =
-# dotnet_naming_style._camelCase.word_separator =
-# dotnet_naming_style._camelCase.capitalization = camel_case
+dotnet_naming_style._camelCase.required_prefix = _
+dotnet_naming_style._camelCase.required_suffix =
+dotnet_naming_style._camelCase.word_separator =
+dotnet_naming_style._camelCase.capitalization = camel_case
 
 dotnet_naming_style.PascalCase.required_prefix =
 dotnet_naming_style.PascalCase.required_suffix =
 dotnet_naming_style.PascalCase.word_separator =
 dotnet_naming_style.PascalCase.capitalization = pascal_case
 
-dotnet_naming_style.IPascalCase.required_prefix = I
-dotnet_naming_style.IPascalCase.required_suffix =
-dotnet_naming_style.IPascalCase.word_separator =
-dotnet_naming_style.IPascalCase.capitalization = pascal_case
+# dotnet_naming_style.IPascalCase.required_prefix = I
+# dotnet_naming_style.IPascalCase.required_suffix =
+# dotnet_naming_style.IPascalCase.word_separator =
+# dotnet_naming_style.IPascalCase.capitalization = pascal_case
 
 [src/Ryujinx.HLE/HOS/Services/**.cs]
 # Disable "mark members as static" rule for services
