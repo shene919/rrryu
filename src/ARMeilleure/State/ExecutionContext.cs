@@ -94,14 +94,15 @@ namespace ARMeilleure.State
         private readonly ExceptionCallbackNoArgs _interruptCallback;
         private readonly ExceptionCallback _breakCallback;
         private readonly ExceptionCallback _supervisorCallback;
+        private readonly ExceptionCallback _invalidOperationCallback;
         private readonly ExceptionCallback _undefinedCallback;
 
-        public ExecutionContext(
-            IJitMemoryAllocator allocator,
+        public ExecutionContext(IJitMemoryAllocator allocator,
             ICounter counter,
             ExceptionCallbackNoArgs interruptCallback = null,
             ExceptionCallback breakCallback = null,
             ExceptionCallback supervisorCallback = null,
+            ExceptionCallback invalidOperationCallback = null,
             ExceptionCallback undefinedCallback = null)
         {
             _nativeContext = new NativeContext(allocator);
@@ -109,6 +110,7 @@ namespace ARMeilleure.State
             _interruptCallback = interruptCallback;
             _breakCallback = breakCallback;
             _supervisorCallback = supervisorCallback;
+            _invalidOperationCallback = invalidOperationCallback;
             _undefinedCallback = undefinedCallback;
 
             Running = true;
@@ -153,6 +155,11 @@ namespace ARMeilleure.State
         internal void OnSupervisorCall(ulong address, int imm)
         {
             _supervisorCallback?.Invoke(this, address, imm);
+        }
+
+        internal void OnInvalidOperation(ulong address, int executionMode)
+        {
+            _invalidOperationCallback?.Invoke(this, address, executionMode);
         }
 
         internal void OnUndefined(ulong address, int opCode)

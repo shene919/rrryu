@@ -52,6 +52,15 @@ namespace ARMeilleure.Instructions
             Statistics.ResumeTimer();
         }
 
+        public static void InvalidOperation(ulong address, int executionMode)
+        {
+            Statistics.PauseTimer();
+
+            GetContext().OnInvalidOperation(address, executionMode);
+
+            Statistics.ResumeTimer();
+        }
+
         public static void Undefined(ulong address, int opCode)
         {
             Statistics.PauseTimer();
@@ -159,9 +168,16 @@ namespace ARMeilleure.Instructions
 
         public static ulong GetFunctionAddress(ulong address)
         {
-            TranslatedFunction function = Context.Translator.GetOrTranslate(address, GetContext().ExecutionMode);
-
-            return (ulong)function.FuncPointer.ToInt64();
+            try
+            {
+                TranslatedFunction function = Context.Translator.GetOrTranslate(address, GetContext().ExecutionMode);
+                return (ulong)function.FuncPointer.ToInt64();
+            }
+            catch (InvalidOperationException)
+            {
+                InvalidOperation(address, (int)GetContext().ExecutionMode);
+                throw;
+            }
         }
 
         public static void InvalidateCacheLine(ulong address)

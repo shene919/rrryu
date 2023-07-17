@@ -744,6 +744,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 InterruptHandler,
                 null,
                 KernelContext.SyscallHandler.SvcCall,
+                InvalidOperationHandler,
                 UndefinedInstructionHandler));
         }
 
@@ -1086,6 +1087,14 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             Logger.Error?.Print(LogClass.Cpu, $"Invalid memory access at virtual address 0x{va:X16}.");
 
             return false;
+        }
+
+        private void InvalidOperationHandler(IExecutionContext context, ulong address, int executionMode)
+        {
+            KernelStatic.GetCurrentThread()?.PrintGuestStackTrace();
+            KernelStatic.GetCurrentThread()?.PrintGuestRegisterPrintout();
+
+            Logger.Error?.Print(LogClass.Cpu, $"Unable to execute decoded blocks at address 0x{address:X16}. (ExecutionMode: {executionMode})");
         }
 
         private void UndefinedInstructionHandler(IExecutionContext context, ulong address, int opCode)

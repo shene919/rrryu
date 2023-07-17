@@ -66,6 +66,7 @@ namespace Ryujinx.Cpu.Jit
                 InterruptHandler,
                 BreakHandler,
                 SupervisorCallHandler,
+                InvalidOperationHandler,
                 UndefinedHandler);
 
             _exceptionCallbacks = exceptionCallbacks;
@@ -96,6 +97,11 @@ namespace Ryujinx.Cpu.Jit
         private void SupervisorCallHandler(ExecutionContext context, ulong address, int imm)
         {
             _exceptionCallbacks.SupervisorCallback?.Invoke(this, address, imm);
+        }
+
+        private void InvalidOperationHandler(ExecutionContext context, ulong address, int executionMode)
+        {
+            _exceptionCallbacks.InvalidOperationCallback?.Invoke(this, address, executionMode);
         }
 
         private void UndefinedHandler(ExecutionContext context, ulong address, int opCode)
