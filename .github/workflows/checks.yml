@@ -35,6 +35,12 @@ jobs:
 
       - name: Run dotnet format
         run: |
+          echo test && false
+          if [ $? -ne 0 ]; then
+            echo here
+          else
+            echo there
+          fi
           dotnet tool install -g dotnet-format
           dotnet format whitespace --verify-no-changes --report ./whitespace-report.json -v d
           dotnet format style --severity info --verify-no-changes --report ./style-report.json -v d
