@@ -1,7 +1,7 @@
 using Ryujinx.Audio.Integration;
-using Ryujinx.Common;
 using System;
 using System.Diagnostics;
+using PerformanceCounter = Ryujinx.Common.PerformanceCounter;
 
 namespace Ryujinx.Audio.Common
 {
