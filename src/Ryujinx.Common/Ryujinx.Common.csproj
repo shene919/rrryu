@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
     <PackageReference Include="MsgPack.Cli" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" />
     <PackageReference Include="System.Management" />
   </ItemGroup>
 

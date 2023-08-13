@@ -246,6 +246,12 @@ namespace Ryujinx
             // Logging system information.
             PrintSystemInfo();
 
+            // Initialize Windows performance monitor.
+            if (OperatingSystem.IsWindows())
+            {
+                WindowsPerformanceMonitor.Initialize();
+            }
+
             // Enable OGL multithreading on the driver, when available.
             BackendThreading threadingMode = ConfigurationState.Instance.Graphics.BackendThreading;
             DriverUtilities.ToggleOGLThreading(threadingMode == BackendThreading.Off);

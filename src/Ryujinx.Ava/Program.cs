@@ -105,6 +105,12 @@ namespace Ryujinx.Ava
             // Logging system information.
             PrintSystemInfo();
 
+            // Initialize Windows performance monitor.
+            if (OperatingSystem.IsWindows())
+            {
+                WindowsPerformanceMonitor.Initialize();
+            }
+
             // Enable OGL multithreading on the driver, when available.
             DriverUtilities.ToggleOGLThreading(ConfigurationState.Instance.Graphics.BackendThreading == BackendThreading.Off);
 
