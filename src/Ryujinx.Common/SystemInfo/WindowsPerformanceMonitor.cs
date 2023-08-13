@@ -12,12 +12,12 @@ namespace Ryujinx.Common.SystemInfo
     public static class WindowsPerformanceMonitor
     {
         private const int Megabytes = 1024 * 1024;
-        private const string GpuEngineCounterCategory = "GPU Engine";
-        private const string GpuAdapterMemoryCounterCategory = "GPU Adapter Memory";
 
         private static readonly Process _currentProcess = Process.GetCurrentProcess();
         private static readonly System.Diagnostics.PerformanceCounter _cpuUsageCounter = new("Process", "% Processor Time", _currentProcess.ProcessName);
-        private static readonly List<System.Diagnostics.PerformanceCounter> _gpuCounters = new();
+
+        private static readonly PerformanceCounterCategory _gpuEngineCounterCategory = new("GPU Engine");
+        private static readonly PerformanceCounterCategory _gpuAdapterMemoryCounterCategory = new("GPU Adapter Memory");
 
         private static Timer _snapshotTimer;
 
@@ -26,36 +26,50 @@ namespace Ryujinx.Common.SystemInfo
             AppDomain.CurrentDomain.UnhandledException += OnExit;
             AppDomain.CurrentDomain.ProcessExit += OnExit;
 
-            InitGpuCounters();
-
             _snapshotTimer = new Timer(LogSnapshot, null, TimeSpan.Zero, TimeSpan.FromMinutes(10));
         }
 
-        private static void InitGpuCounters()
+        private static List<System.Diagnostics.PerformanceCounter> GetGpuEngineCounters()
         {
-            PerformanceCounterCategory[] categories =
-            {
-                new(GpuEngineCounterCategory),
-                new(GpuAdapterMemoryCounterCategory),
-            };
+            List<System.Diagnostics.PerformanceCounter> counters = new();
 
-            foreach (var category in categories)
+            foreach (var instanceName in _gpuEngineCounterCategory.GetInstanceNames())
             {
-                foreach (var instanceName in category.GetInstanceNames())
+                if (instanceName.StartsWith($"pid_{_currentProcess.Id}_"))
                 {
-                    _gpuCounters.AddRange(category.GetCounters(instanceName));
+                    counters.AddRange(_gpuEngineCounterCategory.GetCounters(instanceName));
                 }
             }
+
+            return counters;
+        }
+
+        private static List<System.Diagnostics.PerformanceCounter> GetGpuAdapterMemoryCounters()
+        {
+            List<System.Diagnostics.PerformanceCounter> counters = new();
+
+            foreach (var instanceName in _gpuAdapterMemoryCounterCategory.GetInstanceNames())
+            {
+                counters.AddRange(_gpuAdapterMemoryCounterCategory.GetCounters(instanceName));
+            }
+
+            return counters;
         }
 
         private static void AddGpuSnapshot(StringBuilder message)
         {
             message.AppendLine();
 
-            foreach (var gpuCounter in _gpuCounters)
+            foreach (var gpuCounter in GetGpuEngineCounters())
             {
                 message.AppendLine(
                     $"  {gpuCounter.CategoryName} - {gpuCounter.CounterName}({gpuCounter.InstanceName}): {gpuCounter.NextValue()}");
+            }
+
+            foreach (var gpuCounter in GetGpuAdapterMemoryCounters())
+            {
+                message.AppendLine(
+                    $"  {gpuCounter.CategoryName} - {gpuCounter.CounterName}({gpuCounter.InstanceName}): {gpuCounter.NextValue() / Megabytes} MiB");
             }
         }
 
