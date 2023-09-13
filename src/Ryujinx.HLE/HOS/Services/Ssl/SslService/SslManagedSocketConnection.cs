@@ -3,6 +3,7 @@ using Ryujinx.HLE.HOS.Services.Sockets.Bsd.Impl;
 using Ryujinx.HLE.HOS.Services.Ssl.Types;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
@@ -85,6 +86,11 @@ namespace Ryujinx.HLE.HOS.Services.Ssl.SslService
 
         public ResultCode Handshake(string hostName)
         {
+            if (string.IsNullOrEmpty(hostName))
+            {
+                hostName = Dns.GetHostEntry(Socket.RemoteEndPoint.Address).HostName;
+            }
+
             StartSslOperation();
             _stream = new SslStream(new NetworkStream(((ManagedSocket)Socket).Socket, false), false, null, null);
             _stream.AuthenticateAsClient(hostName, null, TranslateSslVersion(_sslVersion), false);
