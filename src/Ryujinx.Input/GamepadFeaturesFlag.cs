@@ -19,10 +19,19 @@ namespace Ryujinx.Input
         /// <remarks>Also named haptic</remarks>
         Rumble,
 
-        /// <summary>
-        /// Motion
+        /// <summary>        /// Motion (Unified)
         /// <remarks>Also named sixaxis</remarks>
         /// </summary>
         Motion,
+
+        /// <summary>
+        /// Motion (Left)
+        /// </summary>
+        MotionLeft,
+
+        /// <summary>
+        /// Motion (Right)
+        /// </summary>
+        MotionRight,
     }
 }
