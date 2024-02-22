@@ -119,7 +119,7 @@ namespace Ryujinx.Memory
 
             if (!result && throwOnFail)
             {
-                throw new MemoryProtectionException(permission);
+                throw new MemoryProtectionException(address, size, permission);
             }
         }
 

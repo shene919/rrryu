@@ -9,7 +9,7 @@ namespace Ryujinx.Memory
         {
         }
 
-        public MemoryProtectionException(MemoryPermission permission) : base($"Failed to set memory protection to \"{permission}\": {Marshal.GetLastPInvokeErrorMessage()}")
+        public MemoryProtectionException(IntPtr address, ulong size, MemoryPermission permission) : base($"Failed to set memory protection for {address:X} (length: {size}) to \"{permission}\": {Marshal.GetLastPInvokeErrorMessage()}")
         {
         }
 

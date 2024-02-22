@@ -50,12 +50,15 @@ namespace Ryujinx.Memory
                 }
             }
 
+            Console.Error.WriteLine($"Mmap(IntPtr.Zero, {size}, {prot}, {flags}, -1, 0)");
             IntPtr ptr = Mmap(IntPtr.Zero, size, prot, flags, -1, 0);
 
             if (ptr == MAP_FAILED)
             {
                 throw new SystemException(Marshal.GetLastPInvokeErrorMessage());
             }
+
+            Console.Error.WriteLine($"Mmap(IntPtr.Zero, {size}, {prot}, {flags}, -1, 0) --> {ptr:X}");
 
             if (!_allocations.TryAdd(ptr, size))
             {
@@ -75,33 +78,45 @@ namespace Ryujinx.Memory
                 prot |= MmapProts.PROT_EXEC;
             }
 
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, {prot})");
+
             if (mprotect(address, size, prot) != 0)
             {
                 throw new SystemException(Marshal.GetLastPInvokeErrorMessage());
             }
+
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, {prot}) --> no-fail");
         }
 
         public static void Decommit(IntPtr address, ulong size)
         {
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, MmapProts.PROT_READ | MmapProts.PROT_WRITE)");
+
             // Must be writable for madvise to work properly.
             if (mprotect(address, size, MmapProts.PROT_READ | MmapProts.PROT_WRITE) != 0)
             {
                 throw new SystemException(Marshal.GetLastPInvokeErrorMessage());
             }
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, MmapProts.PROT_READ | MmapProts.PROT_WRITE) --> no-fail");
 
+            Console.Error.WriteLine($"madvise({address:X}, {size}, MADV_REMOVE)");
             if (madvise(address, size, MADV_REMOVE) != 0)
             {
                 throw new SystemException(Marshal.GetLastPInvokeErrorMessage());
             }
+            Console.Error.WriteLine($"madvise({address:X}, {size}, MADV_REMOVE) --> no-fail");
 
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, MmapProts.PROT_NONE)");
             if (mprotect(address, size, MmapProts.PROT_NONE) != 0)
             {
                 throw new SystemException(Marshal.GetLastPInvokeErrorMessage());
             }
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, MmapProts.PROT_NONE) --> no-fail");
         }
 
         public static bool Reprotect(IntPtr address, ulong size, MemoryPermission permission)
         {
+            Console.Error.WriteLine($"mprotect({address:X}, {size}, {permission})");
             return mprotect(address, size, GetProtection(permission)) == 0;
         }
 
@@ -115,7 +130,7 @@ namespace Ryujinx.Memory
                 MemoryPermission.ReadAndExecute => MmapProts.PROT_READ | MmapProts.PROT_EXEC,
                 MemoryPermission.ReadWriteExecute => MmapProts.PROT_READ | MmapProts.PROT_WRITE | MmapProts.PROT_EXEC,
                 MemoryPermission.Execute => MmapProts.PROT_EXEC,
-                _ => throw new MemoryProtectionException(permission),
+                _ => throw new MemoryProtectionException(permission.ToString()),
             };
         }
 
@@ -123,6 +138,7 @@ namespace Ryujinx.Memory
         {
             if (_allocations.TryRemove(address, out ulong size))
             {
+                Console.Error.WriteLine($"munmap({address:X}, {size})");
                 return munmap(address, size) == 0;
             }
 
