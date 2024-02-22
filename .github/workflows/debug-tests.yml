@@ -1,0 +1,53 @@
+name: Debug tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: Configuration
+        type: choice
+        required: true
+        options:
+          - Release
+          - Debug
+      os:
+        description: Runner OS
+        type: string
+        required: true
+      maxRetries:
+        description: Max retries for unstable-commands
+        type: number
+        required: true
+        default: 3
+      retryCodes:
+        description: Retry-Codes for unstable-commands (comma-separated)
+        type: string
+        required: true
+        default: "139"
+
+env:
+  POWERSHELL_TELEMETRY_OPTOUT: 1
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+jobs:
+  build:
+    name: ${{ inputs.os }} (${{ inputs.configuration }})
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Overwrite csc problem matcher
+        run: echo "::add-matcher::.github/csc.json"
+
+      - name: Test
+        uses: TSRBerry/unstable-commands@v1
+        with:
+          commands: dotnet test -c "${{ inputs.configuration }}"
+          timeout-minutes: 10
+          max-retries: ${{ inputs.maxRetries }}
+          retry-codes: ${{ inputs.retryCodes }}
