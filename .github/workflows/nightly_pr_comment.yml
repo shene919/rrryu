@@ -1,13 +1,23 @@
 name: Comment PR artifacts links
 
 on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        required: true
+        description: 'Workflow run id for a "Perform checks" run'
+        type: number
+      pull_head_sha:
+        required: true
+        description: 'Commit SHA from the head of a PR'
+        type: string
   workflow_run:
     workflows: ['Perform checks']
     types: [completed]
 
 jobs:
   pr_comment:
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: ${{ fromJSON(vars.JOB_TIMEOUT) }}
     steps:
@@ -15,8 +25,8 @@ jobs:
         with:
           script: |
             const {owner, repo} = context.repo;
-            const run_id = ${{github.event.workflow_run.id}};
-            const pull_head_sha = '${{github.event.workflow_run.head_sha}}';
+            const run_id = ${{github.event_name == 'workflow_dispatch' && inputs.run_id || github.event.workflow_run.id}};
+            const pull_head_sha = '${{github.event_name == 'workflow_dispatch' && inputs.pull_head_sha || github.event.workflow_run.head_sha}}';
 
             const issue_number = await (async () => {
               const pulls = await github.rest.pulls.list.endpoint.merge({owner, repo});
