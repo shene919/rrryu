@@ -721,46 +721,60 @@ namespace Ryujinx.Graphics.Gpu.Image
             {
                 case Format.Astc4x4Srgb:
                 case Format.Astc4x4Unorm:
-                    return DecodeAstc(data, 4, 4, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 4, 4, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc5x4Srgb:
                 case Format.Astc5x4Unorm:
-                    return DecodeAstc(data, 5, 4, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 5, 4, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc5x5Srgb:
                 case Format.Astc5x5Unorm:
-                    return DecodeAstc(data, 5, 5, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 5, 5, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc6x5Srgb:
                 case Format.Astc6x5Unorm:
-                    return DecodeAstc(data, 6, 5, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 6, 5, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc6x6Srgb:
                 case Format.Astc6x6Unorm:
-                    return DecodeAstc(data, 6, 6, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 6, 6, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc8x5Srgb:
                 case Format.Astc8x5Unorm:
-                    return DecodeAstc(data, 8, 5, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 8, 5, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc8x6Srgb:
                 case Format.Astc8x6Unorm:
-                    return DecodeAstc(data, 8, 6, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 8, 6, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc8x8Srgb:
                 case Format.Astc8x8Unorm:
-                    return DecodeAstc(data, 8, 8, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 8, 8, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc10x5Srgb:
                 case Format.Astc10x5Unorm:
-                    return DecodeAstc(data, 10, 5, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 10, 5, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc10x6Srgb:
                 case Format.Astc10x6Unorm:
-                    return DecodeAstc(data, 10, 6, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 10, 6, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc10x8Srgb:
                 case Format.Astc10x8Unorm:
-                    return DecodeAstc(data, 10, 8, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 10, 8, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc10x10Srgb:
                 case Format.Astc10x10Unorm:
-                    return DecodeAstc(data, 10, 10, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 10, 10, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc12x10Srgb:
                 case Format.Astc12x10Unorm:
-                    return DecodeAstc(data, 12, 10, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 12, 10, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Astc12x12Srgb:
                 case Format.Astc12x12Unorm:
-                    return DecodeAstc(data, 12, 12, width, height, depth, levels, layers).Memory.ToArray();;
+                    return DecodeAstc(data, 12, 12, width, height, depth, levels, layers).Memory.ToArray();
+                    ;
                 case Format.Bc1RgbaSrgb:
                 case Format.Bc1RgbaUnorm:
                     return BCnDecoder.DecodeBC1(data, width, height, depth, levels, layers).Memory.ToArray();
@@ -810,7 +824,7 @@ namespace Ryujinx.Graphics.Gpu.Image
             return null;
         }
 
-        private static MemoryOwner<byte>  DecodeAstc(byte[] data, int blockWidth, int blockHeight, int width, int height, int depth,
+        private static MemoryOwner<byte> DecodeAstc(byte[] data, int blockWidth, int blockHeight, int width, int height, int depth,
             int levels, int layers)
         {
             if (!AstcDecoder.TryDecodeToRgba8P(
