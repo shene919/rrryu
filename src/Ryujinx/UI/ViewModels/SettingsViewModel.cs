@@ -173,20 +173,6 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool EnableTextureDump { get; set; }
         public bool EnableTextureRealTimeEditing { get; set; }
 
-        public string CustomThemePath
-        {
-            get
-            {
-                return _customThemePath;
-            }
-            set
-            {
-                _customThemePath = value;
-
-                OnPropertyChanged();
-            }
-        }
-
         public int Language { get; set; }
         public int Region { get; set; }
         public int FsGlobalAccessLogMode { get; set; }
