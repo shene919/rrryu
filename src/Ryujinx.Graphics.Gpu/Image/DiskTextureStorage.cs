@@ -427,7 +427,7 @@ namespace Ryujinx.Graphics.Gpu.Image
             }
             else
             {
-                cachedData = MemoryOwner<byte>.RentCopy(buffer.Span.Slice(0, writtenSize));
+                cachedData = MemoryOwner<byte>.RentCopy(buffer.Span[..writtenSize]);
             }
 
             return new TextureInfoOverride(
