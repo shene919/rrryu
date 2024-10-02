@@ -1,3 +1,5 @@
+using Ryujinx.Common.Memory;
+using Ryujinx.Graphics.Gpu.Image;
 using Ryujinx.Memory;
 using Ryujinx.Memory.Range;
 using System;
@@ -40,6 +42,11 @@ namespace Ryujinx.Graphics.Gpu.Memory
         internal PhysicalMemory Physical { get; }
 
         /// <summary>
+        /// Virtual range cache.
+        /// </summary>
+        internal VirtualRangeCache VirtualRangeCache { get; }
+
+        /// <summary>
         /// Cache of GPU counters.
         /// </summary>
         internal CounterCache CounterCache { get; }
@@ -51,11 +58,14 @@ namespace Ryujinx.Graphics.Gpu.Memory
         internal MemoryManager(PhysicalMemory physicalMemory)
         {
             Physical = physicalMemory;
+            VirtualRangeCache = new VirtualRangeCache(this);
             CounterCache = new CounterCache();
             _pageTable = new ulong[PtLvl0Size][];
             MemoryUnmapped += Physical.TextureCache.MemoryUnmappedHandler;
             MemoryUnmapped += Physical.BufferCache.MemoryUnmappedHandler;
+            MemoryUnmapped += VirtualRangeCache.MemoryUnmappedHandler;
             MemoryUnmapped += CounterCache.MemoryUnmappedHandler;
+            Physical.TextureCache.Initialize();
         }
 
         /// <summary>
@@ -233,11 +243,11 @@ namespace Ryujinx.Graphics.Gpu.Memory
             }
             else
             {
-                Memory<byte> memory = new byte[size];
+                MemoryOwner<byte> memoryOwner = MemoryOwner<byte>.Rent(size);
 
-                GetSpan(va, size).CopyTo(memory.Span);
+                ReadImpl(va, memoryOwner.Span, tracked);
 
-                return new WritableRegion(this, va, memory, tracked);
+                return new WritableRegion(this, va, memoryOwner, tracked);
             }
         }
 
@@ -318,49 +328,6 @@ namespace Ryujinx.Graphics.Gpu.Memory
                     size = Math.Min(data.Length - offset, (int)PageSize);
 
                     writeCallback(pa, data.Slice(offset, size));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Writes data to GPU mapped memory, stopping at the first unmapped page at the memory region, if any.
-        /// </summary>
-        /// <param name="va">GPU virtual address to write the data into</param>
-        /// <param name="data">The data to be written</param>
-        public void WriteMapped(ulong va, ReadOnlySpan<byte> data)
-        {
-            if (IsContiguous(va, data.Length))
-            {
-                Physical.Write(Translate(va), data);
-            }
-            else
-            {
-                int offset = 0, size;
-
-                if ((va & PageMask) != 0)
-                {
-                    ulong pa = Translate(va);
-
-                    size = Math.Min(data.Length, (int)PageSize - (int)(va & PageMask));
-
-                    if (pa != PteUnmapped && Physical.IsMapped(pa))
-                    {
-                        Physical.Write(pa, data[..size]);
-                    }
-
-                    offset += size;
-                }
-
-                for (; offset < data.Length; offset += size)
-                {
-                    ulong pa = Translate(va + (ulong)offset);
-
-                    size = Math.Min(data.Length - offset, (int)PageSize);
-
-                    if (pa != PteUnmapped && Physical.IsMapped(pa))
-                    {
-                        Physical.Write(pa, data.Slice(offset, size));
-                    }
                 }
             }
         }
@@ -506,6 +473,11 @@ namespace Ryujinx.Graphics.Gpu.Memory
 
                 va += PageSize;
                 regionSize += Math.Min(endVa - va, PageSize);
+            }
+
+            if (regions.Count == 0)
+            {
+                return new MultiRange(regionStart, regionSize);
             }
 
             regions.Add(new MemoryRange(regionStart, regionSize));

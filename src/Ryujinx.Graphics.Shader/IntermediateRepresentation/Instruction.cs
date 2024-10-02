@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Ryujinx.Graphics.Shader.IntermediateRepresentation
 {
     [Flags]
-    [SuppressMessage("Design", "CA1069: Enums values should not be duplicated")]
     enum Instruction
     {
         Absolute = 1,
@@ -118,7 +116,8 @@ namespace Ryujinx.Graphics.Shader.IntermediateRepresentation
         Subtract,
         SwizzleAdd,
         TextureSample,
-        TextureSize,
+        TextureQuerySamples,
+        TextureQuerySize,
         Truncate,
         UnpackDouble2x32,
         UnpackHalf2x16,
@@ -157,10 +156,42 @@ namespace Ryujinx.Graphics.Shader.IntermediateRepresentation
             return false;
         }
 
+        public static bool IsComparison(this Instruction inst)
+        {
+            switch (inst & Instruction.Mask)
+            {
+                case Instruction.CompareEqual:
+                case Instruction.CompareGreater:
+                case Instruction.CompareGreaterOrEqual:
+                case Instruction.CompareGreaterOrEqualU32:
+                case Instruction.CompareGreaterU32:
+                case Instruction.CompareLess:
+                case Instruction.CompareLessOrEqual:
+                case Instruction.CompareLessOrEqualU32:
+                case Instruction.CompareLessU32:
+                case Instruction.CompareNotEqual:
+                    return true;
+            }
+
+            return false;
+        }
+
         public static bool IsTextureQuery(this Instruction inst)
         {
             inst &= Instruction.Mask;
-            return inst == Instruction.Lod || inst == Instruction.TextureSize;
+            return inst == Instruction.Lod || inst == Instruction.TextureQuerySamples || inst == Instruction.TextureQuerySize;
+        }
+
+        public static bool IsImage(this Instruction inst)
+        {
+            inst &= Instruction.Mask;
+            return inst == Instruction.ImageAtomic || inst == Instruction.ImageLoad || inst == Instruction.ImageStore;
+        }
+
+        public static bool IsImageStore(this Instruction inst)
+        {
+            inst &= Instruction.Mask;
+            return inst == Instruction.ImageAtomic || inst == Instruction.ImageStore;
         }
     }
 }

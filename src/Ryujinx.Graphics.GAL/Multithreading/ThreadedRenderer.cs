@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+using Ryujinx.Common;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Graphics.GAL.Multithreading.Commands;
 using Ryujinx.Graphics.GAL.Multithreading.Commands.Buffer;
@@ -263,10 +263,10 @@ namespace Ryujinx.Graphics.GAL.Multithreading
             }
         }
 
-        public BufferHandle CreateBuffer(int size, BufferHandle storageHint)
+        public BufferHandle CreateBuffer(int size, BufferAccess access)
         {
             BufferHandle handle = Buffers.CreateBufferHandle();
-            New<CreateBufferCommand>().Set(handle, size, storageHint);
+            New<CreateBufferAccessCommand>().Set(handle, size, access);
             QueueCommand();
 
             return handle;
@@ -281,13 +281,22 @@ namespace Ryujinx.Graphics.GAL.Multithreading
             return handle;
         }
 
-        public BufferHandle CreateBuffer(int size, BufferAccess access)
+        public BufferHandle CreateBufferSparse(ReadOnlySpan<BufferRange> storageBuffers)
         {
             BufferHandle handle = Buffers.CreateBufferHandle();
-            New<CreateBufferAccessCommand>().Set(handle, size, access);
+            New<CreateBufferSparseCommand>().Set(handle, CopySpan(storageBuffers));
             QueueCommand();
 
             return handle;
+        }
+
+        public IImageArray CreateImageArray(int size, bool isBuffer)
+        {
+            var imageArray = new ThreadedImageArray(this);
+            New<CreateImageArrayCommand>().Set(Ref(imageArray), size, isBuffer);
+            QueueCommand();
+
+            return imageArray;
         }
 
         public IProgram CreateProgram(ShaderSource[] shaders, ShaderInfo info)
@@ -339,6 +348,14 @@ namespace Ryujinx.Graphics.GAL.Multithreading
 
                 return texture;
             }
+        }
+        public ITextureArray CreateTextureArray(int size, bool isBuffer)
+        {
+            var textureArray = new ThreadedTextureArray(this);
+            New<CreateTextureArrayCommand>().Set(Ref(textureArray), size, isBuffer);
+            QueueCommand();
+
+            return textureArray;
         }
 
         public void DeleteBuffer(BufferHandle buffer)

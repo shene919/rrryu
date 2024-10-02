@@ -23,7 +23,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 {
                     node = InsertCoordNormalization(context.Hfm, node, context.ResourceManager, context.GpuAccessor, context.Stage);
                     node = InsertCoordGatherBias(node, context.ResourceManager, context.GpuAccessor);
-                    node = InsertConstOffsets(node, context.ResourceManager, context.GpuAccessor);
+                    node = InsertConstOffsets(node, context.ResourceManager, context.GpuAccessor, context.Stage);
 
                     if (texOp.Type == SamplerType.TextureBuffer && !context.GpuAccessor.QueryHostSupportsSnormBufferTextureFormat())
                     {
@@ -45,13 +45,9 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
 
             bool isBindless = (texOp.Flags & TextureFlags.Bindless) != 0;
             bool intCoords = (texOp.Flags & TextureFlags.IntCoords) != 0;
-            bool isIndexed = (texOp.Type & SamplerType.Indexed) != 0;
-
-            int coordsCount = texOp.Type.GetDimensions();
-
-            int coordsIndex = isBindless || isIndexed ? 1 : 0;
 
             bool isImage = IsImageInstructionWithScale(texOp.Inst);
+            bool isIndexed = resourceManager.IsArrayOfTexturesOrImages(texOp.Binding, isImage);
 
             if ((texOp.Inst == Instruction.TextureSample || isImage) &&
                 (intCoords || isImage) &&
@@ -62,8 +58,11 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             {
                 int functionId = hfm.GetOrCreateFunctionId(HelperFunctionName.TexelFetchScale);
                 int samplerIndex = isImage
-                    ? resourceManager.GetTextureDescriptors().Length + resourceManager.FindImageDescriptorIndex(texOp.Binding)
+                    ? resourceManager.GetTextureDescriptors(includeArrays: false).Length + resourceManager.FindImageDescriptorIndex(texOp.Binding)
                     : resourceManager.FindTextureDescriptorIndex(texOp.Binding);
+
+                int coordsCount = texOp.Type.GetDimensions();
+                int coordsIndex = isBindless ? 1 : 0;
 
                 for (int index = 0; index < coordsCount; index++)
                 {
@@ -97,9 +96,9 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             TextureOperation texOp = (TextureOperation)node.Value;
 
             bool isBindless = (texOp.Flags & TextureFlags.Bindless) != 0;
-            bool isIndexed = (texOp.Type & SamplerType.Indexed) != 0;
+            bool isIndexed = resourceManager.IsArrayOfTexturesOrImages(texOp.Binding, isImage: false);
 
-            if (texOp.Inst == Instruction.TextureSize &&
+            if (texOp.Inst == Instruction.TextureQuerySize &&
                 texOp.Index < 2 &&
                 !isBindless &&
                 !isIndexed &&
@@ -152,8 +151,9 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             TextureOperation texOp = (TextureOperation)node.Value;
 
             bool isBindless = (texOp.Flags & TextureFlags.Bindless) != 0;
+            bool isIndexed = resourceManager.IsArrayOfTexturesOrImages(texOp.Binding, isImage: false);
 
-            if (isBindless || !resourceManager.TryGetCbufSlotAndHandleForTexture(texOp.Binding, out int cbufSlot, out int handle))
+            if (isBindless || isIndexed || !resourceManager.TryGetCbufSlotAndHandleForTexture(texOp.Binding, out int cbufSlot, out int handle))
             {
                 return node;
             }
@@ -167,10 +167,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 return node;
             }
 
-            bool isIndexed = (texOp.Type & SamplerType.Indexed) != 0;
-
             int coordsCount = texOp.Type.GetDimensions();
-            int coordsIndex = isBindless || isIndexed ? 1 : 0;
 
             int normCoordsCount = (texOp.Type & SamplerType.Mask) == SamplerType.TextureCube ? 2 : coordsCount;
 
@@ -178,22 +175,14 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             {
                 Operand coordSize = Local();
 
-                Operand[] texSizeSources;
-
-                if (isBindless || isIndexed)
-                {
-                    texSizeSources = new Operand[] { texOp.GetSource(0), Const(0) };
-                }
-                else
-                {
-                    texSizeSources = new Operand[] { Const(0) };
-                }
+                Operand[] texSizeSources = new Operand[] { Const(0) };
 
                 LinkedListNode<INode> textureSizeNode = node.List.AddBefore(node, new TextureOperation(
-                    Instruction.TextureSize,
+                    Instruction.TextureQuerySize,
                     texOp.Type,
                     texOp.Format,
                     texOp.Flags,
+                    texOp.Set,
                     texOp.Binding,
                     index,
                     new[] { coordSize },
@@ -201,13 +190,13 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
 
                 resourceManager.SetUsageFlagsForTextureQuery(texOp.Binding, texOp.Type);
 
-                Operand source = texOp.GetSource(coordsIndex + index);
+                Operand source = texOp.GetSource(index);
 
                 Operand coordNormalized = Local();
 
                 node.List.AddBefore(node, new Operation(Instruction.FP32 | Instruction.Divide, coordNormalized, source, GenerateI2f(node, coordSize)));
 
-                texOp.SetSource(coordsIndex + index, coordNormalized);
+                texOp.SetSource(index, coordNormalized);
 
                 InsertTextureSizeUnscale(hfm, textureSizeNode, resourceManager, stage);
             }
@@ -234,7 +223,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 return node;
             }
 
-            bool isIndexed = (texOp.Type & SamplerType.Indexed) != 0;
+            bool isIndexed = resourceManager.IsArrayOfTexturesOrImages(texOp.Binding, isImage: false);
 
             int coordsCount = texOp.Type.GetDimensions();
             int coordsIndex = isBindless || isIndexed ? 1 : 0;
@@ -259,10 +248,11 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 }
 
                 node.List.AddBefore(node, new TextureOperation(
-                    Instruction.TextureSize,
+                    Instruction.TextureQuerySize,
                     texOp.Type,
                     texOp.Format,
                     texOp.Flags,
+                    texOp.Set,
                     texOp.Binding,
                     index,
                     new[] { coordSize },
@@ -287,7 +277,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             return node;
         }
 
-        private static LinkedListNode<INode> InsertConstOffsets(LinkedListNode<INode> node, ResourceManager resourceManager, IGpuAccessor gpuAccessor)
+        private static LinkedListNode<INode> InsertConstOffsets(LinkedListNode<INode> node, ResourceManager resourceManager, IGpuAccessor gpuAccessor, ShaderStage stage)
         {
             // Non-constant texture offsets are not allowed (according to the spec),
             // however some GPUs does support that.
@@ -303,7 +293,9 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             bool hasOffset = (texOp.Flags & TextureFlags.Offset) != 0;
             bool hasOffsets = (texOp.Flags & TextureFlags.Offsets) != 0;
 
-            bool hasInvalidOffset = (hasOffset || hasOffsets) && !gpuAccessor.QueryHostSupportsNonConstantTextureOffset();
+            bool needsOffsetsEmulation = hasOffsets && !gpuAccessor.QueryHostSupportsTextureGatherOffsets();
+
+            bool hasInvalidOffset = needsOffsetsEmulation || ((hasOffset || hasOffsets) && !gpuAccessor.QueryHostSupportsNonConstantTextureOffset());
 
             bool isBindless = (texOp.Flags & TextureFlags.Bindless) != 0;
 
@@ -319,7 +311,6 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             bool hasLodLevel = (texOp.Flags & TextureFlags.LodLevel) != 0;
 
             bool isArray = (texOp.Type & SamplerType.Array) != 0;
-            bool isIndexed = (texOp.Type & SamplerType.Indexed) != 0;
             bool isMultisample = (texOp.Type & SamplerType.Multisample) != 0;
             bool isShadow = (texOp.Type & SamplerType.Shadow) != 0;
 
@@ -339,6 +330,8 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             {
                 offsetsCount = 0;
             }
+
+            bool isIndexed = resourceManager.IsArrayOfTexturesOrImages(texOp.Binding, isImage: false);
 
             Operand[] offsets = new Operand[offsetsCount];
             Operand[] sources = new Operand[texOp.SourcesCount - offsetsCount];
@@ -402,11 +395,14 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 offsets[index] = offset;
             }
 
-            hasInvalidOffset &= !areAllOffsetsConstant;
-
-            if (!hasInvalidOffset)
+            if (!needsOffsetsEmulation)
             {
-                return node;
+                hasInvalidOffset &= !areAllOffsetsConstant;
+
+                if (!hasInvalidOffset)
+                {
+                    return node;
+                }
             }
 
             if (hasLodBias)
@@ -434,13 +430,13 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
 
             LinkedListNode<INode> oldNode = node;
 
-            if (isGather && !isShadow)
+            if (isGather && !isShadow && hasOffsets)
             {
                 Operand[] newSources = new Operand[sources.Length];
 
                 sources.CopyTo(newSources, 0);
 
-                Operand[] texSizes = InsertTextureLod(node, texOp, lodSources, bindlessHandle, coordsCount);
+                Operand[] texSizes = InsertTextureBaseSize(node, texOp, bindlessHandle, coordsCount);
 
                 int destIndex = 0;
 
@@ -455,7 +451,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                     {
                         Operand offset = Local();
 
-                        Operand intOffset = offsets[index + (hasOffsets ? compIndex * coordsCount : 0)];
+                        Operand intOffset = offsets[index + compIndex * coordsCount];
 
                         node.List.AddBefore(node, new Operation(
                             Instruction.FP32 | Instruction.Divide,
@@ -477,8 +473,9 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                         texOp.Type,
                         texOp.Format,
                         texOp.Flags & ~(TextureFlags.Offset | TextureFlags.Offsets),
+                        texOp.Set,
                         texOp.Binding,
-                        1,
+                        1 << 3, // W component: i=0, j=0
                         new[] { dests[destIndex++] },
                         newSources);
 
@@ -502,7 +499,9 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 }
                 else
                 {
-                    Operand[] texSizes = InsertTextureLod(node, texOp, lodSources, bindlessHandle, coordsCount);
+                    Operand[] texSizes = isGather
+                        ? InsertTextureBaseSize(node, texOp, bindlessHandle, coordsCount)
+                        : InsertTextureLod(node, texOp, lodSources, bindlessHandle, coordsCount, stage);
 
                     for (int index = 0; index < coordsCount; index++)
                     {
@@ -531,6 +530,7 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                     texOp.Type,
                     texOp.Format,
                     texOp.Flags & ~(TextureFlags.Offset | TextureFlags.Offsets),
+                    texOp.Set,
                     texOp.Binding,
                     componentIndex,
                     dests,
@@ -549,26 +549,75 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
             return node;
         }
 
-        private static Operand[] InsertTextureLod(
+        private static Operand[] InsertTextureBaseSize(
             LinkedListNode<INode> node,
             TextureOperation texOp,
-            Operand[] lodSources,
             Operand bindlessHandle,
             int coordsCount)
         {
             Operand[] texSizes = new Operand[coordsCount];
 
-            Operand lod = Local();
+            for (int index = 0; index < coordsCount; index++)
+            {
+                texSizes[index] = Local();
 
-            node.List.AddBefore(node, new TextureOperation(
-                Instruction.Lod,
-                texOp.Type,
-                texOp.Format,
-                texOp.Flags,
-                texOp.Binding,
-                0,
-                new[] { lod },
-                lodSources));
+                Operand[] texSizeSources;
+
+                if (bindlessHandle != null)
+                {
+                    texSizeSources = new Operand[] { bindlessHandle, Const(0) };
+                }
+                else
+                {
+                    texSizeSources = new Operand[] { Const(0) };
+                }
+
+                node.List.AddBefore(node, new TextureOperation(
+                    Instruction.TextureQuerySize,
+                    texOp.Type,
+                    texOp.Format,
+                    texOp.Flags,
+                    texOp.Set,
+                    texOp.Binding,
+                    index,
+                    new[] { texSizes[index] },
+                    texSizeSources));
+            }
+
+            return texSizes;
+        }
+
+        private static Operand[] InsertTextureLod(
+            LinkedListNode<INode> node,
+            TextureOperation texOp,
+            Operand[] lodSources,
+            Operand bindlessHandle,
+            int coordsCount,
+            ShaderStage stage)
+        {
+            Operand[] texSizes = new Operand[coordsCount];
+
+            Operand lod;
+
+            if (stage == ShaderStage.Fragment)
+            {
+                lod = Local();
+
+                node.List.AddBefore(node, new TextureOperation(
+                    Instruction.Lod,
+                    texOp.Type,
+                    texOp.Format,
+                    texOp.Flags,
+                    texOp.Set,
+                    texOp.Binding,
+                    0,
+                    new[] { lod },
+                    lodSources));
+            }
+            else
+            {
+                lod = Const(0);
+            }
 
             for (int index = 0; index < coordsCount; index++)
             {
@@ -586,10 +635,11 @@ namespace Ryujinx.Graphics.Shader.Translation.Transforms
                 }
 
                 node.List.AddBefore(node, new TextureOperation(
-                    Instruction.TextureSize,
+                    Instruction.TextureQuerySize,
                     texOp.Type,
                     texOp.Format,
                     texOp.Flags,
+                    texOp.Set,
                     texOp.Binding,
                     index,
                     new[] { texSizes[index] },

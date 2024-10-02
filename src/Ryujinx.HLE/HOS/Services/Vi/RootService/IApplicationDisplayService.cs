@@ -7,7 +7,7 @@ using Ryujinx.HLE.HOS.Services.SurfaceFlinger;
 using Ryujinx.HLE.HOS.Services.Vi.RootService.ApplicationDisplayService;
 using Ryujinx.HLE.HOS.Services.Vi.RootService.ApplicationDisplayService.Types;
 using Ryujinx.HLE.HOS.Services.Vi.Types;
-using Ryujinx.HLE.Ui;
+using Ryujinx.HLE.UI;
 using Ryujinx.Horizon.Common;
 using System;
 using System.Collections.Generic;
@@ -142,7 +142,7 @@ namespace Ryujinx.HLE.HOS.Services.Vi.RootService
         // OpenDisplay(nn::vi::DisplayName) -> u64 display_id
         public ResultCode OpenDisplay(ServiceCtx context)
         {
-            string name = "";
+            StringBuilder nameBuilder = new();
 
             for (int index = 0; index < 8 && context.RequestData.BaseStream.Position < context.RequestData.BaseStream.Length; index++)
             {
@@ -150,11 +150,11 @@ namespace Ryujinx.HLE.HOS.Services.Vi.RootService
 
                 if (chr >= 0x20 && chr < 0x7f)
                 {
-                    name += (char)chr;
+                    nameBuilder.Append((char)chr);
                 }
             }
 
-            return OpenDisplayImpl(context, name);
+            return OpenDisplayImpl(context, nameBuilder.ToString());
         }
 
         [CommandCmif(1011)]
@@ -250,7 +250,7 @@ namespace Ryujinx.HLE.HOS.Services.Vi.RootService
 
             context.Device.System.SurfaceFlinger.SetRenderLayer(layerId);
 
-            Parcel parcel = new(0x28, 0x4);
+            using Parcel parcel = new(0x28, 0x4);
 
             parcel.WriteObject(producer, "dispdrv\0");
 
@@ -288,7 +288,7 @@ namespace Ryujinx.HLE.HOS.Services.Vi.RootService
 
             context.Device.System.SurfaceFlinger.SetRenderLayer(layerId);
 
-            Parcel parcel = new(0x28, 0x4);
+            using Parcel parcel = new(0x28, 0x4);
 
             parcel.WriteObject(producer, "dispdrv\0");
 

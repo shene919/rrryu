@@ -1,4 +1,4 @@
-﻿using Ryujinx.Graphics.Device;
+using Ryujinx.Graphics.Device;
 using Ryujinx.Graphics.Gpu.Engine.MME;
 using Ryujinx.Graphics.Gpu.Synchronization;
 using System;
@@ -157,6 +157,9 @@ namespace Ryujinx.Graphics.Gpu.Engine.GPFifo
             }
             else if (operation == SyncpointbOperation.Incr)
             {
+                // "Unbind" render targets since a syncpoint increment might indicate future CPU access for the textures.
+                _parent.TextureManager.RefreshModifiedTextures();
+
                 _context.CreateHostSyncIfNeeded(HostSyncFlags.StrictSyncpoint);
                 _context.Synchronization.IncrementSyncpoint(syncpointId);
             }

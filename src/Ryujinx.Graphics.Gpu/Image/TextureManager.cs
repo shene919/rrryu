@@ -1,4 +1,4 @@
-﻿using Ryujinx.Graphics.GAL;
+using Ryujinx.Graphics.GAL;
 using Ryujinx.Graphics.Gpu.Engine.Types;
 using Ryujinx.Graphics.Gpu.Shader;
 using System;
@@ -15,13 +15,16 @@ namespace Ryujinx.Graphics.Gpu.Image
 
         private readonly TextureBindingsManager _cpBindingsManager;
         private readonly TextureBindingsManager _gpBindingsManager;
+        private readonly TextureBindingsArrayCache _bindingsArrayCache;
         private readonly TexturePoolCache _texturePoolCache;
         private readonly SamplerPoolCache _samplerPoolCache;
 
         private readonly Texture[] _rtColors;
         private readonly ITexture[] _rtHostColors;
+        private readonly bool[] _rtColorsBound;
         private Texture _rtDepthStencil;
         private ITexture _rtHostDs;
+        private bool _rtDsBound;
 
         public int ClipRegionWidth { get; private set; }
         public int ClipRegionHeight { get; private set; }
@@ -44,13 +47,15 @@ namespace Ryujinx.Graphics.Gpu.Image
             TexturePoolCache texturePoolCache = new(context);
             SamplerPoolCache samplerPoolCache = new(context);
 
-            _cpBindingsManager = new TextureBindingsManager(context, channel, texturePoolCache, samplerPoolCache, isCompute: true);
-            _gpBindingsManager = new TextureBindingsManager(context, channel, texturePoolCache, samplerPoolCache, isCompute: false);
+            _bindingsArrayCache = new TextureBindingsArrayCache(context, channel);
+            _cpBindingsManager = new TextureBindingsManager(context, channel, _bindingsArrayCache, texturePoolCache, samplerPoolCache, isCompute: true);
+            _gpBindingsManager = new TextureBindingsManager(context, channel, _bindingsArrayCache, texturePoolCache, samplerPoolCache, isCompute: false);
             _texturePoolCache = texturePoolCache;
             _samplerPoolCache = samplerPoolCache;
 
             _rtColors = new Texture[Constants.TotalRenderTargets];
             _rtHostColors = new ITexture[Constants.TotalRenderTargets];
+            _rtColorsBound = new bool[Constants.TotalRenderTargets];
         }
 
         /// <summary>
@@ -154,7 +159,14 @@ namespace Ryujinx.Graphics.Gpu.Image
 
             if (_rtColors[index] != color)
             {
-                _rtColors[index]?.SignalModifying(false);
+                if (_rtColorsBound[index])
+                {
+                    _rtColors[index]?.SignalModifying(false);
+                }
+                else
+                {
+                    _rtColorsBound[index] = true;
+                }
 
                 if (color != null)
                 {
@@ -180,7 +192,14 @@ namespace Ryujinx.Graphics.Gpu.Image
 
             if (_rtDepthStencil != depthStencil)
             {
-                _rtDepthStencil?.SignalModifying(false);
+                if (_rtDsBound)
+                {
+                    _rtDepthStencil?.SignalModifying(false);
+                }
+                else
+                {
+                    _rtDsBound = true;
+                }
 
                 if (depthStencil != null)
                 {
@@ -343,15 +362,16 @@ namespace Ryujinx.Graphics.Gpu.Image
         /// Commits bindings on the graphics pipeline.
         /// </summary>
         /// <param name="specState">Specialization state for the bound shader</param>
+        /// <param name="scaleMismatch">True if there is a scale mismatch in the render targets, indicating they must be re-evaluated</param>
         /// <returns>True if all bound textures match the current shader specialization state, false otherwise</returns>
-        public bool CommitGraphicsBindings(ShaderSpecializationState specState)
+        public bool CommitGraphicsBindings(ShaderSpecializationState specState, out bool scaleMismatch)
         {
             _texturePoolCache.Tick();
             _samplerPoolCache.Tick();
 
             bool result = _gpBindingsManager.CommitBindings(specState);
 
-            UpdateRenderTargets();
+            scaleMismatch = UpdateRenderTargets();
 
             return result;
         }
@@ -366,7 +386,7 @@ namespace Ryujinx.Graphics.Gpu.Image
         {
             ulong poolAddress = _channel.MemoryManager.Translate(poolGpuVa);
 
-            TexturePool texturePool = _texturePoolCache.FindOrCreate(_channel, poolAddress, maximumId);
+            TexturePool texturePool = _texturePoolCache.FindOrCreate(_channel, poolAddress, maximumId, _bindingsArrayCache);
 
             return texturePool;
         }
@@ -409,26 +429,63 @@ namespace Ryujinx.Graphics.Gpu.Image
         /// <summary>
         /// Update host framebuffer attachments based on currently bound render target buffers.
         /// </summary>
-        public void UpdateRenderTargets()
+        /// <returns>True if there is a scale mismatch in the render targets, indicating they must be re-evaluated</returns>
+        public bool UpdateRenderTargets()
         {
             bool anyChanged = false;
+            float expectedScale = RenderTargetScale;
+            bool scaleMismatch = false;
 
-            if (_rtHostDs != _rtDepthStencil?.HostTexture)
+            Texture dsTexture = _rtDepthStencil;
+            ITexture hostDsTexture = null;
+
+            if (dsTexture != null)
             {
-                _rtHostDs = _rtDepthStencil?.HostTexture;
+                hostDsTexture = dsTexture.HostTexture;
 
+                if (!_rtDsBound)
+                {
+                    dsTexture.SignalModifying(true);
+                    _rtDsBound = true;
+                }
+            }
+
+            if (_rtHostDs != hostDsTexture)
+            {
+                _rtHostDs = hostDsTexture;
                 anyChanged = true;
+
+                if (dsTexture != null && dsTexture.ScaleFactor != expectedScale)
+                {
+                    scaleMismatch = true;
+                }
             }
 
             for (int index = 0; index < _rtColors.Length; index++)
             {
-                ITexture hostTexture = _rtColors[index]?.HostTexture;
+                Texture texture = _rtColors[index];
+                ITexture hostTexture = null;
+
+                if (texture != null)
+                {
+                    hostTexture = texture.HostTexture;
+
+                    if (!_rtColorsBound[index])
+                    {
+                        texture.SignalModifying(true);
+                        _rtColorsBound[index] = true;
+                    }
+                }
 
                 if (_rtHostColors[index] != hostTexture)
                 {
                     _rtHostColors[index] = hostTexture;
-
                     anyChanged = true;
+
+                    if (texture != null && texture.ScaleFactor != expectedScale)
+                    {
+                        scaleMismatch = true;
+                    }
                 }
             }
 
@@ -436,6 +493,8 @@ namespace Ryujinx.Graphics.Gpu.Image
             {
                 _context.Renderer.Pipeline.SetRenderTargets(_rtHostColors, _rtHostDs);
             }
+
+            return scaleMismatch;
         }
 
         /// <summary>
@@ -450,6 +509,31 @@ namespace Ryujinx.Graphics.Gpu.Image
             _rtHostDs = _rtDepthStencil?.HostTexture;
 
             _context.Renderer.Pipeline.SetRenderTargets(_rtHostColors, _rtHostDs);
+        }
+
+        /// <summary>
+        /// Marks all currently bound render target textures as modified, and also makes them be set as modified again on next use.
+        /// </summary>
+        public void RefreshModifiedTextures()
+        {
+            Texture dsTexture = _rtDepthStencil;
+
+            if (dsTexture != null && _rtDsBound)
+            {
+                dsTexture.SignalModifying(false);
+                _rtDsBound = false;
+            }
+
+            for (int index = 0; index < _rtColors.Length; index++)
+            {
+                Texture texture = _rtColors[index];
+
+                if (texture != null && _rtColorsBound[index])
+                {
+                    texture.SignalModifying(false);
+                    _rtColorsBound[index] = false;
+                }
+            }
         }
 
         /// <summary>
@@ -488,11 +572,19 @@ namespace Ryujinx.Graphics.Gpu.Image
 
             for (int i = 0; i < _rtColors.Length; i++)
             {
-                _rtColors[i]?.DecrementReferenceCount();
+                if (_rtColorsBound[i])
+                {
+                    _rtColors[i]?.DecrementReferenceCount();
+                }
+
                 _rtColors[i] = null;
             }
 
-            _rtDepthStencil?.DecrementReferenceCount();
+            if (_rtDsBound)
+            {
+                _rtDepthStencil?.DecrementReferenceCount();
+            }
+
             _rtDepthStencil = null;
         }
     }

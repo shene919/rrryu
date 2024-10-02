@@ -1,4 +1,4 @@
-﻿using Ryujinx.Audio.Renderer.Server.Effect;
+using Ryujinx.Audio.Renderer.Server.Effect;
 using Ryujinx.Common.Memory;
 using System.Runtime.InteropServices;
 
@@ -90,9 +90,16 @@ namespace Ryujinx.Audio.Renderer.Parameter.Effect
         public bool MakeupGainEnabled;
 
         /// <summary>
-        /// Reserved/padding.
+        /// Indicate if the compressor effect should output statistics.
         /// </summary>
-        private Array2<byte> _reserved;
+        [MarshalAs(UnmanagedType.I1)]
+        public bool StatisticsEnabled;
+
+        /// <summary>
+        /// Indicate to the DSP that the user did a statistics reset.
+        /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
+        public bool StatisticsReset;
 
         /// <summary>
         /// Check if the <see cref="ChannelCount"/> is valid.

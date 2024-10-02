@@ -1,4 +1,4 @@
-﻿using Ryujinx.Graphics.GAL;
+using Ryujinx.Graphics.GAL;
 using Silk.NET.Vulkan;
 using SamplerCreateInfo = Ryujinx.Graphics.GAL.SamplerCreateInfo;
 
@@ -68,7 +68,7 @@ namespace Ryujinx.Graphics.Vulkan
                 samplerCreateInfo.BorderColor = BorderColor.FloatCustomExt;
             }
 
-            gd.Api.CreateSampler(device, samplerCreateInfo, null, out var sampler).ThrowOnError();
+            gd.Api.CreateSampler(device, in samplerCreateInfo, null, out var sampler).ThrowOnError();
 
             _sampler = new Auto<DisposableSampler>(new DisposableSampler(gd.Api, device, sampler));
         }

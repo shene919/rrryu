@@ -6,6 +6,7 @@ namespace Ryujinx.Graphics.GAL
     {
         public readonly TargetApi Api;
         public readonly string VendorName;
+        public readonly SystemMemoryType MemoryType;
 
         public readonly bool HasFrontFacingBug;
         public readonly bool HasVectorIndexingBug;
@@ -23,6 +24,7 @@ namespace Ryujinx.Graphics.GAL
         public readonly bool SupportsR4G4B4A4Format;
         public readonly bool SupportsScaledVertexFormats;
         public readonly bool SupportsSnormBufferTextureFormat;
+        public readonly bool SupportsSparseBuffer;
         public readonly bool Supports5BitComponentFormat;
         public readonly bool SupportsBlendEquationAdvanced;
         public readonly bool SupportsFragmentShaderInterlock;
@@ -35,9 +37,12 @@ namespace Ryujinx.Graphics.GAL
         public readonly bool SupportsMismatchingViewFormat;
         public readonly bool SupportsCubemapView;
         public readonly bool SupportsNonConstantTextureOffset;
+        public readonly bool SupportsQuads;
+        public readonly bool SupportsSeparateSampler;
         public readonly bool SupportsShaderBallot;
         public readonly bool SupportsShaderBarrierDivergence;
         public readonly bool SupportsShaderFloat64;
+        public readonly bool SupportsTextureGatherOffsets;
         public readonly bool SupportsTextureShadowLod;
         public readonly bool SupportsVertexStoreAndAtomics;
         public readonly bool SupportsViewportIndexVertexTessellation;
@@ -45,6 +50,13 @@ namespace Ryujinx.Graphics.GAL
         public readonly bool SupportsViewportSwizzle;
         public readonly bool SupportsIndirectParameters;
         public readonly bool SupportsDepthClipControl;
+
+        public readonly int UniformBufferSetIndex;
+        public readonly int StorageBufferSetIndex;
+        public readonly int TextureSetIndex;
+        public readonly int ImageSetIndex;
+        public readonly int ExtraSetBaseIndex;
+        public readonly int MaximumExtraSets;
 
         public readonly uint MaximumUniformBuffersPerStage;
         public readonly uint MaximumStorageBuffersPerStage;
@@ -59,9 +71,12 @@ namespace Ryujinx.Graphics.GAL
 
         public readonly int GatherBiasPrecision;
 
+        public readonly ulong MaximumGpuMemory;
+
         public Capabilities(
             TargetApi api,
             string vendorName,
+            SystemMemoryType memoryType,
             bool hasFrontFacingBug,
             bool hasVectorIndexingBug,
             bool needsFragmentOutputSpecialization,
@@ -78,6 +93,7 @@ namespace Ryujinx.Graphics.GAL
             bool supportsScaledVertexFormats,
             bool supportsSnormBufferTextureFormat,
             bool supports5BitComponentFormat,
+            bool supportsSparseBuffer,
             bool supportsBlendEquationAdvanced,
             bool supportsFragmentShaderInterlock,
             bool supportsFragmentShaderOrderingIntel,
@@ -89,9 +105,12 @@ namespace Ryujinx.Graphics.GAL
             bool supportsMismatchingViewFormat,
             bool supportsCubemapView,
             bool supportsNonConstantTextureOffset,
+            bool supportsQuads,
+            bool supportsSeparateSampler,
             bool supportsShaderBallot,
             bool supportsShaderBarrierDivergence,
             bool supportsShaderFloat64,
+            bool supportsTextureGatherOffsets,
             bool supportsTextureShadowLod,
             bool supportsVertexStoreAndAtomics,
             bool supportsViewportIndexVertexTessellation,
@@ -99,6 +118,12 @@ namespace Ryujinx.Graphics.GAL
             bool supportsViewportSwizzle,
             bool supportsIndirectParameters,
             bool supportsDepthClipControl,
+            int uniformBufferSetIndex,
+            int storageBufferSetIndex,
+            int textureSetIndex,
+            int imageSetIndex,
+            int extraSetBaseIndex,
+            int maximumExtraSets,
             uint maximumUniformBuffersPerStage,
             uint maximumStorageBuffersPerStage,
             uint maximumTexturesPerStage,
@@ -108,10 +133,12 @@ namespace Ryujinx.Graphics.GAL
             int shaderSubgroupSize,
             int storageBufferOffsetAlignment,
             int textureBufferOffsetAlignment,
-            int gatherBiasPrecision)
+            int gatherBiasPrecision,
+            ulong maximumGpuMemory)
         {
             Api = api;
             VendorName = vendorName;
+            MemoryType = memoryType;
             HasFrontFacingBug = hasFrontFacingBug;
             HasVectorIndexingBug = hasVectorIndexingBug;
             NeedsFragmentOutputSpecialization = needsFragmentOutputSpecialization;
@@ -128,6 +155,7 @@ namespace Ryujinx.Graphics.GAL
             SupportsScaledVertexFormats = supportsScaledVertexFormats;
             SupportsSnormBufferTextureFormat = supportsSnormBufferTextureFormat;
             Supports5BitComponentFormat = supports5BitComponentFormat;
+            SupportsSparseBuffer = supportsSparseBuffer;
             SupportsBlendEquationAdvanced = supportsBlendEquationAdvanced;
             SupportsFragmentShaderInterlock = supportsFragmentShaderInterlock;
             SupportsFragmentShaderOrderingIntel = supportsFragmentShaderOrderingIntel;
@@ -139,9 +167,12 @@ namespace Ryujinx.Graphics.GAL
             SupportsMismatchingViewFormat = supportsMismatchingViewFormat;
             SupportsCubemapView = supportsCubemapView;
             SupportsNonConstantTextureOffset = supportsNonConstantTextureOffset;
+            SupportsQuads = supportsQuads;
+            SupportsSeparateSampler = supportsSeparateSampler;
             SupportsShaderBallot = supportsShaderBallot;
             SupportsShaderBarrierDivergence = supportsShaderBarrierDivergence;
             SupportsShaderFloat64 = supportsShaderFloat64;
+            SupportsTextureGatherOffsets = supportsTextureGatherOffsets;
             SupportsTextureShadowLod = supportsTextureShadowLod;
             SupportsVertexStoreAndAtomics = supportsVertexStoreAndAtomics;
             SupportsViewportIndexVertexTessellation = supportsViewportIndexVertexTessellation;
@@ -149,6 +180,12 @@ namespace Ryujinx.Graphics.GAL
             SupportsViewportSwizzle = supportsViewportSwizzle;
             SupportsIndirectParameters = supportsIndirectParameters;
             SupportsDepthClipControl = supportsDepthClipControl;
+            UniformBufferSetIndex = uniformBufferSetIndex;
+            StorageBufferSetIndex = storageBufferSetIndex;
+            TextureSetIndex = textureSetIndex;
+            ImageSetIndex = imageSetIndex;
+            ExtraSetBaseIndex = extraSetBaseIndex;
+            MaximumExtraSets = maximumExtraSets;
             MaximumUniformBuffersPerStage = maximumUniformBuffersPerStage;
             MaximumStorageBuffersPerStage = maximumStorageBuffersPerStage;
             MaximumTexturesPerStage = maximumTexturesPerStage;
@@ -159,6 +196,7 @@ namespace Ryujinx.Graphics.GAL
             StorageBufferOffsetAlignment = storageBufferOffsetAlignment;
             TextureBufferOffsetAlignment = textureBufferOffsetAlignment;
             GatherBiasPrecision = gatherBiasPrecision;
+            MaximumGpuMemory = maximumGpuMemory;
         }
     }
 }

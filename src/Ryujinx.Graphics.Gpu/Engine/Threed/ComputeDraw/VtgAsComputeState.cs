@@ -3,6 +3,7 @@ using Ryujinx.Common.Logging;
 using Ryujinx.Graphics.GAL;
 using Ryujinx.Graphics.Gpu.Engine.Types;
 using Ryujinx.Graphics.Gpu.Image;
+using Ryujinx.Graphics.Gpu.Memory;
 using Ryujinx.Graphics.Gpu.Shader;
 using Ryujinx.Graphics.Shader;
 using Ryujinx.Graphics.Shader.Translation;
@@ -202,7 +203,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
             _context.Renderer.Pipeline.SetUniformBuffers(stackalloc[] { new BufferAssignment(vertexInfoBinding, vertexInfoRange) });
 
             int vertexDataBinding = _vertexAsCompute.Reservations.VertexOutputStorageBufferBinding;
-            BufferRange vertexDataRange = _vacContext.GetVertexDataBufferRange(_vertexDataOffset, _vertexDataSize);
+            BufferRange vertexDataRange = _vacContext.GetVertexDataBufferRange(_vertexDataOffset, _vertexDataSize, write: true);
             _context.Renderer.Pipeline.SetStorageBuffers(stackalloc[] { new BufferAssignment(vertexDataBinding, vertexDataRange) });
 
             _vacContext.VertexInfoBufferUpdater.Commit();
@@ -245,9 +246,9 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
             int geometryVbBinding = _geometryAsCompute.Reservations.GeometryVertexOutputStorageBufferBinding;
             int geometryIbBinding = _geometryAsCompute.Reservations.GeometryIndexOutputStorageBufferBinding;
 
-            BufferRange vertexDataRange = _vacContext.GetVertexDataBufferRange(_vertexDataOffset, _vertexDataSize);
-            BufferRange vertexBuffer = _vacContext.GetGeometryVertexDataBufferRange(_geometryVertexDataOffset, _geometryVertexDataSize);
-            BufferRange indexBuffer = _vacContext.GetGeometryIndexDataBufferRange(_geometryIndexDataOffset, _geometryIndexDataSize);
+            BufferRange vertexDataRange = _vacContext.GetVertexDataBufferRange(_vertexDataOffset, _vertexDataSize, write: false);
+            BufferRange vertexBuffer = _vacContext.GetGeometryVertexDataBufferRange(_geometryVertexDataOffset, _geometryVertexDataSize, write: true);
+            BufferRange indexBuffer = _vacContext.GetGeometryIndexDataBufferRange(_geometryIndexDataOffset, _geometryIndexDataSize, write: true);
 
             _context.Renderer.Pipeline.SetStorageBuffers(stackalloc[]
             {
@@ -293,8 +294,8 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
 
             if (_geometryAsCompute != null)
             {
-                BufferRange vertexBuffer = _vacContext.GetGeometryVertexDataBufferRange(_geometryVertexDataOffset, _geometryVertexDataSize);
-                BufferRange indexBuffer = _vacContext.GetGeometryIndexDataBufferRange(_geometryIndexDataOffset, _geometryIndexDataSize);
+                BufferRange vertexBuffer = _vacContext.GetGeometryVertexDataBufferRange(_geometryVertexDataOffset, _geometryVertexDataSize, write: false);
+                BufferRange indexBuffer = _vacContext.GetGeometryIndexDataBufferRange(_geometryIndexDataOffset, _geometryIndexDataSize, write: false);
 
                 _context.Renderer.Pipeline.SetProgram(_vertexPassthroughProgram);
                 _context.Renderer.Pipeline.SetIndexBuffer(indexBuffer, IndexType.UInt);
@@ -310,7 +311,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
             }
             else
             {
-                BufferRange vertexDataRange = _vacContext.GetVertexDataBufferRange(_vertexDataOffset, _vertexDataSize);
+                BufferRange vertexDataRange = _vacContext.GetVertexDataBufferRange(_vertexDataOffset, _vertexDataSize, write: false);
 
                 _context.Renderer.Pipeline.SetProgram(_vertexPassthroughProgram);
                 _context.Renderer.Pipeline.SetStorageBuffers(stackalloc[] { new BufferAssignment(vertexDataBinding, vertexDataRange) });
@@ -370,8 +371,7 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
         {
             var memoryManager = _channel.MemoryManager;
 
-            address = memoryManager.Translate(address);
-            BufferRange range = memoryManager.Physical.BufferCache.GetBufferRange(address, size);
+            BufferRange range = memoryManager.Physical.BufferCache.GetBufferRange(memoryManager.GetPhysicalRegions(address, size), BufferStage.VertexBuffer);
 
             ITexture bufferTexture = _vacContext.EnsureBufferTexture(index + 2, format);
             bufferTexture.SetStorage(range);
@@ -412,9 +412,10 @@ namespace Ryujinx.Graphics.Gpu.Engine.Threed.ComputeDraw
 
             var memoryManager = _channel.MemoryManager;
 
-            address = memoryManager.Translate(address + indexOffset);
             ulong misalign = address & ((ulong)_context.Capabilities.TextureBufferOffsetAlignment - 1);
-            BufferRange range = memoryManager.Physical.BufferCache.GetBufferRange(address - misalign, size + misalign);
+            BufferRange range = memoryManager.Physical.BufferCache.GetBufferRange(
+                memoryManager.GetPhysicalRegions(address + indexOffset - misalign, size + misalign),
+                BufferStage.IndexBuffer);
             misalignedOffset = (int)misalign >> shift;
 
             SetIndexBufferTexture(reservations, range, format);

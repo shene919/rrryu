@@ -161,7 +161,8 @@ namespace Ryujinx.Graphics.Gpu.Shader
                     _graphicsShaderCache,
                     _computeShaderCache,
                     _diskCacheHostStorage,
-                    ShaderCacheStateUpdate, cancellationToken);
+                    ShaderCacheStateUpdate,
+                    cancellationToken);
 
                 loader.LoadShaders();
 
@@ -191,12 +192,14 @@ namespace Ryujinx.Graphics.Gpu.Shader
         /// This automatically translates, compiles and adds the code to the cache if not present.
         /// </remarks>
         /// <param name="channel">GPU channel</param>
+        /// <param name="samplerPoolMaximumId">Maximum ID that an entry in the sampler pool may have</param>
         /// <param name="poolState">Texture pool state</param>
         /// <param name="computeState">Compute engine state</param>
         /// <param name="gpuVa">GPU virtual address of the binary shader code</param>
         /// <returns>Compiled compute shader code</returns>
         public CachedShaderProgram GetComputeShader(
             GpuChannel channel,
+            int samplerPoolMaximumId,
             GpuChannelPoolState poolState,
             GpuChannelComputeState computeState,
             ulong gpuVa)
@@ -213,7 +216,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
             }
 
             ShaderSpecializationState specState = new(ref computeState);
-            GpuAccessorState gpuAccessorState = new(poolState, computeState, default, specState);
+            GpuAccessorState gpuAccessorState = new(samplerPoolMaximumId, poolState, computeState, default, specState);
             GpuAccessor gpuAccessor = new(_context, channel, gpuAccessorState);
             gpuAccessor.InitializeReservedCounts(tfEnabled: false, vertexAsCompute: false);
 
@@ -290,6 +293,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
         /// <param name="state">GPU state</param>
         /// <param name="pipeline">Pipeline state</param>
         /// <param name="channel">GPU channel</param>
+        /// <param name="samplerPoolMaximumId">Maximum ID that an entry in the sampler pool may have</param>
         /// <param name="poolState">Texture pool state</param>
         /// <param name="graphicsState">3D engine state</param>
         /// <param name="addresses">Addresses of the shaders for each stage</param>
@@ -298,6 +302,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
             ref ThreedClassState state,
             ref ProgramPipelineState pipeline,
             GpuChannel channel,
+            int samplerPoolMaximumId,
             ref GpuChannelPoolState poolState,
             ref GpuChannelGraphicsState graphicsState,
             ShaderAddresses addresses)
@@ -318,7 +323,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
             UpdatePipelineInfo(ref state, ref pipeline, graphicsState, channel);
 
             ShaderSpecializationState specState = new(ref graphicsState, ref pipeline, transformFeedbackDescriptors);
-            GpuAccessorState gpuAccessorState = new(poolState, default, graphicsState, specState, transformFeedbackDescriptors);
+            GpuAccessorState gpuAccessorState = new(samplerPoolMaximumId, poolState, default, graphicsState, specState, transformFeedbackDescriptors);
 
             ReadOnlySpan<ulong> addressesSpan = addresses.AsSpan();
 
@@ -334,7 +339,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
 
                 if (gpuVa != 0)
                 {
-                    GpuAccessor gpuAccessor = new(_context, channel, gpuAccessorState, stageIndex);
+                    GpuAccessor gpuAccessor = new(_context, channel, gpuAccessorState, stageIndex, addresses.Geometry != 0);
                     TranslatorContext currentStage = DecodeGraphicsShader(gpuAccessor, api, DefaultFlags, gpuVa);
 
                     if (nextStage != null)
@@ -730,8 +735,8 @@ namespace Ryujinx.Graphics.Gpu.Shader
 
             codeA ??= memoryManager.GetSpan(vertexA.Address, vertexA.Size).ToArray();
             codeB ??= memoryManager.GetSpan(currentStage.Address, currentStage.Size).ToArray();
-            byte[] cb1DataA = memoryManager.Physical.GetSpan(cb1DataAddress, vertexA.Cb1DataSize).ToArray();
-            byte[] cb1DataB = memoryManager.Physical.GetSpan(cb1DataAddress, currentStage.Cb1DataSize).ToArray();
+            byte[] cb1DataA = ReadArray(memoryManager, cb1DataAddress, vertexA.Cb1DataSize);
+            byte[] cb1DataB = ReadArray(memoryManager, cb1DataAddress, currentStage.Cb1DataSize);
 
             ShaderDumpPaths pathsA = default;
             ShaderDumpPaths pathsB = default;
@@ -770,7 +775,7 @@ namespace Ryujinx.Graphics.Gpu.Shader
                 ? channel.BufferManager.GetComputeUniformBufferAddress(1)
                 : channel.BufferManager.GetGraphicsUniformBufferAddress(StageToStageIndex(context.Stage), 1);
 
-            byte[] cb1Data = memoryManager.Physical.GetSpan(cb1DataAddress, context.Cb1DataSize).ToArray();
+            byte[] cb1Data = ReadArray(memoryManager, cb1DataAddress, context.Cb1DataSize);
             code ??= memoryManager.GetSpan(context.Address, context.Size).ToArray();
 
             ShaderDumpPaths paths = dumper?.Dump(code, context.Stage == ShaderStage.Compute) ?? default;
@@ -779,6 +784,23 @@ namespace Ryujinx.Graphics.Gpu.Shader
             paths.Prepend(program);
 
             return new TranslatedShader(new CachedShaderStage(program.Info, code, cb1Data), program);
+        }
+
+        /// <summary>
+        /// Reads data from physical memory, returns an empty array if the memory is unmapped or size is 0.
+        /// </summary>
+        /// <param name="memoryManager">Memory manager with the physical memory to read from</param>
+        /// <param name="address">Physical address of the region to read</param>
+        /// <param name="size">Size in bytes of the data</param>
+        /// <returns>An array with the data at the specified memory location</returns>
+        private static byte[] ReadArray(MemoryManager memoryManager, ulong address, int size)
+        {
+            if (address == MemoryManager.PteUnmapped || size == 0)
+            {
+                return Array.Empty<byte>();
+            }
+
+            return memoryManager.Physical.GetSpan(address, size).ToArray();
         }
 
         /// <summary>

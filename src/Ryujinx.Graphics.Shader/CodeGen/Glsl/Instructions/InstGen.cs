@@ -2,6 +2,7 @@ using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.StructuredIr;
 using Ryujinx.Graphics.Shader.Translation;
 using System;
+using System.Text;
 
 using static Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions.InstGenBallot;
 using static Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions.InstGenCall;
@@ -37,7 +38,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
 
             AggregateType type = GetSrcVarType(operation.Inst, 0);
 
-            string srcExpr = GetSoureExpr(context, src, type);
+            string srcExpr = GetSourceExpr(context, src, type);
             string zero;
 
             if (type == AggregateType.FP64)
@@ -67,11 +68,11 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
 
                 int arity = (int)(info.Type & InstType.ArityMask);
 
-                string args = string.Empty;
+                StringBuilder builder = new();
 
                 if (atomic && (operation.StorageKind == StorageKind.StorageBuffer || operation.StorageKind == StorageKind.SharedMemory))
                 {
-                    args = GenerateLoadOrStore(context, operation, isStore: false);
+                    builder.Append(GenerateLoadOrStore(context, operation, isStore: false));
 
                     AggregateType dstType = operation.Inst == Instruction.AtomicMaxS32 || operation.Inst == Instruction.AtomicMinS32
                         ? AggregateType.S32
@@ -79,7 +80,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
 
                     for (int argIndex = operation.SourcesCount - arity + 2; argIndex < operation.SourcesCount; argIndex++)
                     {
-                        args += ", " + GetSoureExpr(context, operation.GetSource(argIndex), dstType);
+                        builder.Append($", {GetSourceExpr(context, operation.GetSource(argIndex), dstType)}");
                     }
                 }
                 else
@@ -88,16 +89,16 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
                     {
                         if (argIndex != 0)
                         {
-                            args += ", ";
+                            builder.Append(", ");
                         }
 
                         AggregateType dstType = GetSrcVarType(inst, argIndex);
 
-                        args += GetSoureExpr(context, operation.GetSource(argIndex), dstType);
+                        builder.Append(GetSourceExpr(context, operation.GetSource(argIndex), dstType));
                     }
                 }
 
-                return info.OpName + '(' + args + ')';
+                return $"{info.OpName}({builder})";
             }
             else if ((info.Type & InstType.Op) != 0)
             {
@@ -106,7 +107,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
                 // Return may optionally have a return value (and in this case it is unary).
                 if (inst == Instruction.Return && operation.SourcesCount != 0)
                 {
-                    return $"{op} {GetSoureExpr(context, operation.GetSource(0), context.CurrentFunction.ReturnType)}";
+                    return $"{op} {GetSourceExpr(context, operation.GetSource(0), context.CurrentFunction.ReturnType)}";
                 }
 
                 int arity = (int)(info.Type & InstType.ArityMask);
@@ -117,7 +118,7 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
                 {
                     IAstNode src = operation.GetSource(index);
 
-                    string srcExpr = GetSoureExpr(context, src, GetSrcVarType(inst, index));
+                    string srcExpr = GetSourceExpr(context, src, GetSrcVarType(inst, index));
 
                     bool isLhs = arity == 2 && index == 0;
 
@@ -184,8 +185,11 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Glsl.Instructions
                     case Instruction.TextureSample:
                         return TextureSample(context, operation);
 
-                    case Instruction.TextureSize:
-                        return TextureSize(context, operation);
+                    case Instruction.TextureQuerySamples:
+                        return TextureQuerySamples(context, operation);
+
+                    case Instruction.TextureQuerySize:
+                        return TextureQuerySize(context, operation);
 
                     case Instruction.UnpackDouble2x32:
                         return UnpackDouble2x32(context, operation);

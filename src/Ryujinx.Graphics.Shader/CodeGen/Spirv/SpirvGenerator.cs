@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+using Ryujinx.Common;
 using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.StructuredIr;
 using Ryujinx.Graphics.Shader.Translation;
@@ -43,6 +43,10 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             CodeGenContext context = new(info, parameters, instPool, integerPool);
 
+            context.AddCapability(Capability.Shader);
+
+            context.SetMemoryModel(AddressingModel.Logical, MemoryModel.GLSL450);
+
             context.AddCapability(Capability.GroupNonUniformBallot);
             context.AddCapability(Capability.GroupNonUniformShuffle);
             context.AddCapability(Capability.GroupNonUniformVote);
@@ -51,6 +55,11 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             context.AddCapability(Capability.ImageQuery);
             context.AddCapability(Capability.SampledBuffer);
 
+            if (parameters.HostCapabilities.SupportsShaderFloat64)
+            {
+                context.AddCapability(Capability.Float64);
+            }
+
             if (parameters.Definitions.TransformFeedbackEnabled && parameters.Definitions.LastInVertexPipeline)
             {
                 context.AddCapability(Capability.TransformFeedback);
@@ -58,7 +67,8 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
             if (parameters.Definitions.Stage == ShaderStage.Fragment)
             {
-                if (context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Input, IoVariable.Layer)))
+                if (context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Input, IoVariable.Layer)) ||
+                    context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Input, IoVariable.PrimitiveId)))
                 {
                     context.AddCapability(Capability.Geometry);
                 }
@@ -87,6 +97,16 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             else if (parameters.Definitions.Stage == ShaderStage.Vertex)
             {
                 context.AddCapability(Capability.DrawParameters);
+            }
+
+            if (context.Definitions.Stage != ShaderStage.Fragment &&
+                context.Definitions.Stage != ShaderStage.Geometry &&
+                context.Definitions.Stage != ShaderStage.Compute &&
+                (context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Output, IoVariable.Layer)) ||
+                context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Output, IoVariable.ViewportIndex))))
+            {
+                context.AddExtension("SPV_EXT_shader_viewport_index_layer");
+                context.AddCapability(Capability.ShaderViewportIndexLayerEXT);
             }
 
             if (context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Output, IoVariable.ViewportMask)))
@@ -151,7 +171,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             context.EnterBlock(function.MainBlock);
 
             Declarations.DeclareLocals(context, function);
-            Declarations.DeclareLocalForArgs(context, info.Functions);
 
             Generate(context, function.MainBlock);
 
@@ -275,14 +294,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
                         localSizeX,
                         localSizeY,
                         localSizeZ);
-                }
-
-                if (context.Definitions.Stage != ShaderStage.Fragment &&
-                    context.Definitions.Stage != ShaderStage.Geometry &&
-                    context.Definitions.Stage != ShaderStage.Compute &&
-                    context.Info.IoDefinitions.Contains(new IoDefinition(StorageKind.Output, IoVariable.Layer)))
-                {
-                    context.AddCapability(Capability.ShaderLayer);
                 }
 
                 if (context.Definitions.TransformFeedbackEnabled && context.Definitions.LastInVertexPipeline)

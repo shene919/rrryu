@@ -1,4 +1,4 @@
-﻿using ARMeilleure.Diagnostics;
+using ARMeilleure.Diagnostics;
 using ARMeilleure.State;
 using System;
 using System.Collections.Generic;
@@ -80,7 +80,10 @@ namespace ARMeilleure.Translation
                         return true;
                     }
 
-                    Monitor.Wait(Sync);
+                    if (!_disposed)
+                    {
+                        Monitor.Wait(Sync);
+                    }
                 }
             }
 

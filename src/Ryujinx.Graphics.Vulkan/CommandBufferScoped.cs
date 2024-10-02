@@ -1,4 +1,4 @@
-﻿using Silk.NET.Vulkan;
+using Silk.NET.Vulkan;
 using System;
 
 namespace Ryujinx.Graphics.Vulkan
@@ -24,11 +24,6 @@ namespace Ryujinx.Graphics.Vulkan
         public void AddWaitable(MultiFenceHolder waitable)
         {
             _pool.AddWaitable(CommandBufferIndex, waitable);
-        }
-
-        public void AddDependency(CommandBufferScoped dependencyCbs)
-        {
-            _pool.AddDependency(CommandBufferIndex, dependencyCbs);
         }
 
         public FenceHolder GetFence()

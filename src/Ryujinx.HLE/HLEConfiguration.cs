@@ -1,12 +1,13 @@
-﻿using LibHac.Tools.FsSystem;
+using LibHac.Tools.FsSystem;
 using Ryujinx.Audio.Integration;
 using Ryujinx.Common.Configuration;
+using Ryujinx.Common.Configuration.Multiplayer;
 using Ryujinx.Graphics.GAL;
 using Ryujinx.HLE.FileSystem;
 using Ryujinx.HLE.HOS;
 using Ryujinx.HLE.HOS.Services.Account.Acc;
 using Ryujinx.HLE.HOS.SystemState;
-using Ryujinx.HLE.Ui;
+using Ryujinx.HLE.UI;
 using System;
 
 namespace Ryujinx.HLE
@@ -62,7 +63,7 @@ namespace Ryujinx.HLE
         /// The handler for various UI related operations needed outside of HLE.
         /// </summary>
         /// <remarks>This cannot be changed after <see cref="Switch"/> instantiation.</remarks>
-        internal readonly IHostUiHandler HostUiHandler;
+        internal readonly IHostUIHandler HostUIHandler;
 
         /// <summary>
         /// Control the memory configuration used by the emulation context.
@@ -100,7 +101,7 @@ namespace Ryujinx.HLE
         /// <summary>
         /// Control if the guest application should be told that there is a Internet connection available.
         /// </summary>
-        internal readonly bool EnableInternetAccess;
+        public bool EnableInternetAccess { internal get; set; }
 
         /// <summary>
         /// Control LibHac's integrity check level.
@@ -159,6 +160,11 @@ namespace Ryujinx.HLE
         public string MultiplayerLanInterfaceId { internal get; set; }
 
         /// <summary>
+        /// Multiplayer Mode
+        /// </summary>
+        public MultiplayerMode MultiplayerMode { internal get; set; }
+
+        /// <summary>
         /// An action called when HLE force a refresh of output after docked mode changed.
         /// </summary>
         public Action RefreshInputConfig { internal get; set; }
@@ -171,7 +177,7 @@ namespace Ryujinx.HLE
                                 IRenderer gpuRenderer,
                                 IHardwareDeviceDriver audioDeviceDriver,
                                 MemoryConfiguration memoryConfiguration,
-                                IHostUiHandler hostUiHandler,
+                                IHostUIHandler hostUIHandler,
                                 SystemLanguage systemLanguage,
                                 RegionCode region,
                                 bool enableVsync,
@@ -187,7 +193,8 @@ namespace Ryujinx.HLE
                                 AspectRatio aspectRatio,
                                 float audioVolume,
                                 bool useHypervisor,
-                                string multiplayerLanInterfaceId)
+                                string multiplayerLanInterfaceId,
+                                MultiplayerMode multiplayerMode)
         {
             VirtualFileSystem = virtualFileSystem;
             LibHacHorizonManager = libHacHorizonManager;
@@ -197,7 +204,7 @@ namespace Ryujinx.HLE
             GpuRenderer = gpuRenderer;
             AudioDeviceDriver = audioDeviceDriver;
             MemoryConfiguration = memoryConfiguration;
-            HostUiHandler = hostUiHandler;
+            HostUIHandler = hostUIHandler;
             SystemLanguage = systemLanguage;
             Region = region;
             EnableVsync = enableVsync;
@@ -214,6 +221,7 @@ namespace Ryujinx.HLE
             AudioVolume = audioVolume;
             UseHypervisor = useHypervisor;
             MultiplayerLanInterfaceId = multiplayerLanInterfaceId;
+            MultiplayerMode = multiplayerMode;
         }
     }
 }

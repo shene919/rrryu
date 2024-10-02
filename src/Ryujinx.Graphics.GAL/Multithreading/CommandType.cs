@@ -1,15 +1,17 @@
-﻿namespace Ryujinx.Graphics.GAL.Multithreading
+namespace Ryujinx.Graphics.GAL.Multithreading
 {
     enum CommandType : byte
     {
         Action,
-        CreateBuffer,
         CreateBufferAccess,
+        CreateBufferSparse,
         CreateHostBuffer,
+        CreateImageArray,
         CreateProgram,
         CreateSampler,
         CreateSync,
         CreateTexture,
+        CreateTextureArray,
         GetCapabilities,
         Unused,
         PreFrame,
@@ -23,6 +25,9 @@
 
         CounterEventDispose,
         CounterEventFlush,
+
+        ImageArrayDispose,
+        ImageArraySetImages,
 
         ProgramDispose,
         ProgramGetBinary,
@@ -42,6 +47,10 @@
         TextureSetDataSlice,
         TextureSetDataSliceRegion,
         TextureSetStorage,
+
+        TextureArrayDispose,
+        TextureArraySetSamplers,
+        TextureArraySetTextures,
 
         WindowPresent,
 
@@ -75,6 +84,8 @@
         SetTransformFeedbackBuffers,
         SetUniformBuffers,
         SetImage,
+        SetImageArray,
+        SetImageArraySeparate,
         SetIndexBuffer,
         SetLineParameters,
         SetLogicOpState,
@@ -91,6 +102,8 @@
         SetScissor,
         SetStencilTest,
         SetTextureAndSampler,
+        SetTextureArray,
+        SetTextureArraySeparate,
         SetUserClipDistance,
         SetVertexAttribs,
         SetVertexBuffers,

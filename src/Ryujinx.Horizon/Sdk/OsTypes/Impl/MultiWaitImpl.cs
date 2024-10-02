@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common;
+using Ryujinx.Common;
 using Ryujinx.Horizon.Common;
 using System;
 using System.Collections.Generic;
@@ -20,6 +20,8 @@ namespace Ryujinx.Horizon.Sdk.OsTypes.Impl
         private MultiWaitHolderBase _signaledHolder;
 
         public long CurrentTime { get; private set; }
+
+        public IEnumerable<MultiWaitHolderBase> MultiWaits => _multiWaits;
 
         public MultiWaitImpl()
         {

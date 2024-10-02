@@ -1,4 +1,3 @@
-﻿using ARMeilleure.Translation;
 using CommandLine;
 using LibHac.Tools.FsSystem;
 using Ryujinx.Audio.Backends.SDL2;
@@ -8,6 +7,7 @@ using Ryujinx.Common.Configuration.Hid;
 using Ryujinx.Common.Configuration.Hid.Controller;
 using Ryujinx.Common.Configuration.Hid.Controller.Motion;
 using Ryujinx.Common.Configuration.Hid.Keyboard;
+using Ryujinx.Common.GraphicsDriver;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Logging.Targets;
 using Ryujinx.Common.SystemInterop;
@@ -19,6 +19,7 @@ using Ryujinx.Graphics.Gpu;
 using Ryujinx.Graphics.Gpu.Shader;
 using Ryujinx.Graphics.OpenGL;
 using Ryujinx.Graphics.Vulkan;
+using Ryujinx.Graphics.Vulkan.MoltenVK;
 using Ryujinx.Headless.SDL2.OpenGL;
 using Ryujinx.Headless.SDL2.Vulkan;
 using Ryujinx.HLE;
@@ -62,7 +63,7 @@ namespace Ryujinx.Headless.SDL2
 
         static void Main(string[] args)
         {
-            Version = ReleaseInformation.GetVersion();
+            Version = ReleaseInformation.Version;
 
             // Make process DPI aware for proper window sizing on high-res screens.
             ForceDpiAware.Windows();
@@ -87,6 +88,11 @@ namespace Ryujinx.Headless.SDL2
 
                     invoked.WaitOne();
                 };
+            }
+
+            if (OperatingSystem.IsMacOS())
+            {
+                MVKInitialization.InitializeResolver();
             }
 
             Parser.Default.ParseArguments<Options>(args)
@@ -428,11 +434,26 @@ namespace Ryujinx.Headless.SDL2
 
             if (!option.DisableFileLog)
             {
-                Logger.AddTarget(new AsyncLogTargetWrapper(
-                    new FileLogTarget(ReleaseInformation.GetBaseApplicationDirectory(), "file"),
-                    1000,
-                    AsyncLogTargetOverflowAction.Block
-                ));
+                string logDir = AppDataManager.LogsDirPath;
+                FileStream logFile = null;
+
+                if (!string.IsNullOrEmpty(logDir))
+                {
+                    logFile = FileLogTarget.PrepareLogFile(logDir);
+                }
+
+                if (logFile != null)
+                {
+                    Logger.AddTarget(new AsyncLogTargetWrapper(
+                        new FileLogTarget("file", logFile),
+                        1000,
+                        AsyncLogTargetOverflowAction.Block
+                    ));
+                }
+                else
+                {
+                    Logger.Error?.Print(LogClass.Application, "No writable log directory available. Make sure either the Logs directory, Application Data, or the Ryujinx directory is writable.");
+                }
             }
 
             // Setup graphics configuration
@@ -442,6 +463,8 @@ namespace Ryujinx.Headless.SDL2
             GraphicsConfig.MaxAnisotropy = option.MaxAnisotropy;
             GraphicsConfig.ShadersDumpPath = option.GraphicsShadersDumpPath;
             GraphicsConfig.EnableMacroHLE = !option.DisableMacroHLE;
+
+            DriverUtilities.InitDriverConfig(option.BackendThreading == BackendThreading.Off);
 
             while (true)
             {
@@ -539,7 +562,7 @@ namespace Ryujinx.Headless.SDL2
                 _userChannelPersistence,
                 renderer,
                 new SDL2HardwareDeviceDriver(),
-                options.ExpandRAM ? MemoryConfiguration.MemoryConfiguration6GiB : MemoryConfiguration.MemoryConfiguration4GiB,
+                options.ExpandRAM ? MemoryConfiguration.MemoryConfiguration8GiB : MemoryConfiguration.MemoryConfiguration4GiB,
                 window,
                 options.SystemLanguage,
                 options.SystemRegion,
@@ -556,7 +579,8 @@ namespace Ryujinx.Headless.SDL2
                 options.AspectRatio,
                 options.AudioVolume,
                 options.UseHypervisor ?? true,
-                options.MultiplayerLanInterfaceId);
+                options.MultiplayerLanInterfaceId,
+                Common.Configuration.Multiplayer.MultiplayerMode.Disabled);
 
             return new Switch(configuration);
         }
@@ -596,6 +620,13 @@ namespace Ryujinx.Headless.SDL2
             _window = window;
 
             _window.IsFullscreen = options.IsFullscreen;
+            _window.DisplayId = options.DisplayId;
+            _window.IsExclusiveFullscreen = options.IsExclusiveFullscreen;
+            _window.ExclusiveFullscreenWidth = options.ExclusiveFullscreenWidth;
+            _window.ExclusiveFullscreenHeight = options.ExclusiveFullscreenHeight;
+            _window.AntiAliasing = options.AntiAliasing;
+            _window.ScalingFilter = options.ScalingFilter;
+            _window.ScalingFilterLevel = options.ScalingFilterLevel;
 
             _emulationContext = InitializeEmulationContext(window, renderer, options);
 
@@ -702,9 +733,6 @@ namespace Ryujinx.Headless.SDL2
             }
 
             SetupProgressHandler();
-
-            Translator.IsReadyForTranslation.Reset();
-
             ExecutionEntrypoint();
 
             return true;

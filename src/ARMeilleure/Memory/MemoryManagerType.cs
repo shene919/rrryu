@@ -1,4 +1,4 @@
-﻿namespace ARMeilleure.Memory
+namespace ARMeilleure.Memory
 {
     /// <summary>
     /// Indicates the type of a memory manager and the method it uses for memory mapping
@@ -29,13 +29,35 @@
         /// Allows invalid access from JIT code to the rest of the program, but is faster.
         /// </summary>
         HostMappedUnsafe,
+
+        /// <summary>
+        /// High level implementation using a software flat page table for address translation
+        /// with no support for handling invalid or non-contiguous memory access.
+        /// </summary>
+        HostTracked,
+
+        /// <summary>
+        /// High level implementation using a software flat page table for address translation
+        /// without masking the address and no support for handling invalid or non-contiguous memory access.
+        /// </summary>
+        HostTrackedUnsafe,
     }
 
-    static class MemoryManagerTypeExtensions
+    public static class MemoryManagerTypeExtensions
     {
         public static bool IsHostMapped(this MemoryManagerType type)
         {
             return type == MemoryManagerType.HostMapped || type == MemoryManagerType.HostMappedUnsafe;
+        }
+
+        public static bool IsHostTracked(this MemoryManagerType type)
+        {
+            return type == MemoryManagerType.HostTracked || type == MemoryManagerType.HostTrackedUnsafe;
+        }
+
+        public static bool IsHostMappedOrTracked(this MemoryManagerType type)
+        {
+            return type.IsHostMapped() || type.IsHostTracked();
         }
     }
 }

@@ -14,11 +14,13 @@ using Ryujinx.Common.Utilities;
 using Ryujinx.HLE.Exceptions;
 using Ryujinx.HLE.HOS.Services.Ssl;
 using Ryujinx.HLE.HOS.Services.Time;
+using Ryujinx.HLE.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using Path = System.IO.Path;
 
 namespace Ryujinx.HLE.FileSystem
@@ -103,20 +105,15 @@ namespace Ryujinx.HLE.FileSystem
 
                 foreach (StorageId storageId in Enum.GetValues<StorageId>())
                 {
-                    string contentDirectory = null;
-                    string contentPathString = null;
-                    string registeredDirectory = null;
-
-                    try
-                    {
-                        contentPathString = ContentPath.GetContentPath(storageId);
-                        contentDirectory = ContentPath.GetRealPath(contentPathString);
-                        registeredDirectory = Path.Combine(contentDirectory, "registered");
-                    }
-                    catch (NotSupportedException)
+                    if (!ContentPath.TryGetContentPath(storageId, out var contentPathString))
                     {
                         continue;
                     }
+                    if (!ContentPath.TryGetRealPath(contentPathString, out var contentDirectory))
+                    {
+                        continue;
+                    }
+                    var registeredDirectory = Path.Combine(contentDirectory, "registered");
 
                     Directory.CreateDirectory(registeredDirectory);
 
@@ -188,41 +185,6 @@ namespace Ryujinx.HLE.FileSystem
             }
         }
 
-        // fs must contain AOC nca files in its root
-        public void AddAocData(IFileSystem fs, string containerPath, ulong aocBaseId, IntegrityCheckLevel integrityCheckLevel)
-        {
-            _virtualFileSystem.ImportTickets(fs);
-
-            foreach (var ncaPath in fs.EnumerateEntries("*.cnmt.nca", SearchOptions.Default))
-            {
-                using var ncaFile = new UniqueRef<IFile>();
-
-                fs.OpenFile(ref ncaFile.Ref, ncaPath.FullPath.ToU8Span(), OpenMode.Read);
-                var nca = new Nca(_virtualFileSystem.KeySet, ncaFile.Get.AsStorage());
-                if (nca.Header.ContentType != NcaContentType.Meta)
-                {
-                    Logger.Warning?.Print(LogClass.Application, $"{ncaPath} is not a valid metadata file");
-
-                    continue;
-                }
-
-                using var pfs0 = nca.OpenFileSystem(0, integrityCheckLevel);
-                using var cnmtFile = new UniqueRef<IFile>();
-
-                pfs0.OpenFile(ref cnmtFile.Ref, pfs0.EnumerateEntries().Single().FullPath.ToU8Span(), OpenMode.Read);
-
-                var cnmt = new Cnmt(cnmtFile.Get.AsStream());
-                if (cnmt.Type != ContentMetaType.AddOnContent || (cnmt.TitleId & 0xFFFFFFFFFFFFE000) != aocBaseId)
-                {
-                    continue;
-                }
-
-                string ncaId = Convert.ToHexString(cnmt.ContentEntries[0].NcaId).ToLower();
-
-                AddAocItem(cnmt.TitleId, containerPath, $"{ncaId}.nca", true);
-            }
-        }
-
         public void AddAocItem(ulong titleId, string containerPath, string ncaPath, bool mergedToContainer = false)
         {
             // TODO: Check Aoc version.
@@ -236,10 +198,7 @@ namespace Ryujinx.HLE.FileSystem
 
                 if (!mergedToContainer)
                 {
-                    using FileStream fileStream = File.OpenRead(containerPath);
-                    using PartitionFileSystem partitionFileSystem = new(fileStream.AsStorage());
-
-                    _virtualFileSystem.ImportTickets(partitionFileSystem);
+                    using var pfs = PartitionFileSystemUtils.OpenApplicationFileSystem(containerPath, _virtualFileSystem);
                 }
             }
         }
@@ -258,17 +217,17 @@ namespace Ryujinx.HLE.FileSystem
             {
                 var file = new FileStream(aoc.ContainerPath, FileMode.Open, FileAccess.Read);
                 using var ncaFile = new UniqueRef<IFile>();
-                PartitionFileSystem pfs;
 
                 switch (Path.GetExtension(aoc.ContainerPath))
                 {
                     case ".xci":
-                        pfs = new Xci(_virtualFileSystem.KeySet, file.AsStorage()).OpenPartition(XciPartitionType.Secure);
-                        pfs.OpenFile(ref ncaFile.Ref, aoc.NcaPath.ToU8Span(), OpenMode.Read);
+                        var xci = new Xci(_virtualFileSystem.KeySet, file.AsStorage()).OpenPartition(XciPartitionType.Secure);
+                        xci.OpenFile(ref ncaFile.Ref, aoc.NcaPath.ToU8Span(), OpenMode.Read).ThrowIfFailure();
                         break;
                     case ".nsp":
-                        pfs = new PartitionFileSystem(file.AsStorage());
-                        pfs.OpenFile(ref ncaFile.Ref, aoc.NcaPath.ToU8Span(), OpenMode.Read);
+                        var pfs = new PartitionFileSystem();
+                        pfs.Initialize(file.AsStorage());
+                        pfs.OpenFile(ref ncaFile.Ref, aoc.NcaPath.ToU8Span(), OpenMode.Read).ThrowIfFailure();
                         break;
                     default:
                         return false; // Print error?
@@ -418,10 +377,7 @@ namespace Ryujinx.HLE.FileSystem
 
             if (locationList != null)
             {
-                if (locationList.Contains(entry))
-                {
-                    locationList.Remove(entry);
-                }
+                locationList.Remove(entry);
 
                 locationList.AddLast(entry);
             }
@@ -472,8 +428,8 @@ namespace Ryujinx.HLE.FileSystem
 
         public void InstallFirmware(string firmwareSource)
         {
-            string contentPathString = ContentPath.GetContentPath(StorageId.BuiltInSystem);
-            string contentDirectory = ContentPath.GetRealPath(contentPathString);
+            ContentPath.TryGetContentPath(StorageId.BuiltInSystem, out var contentPathString);
+            ContentPath.TryGetRealPath(contentPathString, out var contentDirectory);
             string registeredDirectory = Path.Combine(contentDirectory, "registered");
             string temporaryDirectory = Path.Combine(contentDirectory, "temp");
 
@@ -605,11 +561,11 @@ namespace Ryujinx.HLE.FileSystem
 
             if (filesystem.FileExists($"{path}/00"))
             {
-                filesystem.OpenFile(ref file.Ref, $"{path}/00".ToU8Span(), mode);
+                filesystem.OpenFile(ref file.Ref, $"{path}/00".ToU8Span(), mode).ThrowIfFailure();
             }
             else
             {
-                filesystem.OpenFile(ref file.Ref, path.ToU8Span(), mode);
+                filesystem.OpenFile(ref file.Ref, path.ToU8Span(), mode).ThrowIfFailure();
             }
 
             return file.Release();
@@ -817,13 +773,13 @@ namespace Ryujinx.HLE.FileSystem
 
                     if (updateNcas.Count > 0)
                     {
-                        string extraNcas = string.Empty;
+                        StringBuilder extraNcas = new();
 
                         foreach (var entry in updateNcas)
                         {
                             foreach (var (type, path) in entry.Value)
                             {
-                                extraNcas += path + Environment.NewLine;
+                                extraNcas.AppendLine(path);
                             }
                         }
 
@@ -954,13 +910,13 @@ namespace Ryujinx.HLE.FileSystem
 
                 if (updateNcas.Count > 0)
                 {
-                    string extraNcas = string.Empty;
+                    StringBuilder extraNcas = new();
 
                     foreach (var entry in updateNcas)
                     {
                         foreach (var (type, path) in entry.Value)
                         {
-                            extraNcas += path + Environment.NewLine;
+                            extraNcas.AppendLine(path);
                         }
                     }
 

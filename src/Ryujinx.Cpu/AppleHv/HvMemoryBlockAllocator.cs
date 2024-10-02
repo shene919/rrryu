@@ -1,7 +1,9 @@
 using Ryujinx.Memory;
+using System.Runtime.Versioning;
 
 namespace Ryujinx.Cpu.AppleHv
 {
+    [SupportedOSPlatform("macos")]
     class HvMemoryBlockAllocator : PrivateMemoryAllocatorImpl<HvMemoryBlockAllocator.Block>
     {
         public class Block : PrivateMemoryAllocator.Block
@@ -36,7 +38,7 @@ namespace Ryujinx.Cpu.AppleHv
 
         private readonly HvIpaAllocator _ipaAllocator;
 
-        public HvMemoryBlockAllocator(HvIpaAllocator ipaAllocator, int blockAlignment) : base(blockAlignment, MemoryAllocationFlags.None)
+        public HvMemoryBlockAllocator(HvIpaAllocator ipaAllocator, ulong blockAlignment) : base(blockAlignment, MemoryAllocationFlags.None)
         {
             _ipaAllocator = ipaAllocator;
         }

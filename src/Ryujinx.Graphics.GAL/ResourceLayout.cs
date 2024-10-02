@@ -15,14 +15,6 @@ namespace Ryujinx.Graphics.GAL
         BufferImage,
     }
 
-    public enum ResourceAccess : byte
-    {
-        None = 0,
-        Read = 1,
-        Write = 2,
-        ReadWrite = Read | Write,
-    }
-
     [Flags]
     public enum ResourceStages : byte
     {
@@ -79,21 +71,23 @@ namespace Ryujinx.Graphics.GAL
     public readonly struct ResourceUsage : IEquatable<ResourceUsage>
     {
         public int Binding { get; }
+        public int ArrayLength { get; }
         public ResourceType Type { get; }
         public ResourceStages Stages { get; }
-        public ResourceAccess Access { get; }
+        public bool Write { get; }
 
-        public ResourceUsage(int binding, ResourceType type, ResourceStages stages, ResourceAccess access)
+        public ResourceUsage(int binding, int arrayLength, ResourceType type, ResourceStages stages, bool write)
         {
             Binding = binding;
+            ArrayLength = arrayLength;
             Type = type;
             Stages = stages;
-            Access = access;
+            Write = write;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Binding, Type, Stages, Access);
+            return HashCode.Combine(Binding, ArrayLength, Type, Stages);
         }
 
         public override bool Equals(object obj)
@@ -103,7 +97,7 @@ namespace Ryujinx.Graphics.GAL
 
         public bool Equals(ResourceUsage other)
         {
-            return Binding == other.Binding && Type == other.Type && Stages == other.Stages && Access == other.Access;
+            return Binding == other.Binding && ArrayLength == other.ArrayLength && Type == other.Type && Stages == other.Stages;
         }
 
         public static bool operator ==(ResourceUsage left, ResourceUsage right)

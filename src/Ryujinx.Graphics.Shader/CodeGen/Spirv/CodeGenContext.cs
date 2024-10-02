@@ -1,4 +1,4 @@
-﻿using Ryujinx.Graphics.Shader.IntermediateRepresentation;
+using Ryujinx.Graphics.Shader.IntermediateRepresentation;
 using Ryujinx.Graphics.Shader.StructuredIr;
 using Ryujinx.Graphics.Shader.Translation;
 using Spv.Generator;
@@ -33,9 +33,9 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
         public Dictionary<int, Instruction> LocalMemories { get; } = new();
         public Dictionary<int, Instruction> SharedMemories { get; } = new();
 
-        public Dictionary<int, SamplerType> SamplersTypes { get; } = new();
-        public Dictionary<int, (Instruction, Instruction, Instruction)> Samplers { get; } = new();
-        public Dictionary<int, (Instruction, Instruction)> Images { get; } = new();
+        public Dictionary<SetBindingPair, SamplerType> SamplersTypes { get; } = new();
+        public Dictionary<SetBindingPair, SamplerDeclaration> Samplers { get; } = new();
+        public Dictionary<SetBindingPair, ImageDeclaration> Images { get; } = new();
 
         public Dictionary<IoDefinition, Instruction> Inputs { get; } = new();
         public Dictionary<IoDefinition, Instruction> Outputs { get; } = new();
@@ -44,7 +44,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
 
         public StructuredFunction CurrentFunction { get; set; }
         private readonly Dictionary<AstOperand, Instruction> _locals = new();
-        private readonly Dictionary<int, Instruction[]> _localForArgs = new();
         private readonly Dictionary<int, Instruction> _funcArgs = new();
         private readonly Dictionary<int, (StructuredFunction, Instruction)> _functions = new();
 
@@ -99,11 +98,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             Logger = parameters.Logger;
             TargetApi = parameters.TargetApi;
 
-            AddCapability(Capability.Shader);
-            AddCapability(Capability.Float64);
-
-            SetMemoryModel(AddressingModel.Logical, MemoryModel.GLSL450);
-
             Delegates = new SpirvDelegates(this);
         }
 
@@ -112,7 +106,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
             IsMainFunction = isMainFunction;
             MayHaveReturned = false;
             _locals.Clear();
-            _localForArgs.Clear();
             _funcArgs.Clear();
         }
 
@@ -167,11 +160,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
         public void DeclareLocal(AstOperand local, Instruction spvLocal)
         {
             _locals.Add(local, spvLocal);
-        }
-
-        public void DeclareLocalForArgs(int funcIndex, Instruction[] spvLocals)
-        {
-            _localForArgs.Add(funcIndex, spvLocals);
         }
 
         public void DeclareArgument(int argIndex, Instruction spvLocal)
@@ -276,11 +264,6 @@ namespace Ryujinx.Graphics.Shader.CodeGen.Spirv
         public Instruction GetLocalPointer(AstOperand local)
         {
             return _locals[local];
-        }
-
-        public Instruction[] GetLocalForArgsPointers(int funcIndex)
-        {
-            return _localForArgs[funcIndex];
         }
 
         public Instruction GetArgumentPointer(AstOperand funcArg)

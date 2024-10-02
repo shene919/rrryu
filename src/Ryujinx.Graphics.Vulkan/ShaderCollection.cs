@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common.Logging;
+using Ryujinx.Common.Logging;
 using Ryujinx.Graphics.GAL;
 using Silk.NET.Vulkan;
 using System;
@@ -21,11 +21,18 @@ namespace Ryujinx.Graphics.Vulkan
         public bool HasMinimalLayout { get; }
         public bool UsePushDescriptors { get; }
         public bool IsCompute { get; }
+        public bool HasTessellationControlShader => (Stages & (1u << 3)) != 0;
+
+        public bool UpdateTexturesWithoutTemplate { get; }
 
         public uint Stages { get; }
 
+        public PipelineStageFlags IncoherentBufferWriteStages { get; }
+        public PipelineStageFlags IncoherentTextureWriteStages { get; }
+
         public ResourceBindingSegment[][] ClearSegments { get; }
         public ResourceBindingSegment[][] BindingSegments { get; }
+        public DescriptorSetTemplate[] Templates { get; }
 
         public ProgramLinkStatus LinkStatus { get; private set; }
 
@@ -107,17 +114,30 @@ namespace Ryujinx.Graphics.Vulkan
 
             _shaders = internalShaders;
 
-            bool usePushDescriptors = !isMinimal && VulkanConfiguration.UsePushDescriptors && _gd.Capabilities.SupportsPushDescriptors;
+            bool usePushDescriptors = !isMinimal &&
+                VulkanConfiguration.UsePushDescriptors &&
+                _gd.Capabilities.SupportsPushDescriptors &&
+                !IsCompute &&
+                !HasPushDescriptorsBug(gd) &&
+                CanUsePushDescriptors(gd, resourceLayout, IsCompute);
 
-            _plce = gd.PipelineLayoutCache.GetOrCreate(gd, device, resourceLayout.Sets, usePushDescriptors);
+            ReadOnlyCollection<ResourceDescriptorCollection> sets = usePushDescriptors ?
+                BuildPushDescriptorSets(gd, resourceLayout.Sets) : resourceLayout.Sets;
+
+            _plce = gd.PipelineLayoutCache.GetOrCreate(gd, device, sets, usePushDescriptors);
 
             HasMinimalLayout = isMinimal;
             UsePushDescriptors = usePushDescriptors;
 
             Stages = stages;
 
-            ClearSegments = BuildClearSegments(resourceLayout.Sets);
-            BindingSegments = BuildBindingSegments(resourceLayout.SetUsages);
+            ClearSegments = BuildClearSegments(sets);
+            BindingSegments = BuildBindingSegments(resourceLayout.SetUsages, out bool usesBufferTextures);
+            Templates = BuildTemplates(usePushDescriptors);
+            (IncoherentBufferWriteStages, IncoherentTextureWriteStages) = BuildIncoherentStages(resourceLayout.SetUsages);
+
+            // Updating buffer texture bindings using template updates crashes the Adreno driver on Windows.
+            UpdateTexturesWithoutTemplate = gd.IsQualcommProprietary && usesBufferTextures;
 
             _compileTask = Task.CompletedTask;
             _firstBackgroundUse = false;
@@ -137,6 +157,82 @@ namespace Ryujinx.Graphics.Vulkan
             _firstBackgroundUse = !fromCache;
         }
 
+        private static bool HasPushDescriptorsBug(VulkanRenderer gd)
+        {
+            // Those GPUs/drivers do not work properly with push descriptors, so we must force disable them.
+            return gd.IsNvidiaPreTuring || (gd.IsIntelArc && gd.IsIntelWindows);
+        }
+
+        private static bool CanUsePushDescriptors(VulkanRenderer gd, ResourceLayout layout, bool isCompute)
+        {
+            // If binding 3 is immediately used, use an alternate set of reserved bindings.
+            ReadOnlyCollection<ResourceUsage> uniformUsage = layout.SetUsages[0].Usages;
+            bool hasBinding3 = uniformUsage.Any(x => x.Binding == 3);
+            int[] reserved = isCompute ? Array.Empty<int>() : gd.GetPushDescriptorReservedBindings(hasBinding3);
+
+            // Can't use any of the reserved usages.
+            for (int i = 0; i < uniformUsage.Count; i++)
+            {
+                var binding = uniformUsage[i].Binding;
+
+                if (reserved.Contains(binding) ||
+                    binding >= Constants.MaxPushDescriptorBinding ||
+                    binding >= gd.Capabilities.MaxPushDescriptors + reserved.Count(id => id < binding))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static ReadOnlyCollection<ResourceDescriptorCollection> BuildPushDescriptorSets(
+            VulkanRenderer gd,
+            ReadOnlyCollection<ResourceDescriptorCollection> sets)
+        {
+            // The reserved bindings were selected when determining if push descriptors could be used.
+            int[] reserved = gd.GetPushDescriptorReservedBindings(false);
+
+            var result = new ResourceDescriptorCollection[sets.Count];
+
+            for (int i = 0; i < sets.Count; i++)
+            {
+                if (i == 0)
+                {
+                    // Push descriptors apply here. Remove reserved bindings.
+                    ResourceDescriptorCollection original = sets[i];
+
+                    var pdUniforms = new ResourceDescriptor[original.Descriptors.Count];
+                    int j = 0;
+
+                    foreach (ResourceDescriptor descriptor in original.Descriptors)
+                    {
+                        if (reserved.Contains(descriptor.Binding))
+                        {
+                            // If the binding is reserved, set its descriptor count to 0.
+                            pdUniforms[j++] = new ResourceDescriptor(
+                                descriptor.Binding,
+                                0,
+                                descriptor.Type,
+                                descriptor.Stages);
+                        }
+                        else
+                        {
+                            pdUniforms[j++] = descriptor;
+                        }
+                    }
+
+                    result[i] = new ResourceDescriptorCollection(new(pdUniforms));
+                }
+                else
+                {
+                    result[i] = sets[i];
+                }
+            }
+
+            return new(result);
+        }
+
         private static ResourceBindingSegment[][] BuildClearSegments(ReadOnlyCollection<ResourceDescriptorCollection> sets)
         {
             ResourceBindingSegment[][] segments = new ResourceBindingSegment[sets.Count][];
@@ -154,7 +250,9 @@ namespace Ryujinx.Graphics.Vulkan
 
                     if (currentDescriptor.Binding + currentCount != descriptor.Binding ||
                         currentDescriptor.Type != descriptor.Type ||
-                        currentDescriptor.Stages != descriptor.Stages)
+                        currentDescriptor.Stages != descriptor.Stages ||
+                        currentDescriptor.Count > 1 ||
+                        descriptor.Count > 1)
                     {
                         if (currentCount != 0)
                         {
@@ -163,7 +261,7 @@ namespace Ryujinx.Graphics.Vulkan
                                 currentCount,
                                 currentDescriptor.Type,
                                 currentDescriptor.Stages,
-                                ResourceAccess.ReadWrite));
+                                currentDescriptor.Count > 1));
                         }
 
                         currentDescriptor = descriptor;
@@ -182,7 +280,7 @@ namespace Ryujinx.Graphics.Vulkan
                         currentCount,
                         currentDescriptor.Type,
                         currentDescriptor.Stages,
-                        ResourceAccess.ReadWrite));
+                        currentDescriptor.Count > 1));
                 }
 
                 segments[setIndex] = currentSegments.ToArray();
@@ -191,8 +289,10 @@ namespace Ryujinx.Graphics.Vulkan
             return segments;
         }
 
-        private static ResourceBindingSegment[][] BuildBindingSegments(ReadOnlyCollection<ResourceUsageCollection> setUsages)
+        private static ResourceBindingSegment[][] BuildBindingSegments(ReadOnlyCollection<ResourceUsageCollection> setUsages, out bool usesBufferTextures)
         {
+            usesBufferTextures = false;
+
             ResourceBindingSegment[][] segments = new ResourceBindingSegment[setUsages.Count][];
 
             for (int setIndex = 0; setIndex < setUsages.Count; setIndex++)
@@ -206,16 +306,16 @@ namespace Ryujinx.Graphics.Vulkan
                 {
                     ResourceUsage usage = setUsages[setIndex].Usages[index];
 
-                    // If the resource is not accessed, we don't need to update it.
-                    if (usage.Access == ResourceAccess.None)
+                    if (usage.Type == ResourceType.BufferTexture)
                     {
-                        continue;
+                        usesBufferTextures = true;
                     }
 
                     if (currentUsage.Binding + currentCount != usage.Binding ||
                         currentUsage.Type != usage.Type ||
                         currentUsage.Stages != usage.Stages ||
-                        currentUsage.Access != usage.Access)
+                        currentUsage.ArrayLength > 1 ||
+                        usage.ArrayLength > 1)
                     {
                         if (currentCount != 0)
                         {
@@ -224,11 +324,11 @@ namespace Ryujinx.Graphics.Vulkan
                                 currentCount,
                                 currentUsage.Type,
                                 currentUsage.Stages,
-                                currentUsage.Access));
+                                currentUsage.ArrayLength > 1));
                         }
 
                         currentUsage = usage;
-                        currentCount = 1;
+                        currentCount = usage.ArrayLength;
                     }
                     else
                     {
@@ -243,13 +343,109 @@ namespace Ryujinx.Graphics.Vulkan
                         currentCount,
                         currentUsage.Type,
                         currentUsage.Stages,
-                        currentUsage.Access));
+                        currentUsage.ArrayLength > 1));
                 }
 
                 segments[setIndex] = currentSegments.ToArray();
             }
 
             return segments;
+        }
+
+        private DescriptorSetTemplate[] BuildTemplates(bool usePushDescriptors)
+        {
+            var templates = new DescriptorSetTemplate[BindingSegments.Length];
+
+            for (int setIndex = 0; setIndex < BindingSegments.Length; setIndex++)
+            {
+                if (usePushDescriptors && setIndex == 0)
+                {
+                    // Push descriptors get updated using templates owned by the pipeline layout.
+                    continue;
+                }
+
+                ResourceBindingSegment[] segments = BindingSegments[setIndex];
+
+                if (segments != null && segments.Length > 0)
+                {
+                    templates[setIndex] = new DescriptorSetTemplate(
+                        _gd,
+                        _device,
+                        segments,
+                        _plce,
+                        IsCompute ? PipelineBindPoint.Compute : PipelineBindPoint.Graphics,
+                        setIndex);
+                }
+            }
+
+            return templates;
+        }
+
+        private PipelineStageFlags GetPipelineStages(ResourceStages stages)
+        {
+            PipelineStageFlags result = 0;
+
+            if ((stages & ResourceStages.Compute) != 0)
+            {
+                result |= PipelineStageFlags.ComputeShaderBit;
+            }
+
+            if ((stages & ResourceStages.Vertex) != 0)
+            {
+                result |= PipelineStageFlags.VertexShaderBit;
+            }
+
+            if ((stages & ResourceStages.Fragment) != 0)
+            {
+                result |= PipelineStageFlags.FragmentShaderBit;
+            }
+
+            if ((stages & ResourceStages.Geometry) != 0)
+            {
+                result |= PipelineStageFlags.GeometryShaderBit;
+            }
+
+            if ((stages & ResourceStages.TessellationControl) != 0)
+            {
+                result |= PipelineStageFlags.TessellationControlShaderBit;
+            }
+
+            if ((stages & ResourceStages.TessellationEvaluation) != 0)
+            {
+                result |= PipelineStageFlags.TessellationEvaluationShaderBit;
+            }
+
+            return result;
+        }
+
+        private (PipelineStageFlags Buffer, PipelineStageFlags Texture) BuildIncoherentStages(ReadOnlyCollection<ResourceUsageCollection> setUsages)
+        {
+            PipelineStageFlags buffer = PipelineStageFlags.None;
+            PipelineStageFlags texture = PipelineStageFlags.None;
+
+            foreach (var set in setUsages)
+            {
+                foreach (var range in set.Usages)
+                {
+                    if (range.Write)
+                    {
+                        PipelineStageFlags stages = GetPipelineStages(range.Stages);
+
+                        switch (range.Type)
+                        {
+                            case ResourceType.Image:
+                                texture |= stages;
+                                break;
+                            case ResourceType.StorageBuffer:
+                            case ResourceType.BufferImage:
+                                buffer |= stages;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return (buffer, texture);
         }
 
         private async Task BackgroundCompilation()
@@ -363,10 +559,11 @@ namespace Ryujinx.Graphics.Vulkan
                 stages[i] = _shaders[i].GetInfo();
             }
 
+            pipeline.HasTessellationControlShader = HasTessellationControlShader;
             pipeline.StagesCount = (uint)_shaders.Length;
             pipeline.PipelineLayout = PipelineLayout;
 
-            pipeline.CreateGraphicsPipeline(_gd, _device, this, (_gd.Pipeline as PipelineBase).PipelineCache, renderPass.Value);
+            pipeline.CreateGraphicsPipeline(_gd, _device, this, (_gd.Pipeline as PipelineBase).PipelineCache, renderPass.Value, throwOnError: true);
             pipeline.Dispose();
         }
 
@@ -425,6 +622,11 @@ namespace Ryujinx.Graphics.Vulkan
             return null;
         }
 
+        public DescriptorSetTemplate GetPushDescriptorTemplate(long updateMask)
+        {
+            return _plce.GetPushDescriptorTemplate(IsCompute ? PipelineBindPoint.Compute : PipelineBindPoint.Graphics, updateMask);
+        }
+
         public void AddComputePipeline(ref SpecData key, Auto<DisposablePipeline> pipeline)
         {
             (_computePipelineCache ??= new()).Add(ref key, pipeline);
@@ -475,13 +677,34 @@ namespace Ryujinx.Graphics.Vulkan
             return true;
         }
 
-        public Auto<DescriptorSetCollection> GetNewDescriptorSetCollection(
-            VulkanRenderer gd,
-            int commandBufferIndex,
-            int setIndex,
-            out bool isNew)
+        public void UpdateDescriptorCacheCommandBufferIndex(int commandBufferIndex)
         {
-            return _plce.GetNewDescriptorSetCollection(gd, commandBufferIndex, setIndex, out isNew);
+            _plce.UpdateCommandBufferIndex(commandBufferIndex);
+        }
+
+        public Auto<DescriptorSetCollection> GetNewDescriptorSetCollection(int setIndex, out bool isNew)
+        {
+            return _plce.GetNewDescriptorSetCollection(setIndex, out isNew);
+        }
+
+        public Auto<DescriptorSetCollection> GetNewManualDescriptorSetCollection(CommandBufferScoped cbs, int setIndex, out int cacheIndex)
+        {
+            return _plce.GetNewManualDescriptorSetCollection(cbs, setIndex, out cacheIndex);
+        }
+
+        public void UpdateManualDescriptorSetCollectionOwnership(CommandBufferScoped cbs, int setIndex, int cacheIndex)
+        {
+            _plce.UpdateManualDescriptorSetCollectionOwnership(cbs, setIndex, cacheIndex);
+        }
+
+        public void ReleaseManualDescriptorSetCollection(int setIndex, int cacheIndex)
+        {
+            _plce.ReleaseManualDescriptorSetCollection(setIndex, cacheIndex);
+        }
+
+        public bool HasSameLayout(ShaderCollection other)
+        {
+            return other != null && _plce == other._plce;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -502,7 +725,7 @@ namespace Ryujinx.Graphics.Vulkan
                 {
                     foreach (Auto<DisposablePipeline> pipeline in _graphicsPipelineCache.Values)
                     {
-                        pipeline.Dispose();
+                        pipeline?.Dispose();
                     }
                 }
 
@@ -512,6 +735,11 @@ namespace Ryujinx.Graphics.Vulkan
                     {
                         pipeline.Dispose();
                     }
+                }
+
+                for (int i = 0; i < Templates.Length; i++)
+                {
+                    Templates[i]?.Dispose();
                 }
 
                 if (_dummyRenderPass.Value.Handle != 0)

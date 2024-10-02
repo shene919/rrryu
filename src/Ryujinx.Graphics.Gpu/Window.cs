@@ -131,7 +131,7 @@ namespace Ryujinx.Graphics.Gpu
             bool isLinear,
             int gobBlocksInY,
             Format format,
-            int bytesPerPixel,
+            byte bytesPerPixel,
             ImageCrop crop,
             Action<GpuContext, object> acquireCallback,
             Action<object> releaseCallback,
@@ -200,7 +200,7 @@ namespace Ryujinx.Graphics.Gpu
             {
                 pt.AcquireCallback(_context, pt.UserObj);
 
-                Image.Texture texture = pt.Cache.FindOrCreateTexture(null, TextureSearchFlags.WithUpscale, pt.Info, 0, pt.Range);
+                Image.Texture texture = pt.Cache.FindOrCreateTexture(null, TextureSearchFlags.WithUpscale, pt.Info, 0, range: pt.Range);
 
                 pt.Cache.Tick();
 

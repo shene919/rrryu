@@ -1,4 +1,4 @@
-﻿using Ryujinx.Common.Logging;
+using Ryujinx.Common.Logging;
 using Ryujinx.Graphics.GAL;
 using Ryujinx.Graphics.Shader;
 using shaderc;
@@ -64,7 +64,7 @@ namespace Ryujinx.Graphics.Vulkan
                         PCode = (uint*)pCode,
                     };
 
-                    api.CreateShaderModule(device, shaderModuleCreateInfo, null, out _module).ThrowOnError();
+                    api.CreateShaderModule(device, in shaderModuleCreateInfo, null, out _module).ThrowOnError();
                 }
 
                 CompileStatus = ProgramLinkStatus.Success;

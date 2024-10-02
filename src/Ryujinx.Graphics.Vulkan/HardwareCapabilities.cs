@@ -1,4 +1,4 @@
-﻿using Silk.NET.Vulkan;
+using Silk.NET.Vulkan;
 using System;
 
 namespace Ryujinx.Graphics.Vulkan
@@ -34,6 +34,7 @@ namespace Ryujinx.Graphics.Vulkan
         public readonly bool SupportsMultiView;
         public readonly bool SupportsNullDescriptors;
         public readonly bool SupportsPushDescriptors;
+        public readonly uint MaxPushDescriptors;
         public readonly bool SupportsPrimitiveTopologyListRestart;
         public readonly bool SupportsPrimitiveTopologyPatchListRestart;
         public readonly bool SupportsTransformFeedback;
@@ -41,9 +42,12 @@ namespace Ryujinx.Graphics.Vulkan
         public readonly bool SupportsPreciseOcclusionQueries;
         public readonly bool SupportsPipelineStatisticsQuery;
         public readonly bool SupportsGeometryShader;
+        public readonly bool SupportsTessellationShader;
         public readonly bool SupportsViewportArray2;
         public readonly bool SupportsHostImportedMemory;
         public readonly bool SupportsDepthClipControl;
+        public readonly bool SupportsAttachmentFeedbackLoop;
+        public readonly bool SupportsDynamicAttachmentFeedbackLoop;
         public readonly uint SubgroupSize;
         public readonly SampleCountFlags SupportedSampleCounts;
         public readonly PortabilitySubsetFlags PortabilitySubset;
@@ -70,6 +74,7 @@ namespace Ryujinx.Graphics.Vulkan
             bool supportsMultiView,
             bool supportsNullDescriptors,
             bool supportsPushDescriptors,
+            uint maxPushDescriptors,
             bool supportsPrimitiveTopologyListRestart,
             bool supportsPrimitiveTopologyPatchListRestart,
             bool supportsTransformFeedback,
@@ -77,9 +82,12 @@ namespace Ryujinx.Graphics.Vulkan
             bool supportsPreciseOcclusionQueries,
             bool supportsPipelineStatisticsQuery,
             bool supportsGeometryShader,
+            bool supportsTessellationShader,
             bool supportsViewportArray2,
             bool supportsHostImportedMemory,
             bool supportsDepthClipControl,
+            bool supportsAttachmentFeedbackLoop,
+            bool supportsDynamicAttachmentFeedbackLoop,
             uint subgroupSize,
             SampleCountFlags supportedSampleCounts,
             PortabilitySubsetFlags portabilitySubset,
@@ -105,6 +113,7 @@ namespace Ryujinx.Graphics.Vulkan
             SupportsMultiView = supportsMultiView;
             SupportsNullDescriptors = supportsNullDescriptors;
             SupportsPushDescriptors = supportsPushDescriptors;
+            MaxPushDescriptors = maxPushDescriptors;
             SupportsPrimitiveTopologyListRestart = supportsPrimitiveTopologyListRestart;
             SupportsPrimitiveTopologyPatchListRestart = supportsPrimitiveTopologyPatchListRestart;
             SupportsTransformFeedback = supportsTransformFeedback;
@@ -112,9 +121,12 @@ namespace Ryujinx.Graphics.Vulkan
             SupportsPreciseOcclusionQueries = supportsPreciseOcclusionQueries;
             SupportsPipelineStatisticsQuery = supportsPipelineStatisticsQuery;
             SupportsGeometryShader = supportsGeometryShader;
+            SupportsTessellationShader = supportsTessellationShader;
             SupportsViewportArray2 = supportsViewportArray2;
             SupportsHostImportedMemory = supportsHostImportedMemory;
             SupportsDepthClipControl = supportsDepthClipControl;
+            SupportsAttachmentFeedbackLoop = supportsAttachmentFeedbackLoop;
+            SupportsDynamicAttachmentFeedbackLoop = supportsDynamicAttachmentFeedbackLoop;
             SubgroupSize = subgroupSize;
             SupportedSampleCounts = supportedSampleCounts;
             PortabilitySubset = portabilitySubset;

@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Logging;
@@ -96,6 +96,8 @@ namespace Ryujinx.Headless.SDL2.OpenGL
                 }
             }
 
+            public bool HasContext() => SDL_GL_GetCurrentContext() != IntPtr.Zero;
+
             public void Dispose()
             {
                 SDL_GL_DeleteContext(_context);
@@ -151,11 +153,15 @@ namespace Ryujinx.Headless.SDL2.OpenGL
             GL.Clear(ClearBufferMask.ColorBufferBit);
             SwapBuffers();
 
-            if (IsFullscreen)
+            if (IsExclusiveFullscreen)
+            {
+                Renderer?.Window.SetSize(ExclusiveFullscreenWidth, ExclusiveFullscreenHeight);
+                MouseDriver.SetClientSize(ExclusiveFullscreenWidth, ExclusiveFullscreenHeight);
+            }
+            else if (IsFullscreen)
             {
                 // NOTE: grabbing the main display's dimensions directly as OpenGL doesn't scale along like the VulkanWindow.
-                // we might have to amend this if people run this on a non-primary display set to a different resolution.
-                if (SDL_GetDisplayBounds(0, out SDL_Rect displayBounds) < 0)
+                if (SDL_GetDisplayBounds(DisplayId, out SDL_Rect displayBounds) < 0)
                 {
                     Logger.Warning?.Print(LogClass.Application, $"Could not retrieve display bounds: {SDL_GetError()}");
 
