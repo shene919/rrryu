@@ -193,7 +193,8 @@ namespace Ryujinx.HLE.HOS
                 }
                 else if (StrEquals(TexturesDir, modDir.Name))
                 {
-                    mods.TextureDirs.Add(mod = new Mod<DirectoryInfo>(dir.Name, modDir, true));
+                    var modData = modMetadata.Mods.Find(x => modDir.FullName.Contains(x.Path));
+                    mods.TextureDirs.Add(mod = new Mod<DirectoryInfo>(dir.Name, modDir, modData.Enabled));
                     types.Append('T');
                 }
                 else if (StrEquals(CheatDir, modDir.Name))
