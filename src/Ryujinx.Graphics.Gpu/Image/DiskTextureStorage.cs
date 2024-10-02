@@ -62,7 +62,8 @@ namespace Ryujinx.Graphics.Gpu.Image
             public readonly Target Target;
             public readonly byte[] Data;
 
-            public TextureRequest(int width, int height, int depth, int layers, int levels, Format format, Target target, byte[] data)
+            public TextureRequest(int width, int height, int depth, int layers, int levels, Format format,
+                Target target, byte[] data)
             {
                 Width = width;
                 Height = height;
@@ -185,7 +186,7 @@ namespace Ryujinx.Graphics.Gpu.Image
             }
         }
 
-        internal TextureInfoOverride? ImportTexture(out SpanOrArray<byte> cachedData, Texture texture, byte[] data)
+        internal TextureInfoOverride? ImportTexture(out MemoryOwner<byte> cachedData, Texture texture, byte[] data)
         {
             cachedData = default;
 
@@ -204,7 +205,8 @@ namespace Ryujinx.Graphics.Gpu.Image
             return infoOverride;
         }
 
-        private TextureInfoOverride? ImportDdsTexture(out SpanOrArray<byte> cachedData, Texture texture, byte[] data)
+
+        private TextureInfoOverride? ImportDdsTexture(out MemoryOwner<byte> cachedData, Texture texture, byte[] data)
         {
             cachedData = default;
 
@@ -224,7 +226,7 @@ namespace Ryujinx.Graphics.Gpu.Image
                 data);
 
             ImageParameters parameters = default;
-            byte[] buffer = null;
+            MemoryOwner<byte> buffer = null;
 
             bool imported = false;
             string fileName = BuildFileName(request, "dds");
@@ -257,9 +259,9 @@ namespace Ryujinx.Graphics.Gpu.Image
                         break;
                     }
 
-                    buffer = new byte[DdsFileFormat.CalculateSize(parameters)];
+                    buffer = MemoryOwner<byte>.Rent(DdsFileFormat.CalculateSize(parameters));
 
-                    loadResult = DdsFileFormat.TryLoadData(imageFile, buffer);
+                    loadResult = DdsFileFormat.TryLoadData(imageFile, buffer.Span);
 
                     if (loadResult != ImageLoadResult.Success)
                     {
@@ -281,11 +283,11 @@ namespace Ryujinx.Graphics.Gpu.Image
             {
                 for (int i = 0; i < buffer.Length; i += 4)
                 {
-                    (buffer[i + 2], buffer[i]) = (buffer[i], buffer[i + 2]);
+                    (buffer.Span[i + 2], buffer.Span[i]) = (buffer.Span[i], buffer.Span[i + 2]);
                 }
             }
 
-            cachedData = new SpanOrArray<byte>(buffer);
+            cachedData = buffer;
 
             return new TextureInfoOverride(
                 parameters.Width,
@@ -295,7 +297,7 @@ namespace Ryujinx.Graphics.Gpu.Image
                 ConvertToFormat(parameters.Format, IsSupportedSrgbFormat(request.Format)));
         }
 
-        private TextureInfoOverride? ImportPngTexture(out SpanOrArray<byte> cachedData, Texture texture, byte[] data)
+        private TextureInfoOverride? ImportPngTexture(out MemoryOwner<byte> cachedData, Texture texture, byte[] data)
         {
             cachedData = default;
 
@@ -314,7 +316,7 @@ namespace Ryujinx.Graphics.Gpu.Image
                 texture.Target,
                 data);
 
-            byte[] buffer = null;
+            MemoryOwner<byte> buffer = null;
 
             int importedFirstLevel = 0;
             int importedWidth = 0;
@@ -326,7 +328,9 @@ namespace Ryujinx.Graphics.Gpu.Image
 
             DoForEachSlice(request, (level, slice, _, _) =>
             {
-                int sliceSize = (importedWidth | importedHeight) != 0 ? Math.Max(1, importedWidth >> level) * Math.Max(1, importedHeight >> level) * 4 : 0;
+                int sliceSize = (importedWidth | importedHeight) != 0
+                    ? Math.Max(1, importedWidth >> level) * Math.Max(1, importedHeight >> level) * 4
+                    : 0;
 
                 bool imported = false;
                 string fileName = BuildFileName(request, level, slice, "png");
@@ -351,7 +355,8 @@ namespace Ryujinx.Graphics.Gpu.Image
                             break;
                         }
 
-                        ImageLoadResult loadResult = PngFileFormat.TryLoadHeader(imageFile, out ImageParameters parameters);
+                        ImageLoadResult loadResult =
+                            PngFileFormat.TryLoadHeader(imageFile, out ImageParameters parameters);
 
                         if (loadResult != ImageLoadResult.Success)
                         {
@@ -362,18 +367,21 @@ namespace Ryujinx.Graphics.Gpu.Image
                         int importedSizeWL = Math.Max(1, importedWidth >> level);
                         int importedSizeHL = Math.Max(1, importedHeight >> level);
 
-                        if (writtenSize == 0 || (importedSizeWL == parameters.Width && importedSizeHL == parameters.Height))
+                        if (writtenSize == 0 ||
+                            (importedSizeWL == parameters.Width && importedSizeHL == parameters.Height))
                         {
                             if (writtenSize == 0)
                             {
                                 importedFirstLevel = level;
                                 importedWidth = parameters.Width << level;
                                 importedHeight = parameters.Height << level;
-                                sliceSize = Math.Max(1, importedWidth >> level) * Math.Max(1, importedHeight >> level) * 4;
-                                buffer = new byte[CalculateSize(importedWidth, importedHeight, request.Depth, request.Layers, request.Levels)];
+                                sliceSize = Math.Max(1, importedWidth >> level) * Math.Max(1, importedHeight >> level) *
+                                            4;
+                                buffer = MemoryOwner<byte>.Rent(CalculateSize(importedWidth, importedHeight,
+                                    request.Depth, request.Layers, request.Levels));
                             }
 
-                            loadResult = PngFileFormat.TryLoadData(imageFile, buffer.AsSpan().Slice(offset, sliceSize));
+                            loadResult = PngFileFormat.TryLoadData(imageFile, buffer.Span.Slice(offset, sliceSize));
 
                             if (loadResult != ImageLoadResult.Success)
                             {
@@ -413,13 +421,13 @@ namespace Ryujinx.Graphics.Gpu.Image
                 return null;
             }
 
-            if (writtenSize == buffer.Length)
+            if (writtenSize == buffer.Memory.Length)
             {
-                cachedData = new SpanOrArray<byte>(buffer);
+                cachedData = buffer;
             }
             else
             {
-                cachedData = new SpanOrArray<byte>(buffer.AsSpan()[..writtenSize]);
+                cachedData = MemoryOwner<byte>.RentCopy(buffer.Span.Slice(0, writtenSize));
             }
 
             return new TextureInfoOverride(
@@ -427,7 +435,8 @@ namespace Ryujinx.Graphics.Gpu.Image
                 importedHeight,
                 slices,
                 levels,
-                new FormatInfo(IsSupportedSrgbFormat(request.Format) ? Format.R8G8B8A8Srgb : Format.R8G8B8A8Unorm, 1, 1, 4, 4));
+                new FormatInfo(IsSupportedSrgbFormat(request.Format) ? Format.R8G8B8A8Srgb : Format.R8G8B8A8Unorm, 1, 1,
+                    4, 4));
         }
 
         private static int CalculateSize(int width, int height, int depth, int layers, int levels)
@@ -712,55 +721,55 @@ namespace Ryujinx.Graphics.Gpu.Image
             {
                 case Format.Astc4x4Srgb:
                 case Format.Astc4x4Unorm:
-                    return DecodeAstc(data, 4, 4, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 4, 4, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc5x4Srgb:
                 case Format.Astc5x4Unorm:
-                    return DecodeAstc(data, 5, 4, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 5, 4, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc5x5Srgb:
                 case Format.Astc5x5Unorm:
-                    return DecodeAstc(data, 5, 5, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 5, 5, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc6x5Srgb:
                 case Format.Astc6x5Unorm:
-                    return DecodeAstc(data, 6, 5, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 6, 5, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc6x6Srgb:
                 case Format.Astc6x6Unorm:
-                    return DecodeAstc(data, 6, 6, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 6, 6, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc8x5Srgb:
                 case Format.Astc8x5Unorm:
-                    return DecodeAstc(data, 8, 5, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 8, 5, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc8x6Srgb:
                 case Format.Astc8x6Unorm:
-                    return DecodeAstc(data, 8, 6, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 8, 6, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc8x8Srgb:
                 case Format.Astc8x8Unorm:
-                    return DecodeAstc(data, 8, 8, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 8, 8, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc10x5Srgb:
                 case Format.Astc10x5Unorm:
-                    return DecodeAstc(data, 10, 5, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 10, 5, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc10x6Srgb:
                 case Format.Astc10x6Unorm:
-                    return DecodeAstc(data, 10, 6, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 10, 6, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc10x8Srgb:
                 case Format.Astc10x8Unorm:
-                    return DecodeAstc(data, 10, 8, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 10, 8, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc10x10Srgb:
                 case Format.Astc10x10Unorm:
-                    return DecodeAstc(data, 10, 10, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 10, 10, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc12x10Srgb:
                 case Format.Astc12x10Unorm:
-                    return DecodeAstc(data, 12, 10, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 12, 10, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Astc12x12Srgb:
                 case Format.Astc12x12Unorm:
-                    return DecodeAstc(data, 12, 12, width, height, depth, levels, layers);
+                    return DecodeAstc(data, 12, 12, width, height, depth, levels, layers).Memory.ToArray();;
                 case Format.Bc1RgbaSrgb:
                 case Format.Bc1RgbaUnorm:
-                    return BCnDecoder.DecodeBC1(data, width, height, depth, levels, layers);
+                    return BCnDecoder.DecodeBC1(data, width, height, depth, levels, layers).Memory.ToArray();
                 case Format.Bc2Srgb:
                 case Format.Bc2Unorm:
-                    return BCnDecoder.DecodeBC2(data, width, height, depth, levels, layers);
+                    return BCnDecoder.DecodeBC2(data, width, height, depth, levels, layers).Memory.ToArray();
                 case Format.Bc3Srgb:
                 case Format.Bc3Unorm:
-                    return BCnDecoder.DecodeBC3(data, width, height, depth, levels, layers);
+                    return BCnDecoder.DecodeBC3(data, width, height, depth, levels, layers).Memory.ToArray();
                 /*case Format.Bc4Snorm:
                 case Format.Bc4Unorm:
                     return BCnDecoder.DecodeBC4(data, width, height, depth, levels, layers, request.Format == Format.Bc4Snorm);
@@ -772,49 +781,50 @@ namespace Ryujinx.Graphics.Gpu.Image
                     return BCnDecoder.DecodeBC6(data, width, height, depth, levels, layers, request.Format == Format.Bc6HSfloat);*/
                 case Format.Bc7Srgb:
                 case Format.Bc7Unorm:
-                    return BCnDecoder.DecodeBC7(data, width, height, depth, levels, layers);
+                    return BCnDecoder.DecodeBC7(data, width, height, depth, levels, layers).Memory.ToArray();
                 case Format.Etc2RgbaSrgb:
                 case Format.Etc2RgbaUnorm:
-                    return ETC2Decoder.DecodeRgba(data, width, height, depth, levels, layers);
+                    return ETC2Decoder.DecodeRgba(data, width, height, depth, levels, layers).Memory.ToArray();
                 case Format.Etc2RgbSrgb:
                 case Format.Etc2RgbUnorm:
-                    return ETC2Decoder.DecodeRgb(data, width, height, depth, levels, layers);
+                    return ETC2Decoder.DecodeRgb(data, width, height, depth, levels, layers).Memory.ToArray();
                 case Format.Etc2RgbPtaSrgb:
                 case Format.Etc2RgbPtaUnorm:
-                    return ETC2Decoder.DecodePta(data, width, height, depth, levels, layers);
+                    return ETC2Decoder.DecodePta(data, width, height, depth, levels, layers).Memory.ToArray();
                 case Format.R8G8B8A8Unorm:
                 case Format.R8G8B8A8Srgb:
                     return request.Data;
                 case Format.B5G6R5Unorm:
                 case Format.R5G6B5Unorm:
-                    return PixelConverter.ConvertR5G6B5ToR8G8B8A8(data, width);
+                    return PixelConverter.ConvertR5G6B5ToR8G8B8A8(data, width).Memory.ToArray();
                 case Format.B5G5R5A1Unorm:
                 case Format.R5G5B5X1Unorm:
                 case Format.R5G5B5A1Unorm:
-                    return PixelConverter.ConvertR5G5B5ToR8G8B8A8(data, width, request.Format == Format.R5G5B5X1Unorm);
+                    return PixelConverter.ConvertR5G5B5ToR8G8B8A8(data, width, request.Format == Format.R5G5B5X1Unorm).Memory.ToArray();
                 case Format.A1B5G5R5Unorm:
-                    return PixelConverter.ConvertA1B5G5R5ToR8G8B8A8(data, width);
+                    return PixelConverter.ConvertA1B5G5R5ToR8G8B8A8(data, width).Memory.ToArray();
                 case Format.R4G4B4A4Unorm:
-                    return PixelConverter.ConvertR4G4B4A4ToR8G8B8A8(data, width);
+                    return PixelConverter.ConvertR4G4B4A4ToR8G8B8A8(data, width).Memory.ToArray();
             }
 
             return null;
         }
 
-        private static byte[] DecodeAstc(byte[] data, int blockWidth, int blockHeight, int width, int height, int depth, int levels, int layers)
+        private static MemoryOwner<byte>  DecodeAstc(byte[] data, int blockWidth, int blockHeight, int width, int height, int depth,
+            int levels, int layers)
         {
             if (!AstcDecoder.TryDecodeToRgba8P(
-                data,
-                blockWidth,
-                blockHeight,
-                width,
-                height,
-                depth,
-                levels,
-                layers,
-                out byte[] decoded))
+                    data,
+                    blockWidth,
+                    blockHeight,
+                    width,
+                    height,
+                    depth,
+                    levels,
+                    layers,
+                    out MemoryOwner<byte> decoded))
             {
-                decoded = new byte[width * height * depth * layers * 4];
+                decoded = MemoryOwner<byte>.Rent(width * height * depth * layers * 4);
             }
 
             return decoded;
@@ -917,10 +927,12 @@ namespace Ryujinx.Graphics.Gpu.Image
         {
             return format switch
             {
-                ImageFormat.Bc1RgbaUnorm => new FormatInfo(isSrgb ? Format.Bc1RgbaSrgb : Format.Bc1RgbaUnorm, 4, 4, 8, 4),
+                ImageFormat.Bc1RgbaUnorm => new FormatInfo(isSrgb ? Format.Bc1RgbaSrgb : Format.Bc1RgbaUnorm, 4, 4, 8,
+                    4),
                 ImageFormat.Bc2Unorm => new FormatInfo(isSrgb ? Format.Bc2Srgb : Format.Bc2Unorm, 4, 4, 16, 4),
                 ImageFormat.Bc3Unorm => new FormatInfo(isSrgb ? Format.Bc3Srgb : Format.Bc3Unorm, 4, 4, 16, 4),
-                ImageFormat.R8G8B8A8Unorm or ImageFormat.B8G8R8A8Unorn => new FormatInfo(isSrgb ? Format.R8G8B8A8Srgb : Format.R8G8B8A8Unorm, 1, 1, 4, 4),
+                ImageFormat.R8G8B8A8Unorm or ImageFormat.B8G8R8A8Unorn => new FormatInfo(
+                    isSrgb ? Format.R8G8B8A8Srgb : Format.R8G8B8A8Unorm, 1, 1, 4, 4),
                 ImageFormat.R5G6B5Unorm => new FormatInfo(Format.R5G6B5Unorm, 1, 1, 2, 3),
                 ImageFormat.R5G5B5A1Unorm => new FormatInfo(Format.R5G5B5A1Unorm, 1, 1, 2, 4),
                 ImageFormat.R4G4B4A4Unorm => new FormatInfo(Format.R4G4B4A4Unorm, 1, 1, 2, 4),
@@ -935,19 +947,24 @@ namespace Ryujinx.Graphics.Gpu.Image
             switch (result)
             {
                 case ImageLoadResult.CorruptedHeader:
-                    Logger.Error?.Print(LogClass.Gpu, $"Failed to load \"{fileName}\" because the file header is corrupted.");
+                    Logger.Error?.Print(LogClass.Gpu,
+                        $"Failed to load \"{fileName}\" because the file header is corrupted.");
                     break;
                 case ImageLoadResult.CorruptedData:
-                    Logger.Error?.Print(LogClass.Gpu, $"Failed to load \"{fileName}\" because the file data is corrupted.");
+                    Logger.Error?.Print(LogClass.Gpu,
+                        $"Failed to load \"{fileName}\" because the file data is corrupted.");
                     break;
                 case ImageLoadResult.DataTooShort:
-                    Logger.Error?.Print(LogClass.Gpu, $"Failed to load \"{fileName}\" because some data is missing from the file.");
+                    Logger.Error?.Print(LogClass.Gpu,
+                        $"Failed to load \"{fileName}\" because some data is missing from the file.");
                     break;
                 case ImageLoadResult.OutputTooShort:
-                    Logger.Error?.Print(LogClass.Gpu, $"Failed to load \"{fileName}\" because the output buffer was not large enough.");
+                    Logger.Error?.Print(LogClass.Gpu,
+                        $"Failed to load \"{fileName}\" because the output buffer was not large enough.");
                     break;
                 case ImageLoadResult.UnsupportedFormat:
-                    Logger.Error?.Print(LogClass.Gpu, $"Failed to load \"{fileName}\" because the image format is not currently supported.");
+                    Logger.Error?.Print(LogClass.Gpu,
+                        $"Failed to load \"{fileName}\" because the image format is not currently supported.");
                     break;
             }
         }

@@ -838,7 +838,7 @@ namespace Ryujinx.Graphics.Gpu.Image
 
             if (_context.DiskTextureStorage.IsActive && !_forRender)
             {
-                TextureInfoOverride? importOverride = _context.DiskTextureStorage.ImportTexture(out var importedTexture, this, result.ToArray());
+                TextureInfoOverride? importOverride = _context.DiskTextureStorage.ImportTexture(out var importedTexture, this, result.Memory.ToArray());
 
                 if (importOverride.HasValue)
                 {
@@ -873,7 +873,7 @@ namespace Ryujinx.Graphics.Gpu.Image
                 }
                 else if (!_hasData)
                 {
-                    _context.DiskTextureStorage.EnqueueTextureDataForExport(this, result.ToArray());
+                    _context.DiskTextureStorage.EnqueueTextureDataForExport(this, result.Memory.ToArray());
                 }
             }
 
